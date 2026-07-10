@@ -10,6 +10,8 @@ import {
   ChevronRight,
 } from 'lucide-react';
 
+import { cn } from '@/lib/utils';
+
 interface ActionItem {
   icon: React.ComponentType<{ className?: string; size?: number }>;
   label: string;
@@ -20,9 +22,10 @@ interface ActionItem {
 
 interface QuickActionsProps {
   onAddTransaction: () => void;
+  className?: string;
 }
 
-export const QuickActions: React.FC<QuickActionsProps> = ({ onAddTransaction }) => {
+export const QuickActions: React.FC<QuickActionsProps> = ({ onAddTransaction, className }) => {
   const navigate = useNavigate();
 
   const actions: ActionItem[] = [
@@ -42,7 +45,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ onAddTransaction }) 
   };
 
   return (
-    <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col h-full justify-between select-none">
+    <div className={cn("glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col h-full justify-between select-none", className)}>
       <div>
         <h3 className="text-sm font-bold font-display text-white tracking-wide mb-1">
           Quick Actions

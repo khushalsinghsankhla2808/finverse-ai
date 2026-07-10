@@ -415,9 +415,10 @@ export const DashboardPage: React.FC = () => {
               </div>
 
               {/* Quick Actions (33%) */}
-              <div className="glassmorphism rounded-2xl border border-white/8 lg:col-span-4 sm:h-auto lg:h-[380px]">
-                <QuickActions onAddTransaction={() => setIsAddModalOpen(true)} />
-              </div>
+              <QuickActions
+                onAddTransaction={() => setIsAddModalOpen(true)}
+                className="lg:col-span-4 sm:h-auto lg:h-[380px]"
+              />
             </div>
 
             {/* Row 3: Recharts Charts & Recent Transactions */}
