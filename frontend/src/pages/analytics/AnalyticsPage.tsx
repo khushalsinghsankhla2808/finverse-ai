@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState,  useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   BarChart,
@@ -20,233 +20,94 @@ import {
   Wallet,
   Activity,
 } from 'lucide-react';
-import { useFinanceStore } from '@/stores/financeStore';
-import { formatINR, formatINRCompact, getCategoryColor } from '@/lib/utils';
+import { useCurrencyStore } from '@/stores/currencyStore';
+import analyticsService from '@/services/analyticsService';
+import { formatINR, formatINRCompact } from '@/lib/utils';
 import PageTransition from '@/components/common/PageTransition';
 
 // Period Type
 type PeriodType = 'month' | 'quarter' | 'year';
 
 export const AnalyticsPage: React.FC = () => {
-  const { transactions } = useFinanceStore();
+  // const { transactions } = useFinanceStore();
   const [period, setPeriod] = useState<PeriodType>('month');
   const [hoveredPieIndex, setHoveredPieIndex] = useState<number | null>(null);
 
-  // Period Config Helper
-  const dateLimit = useMemo(() => {
-    const limit = new Date();
-    if (period === 'month') {
-      limit.setDate(limit.getDate() - 30);
-    } else if (period === 'quarter') {
-      limit.setDate(limit.getDate() - 90);
-    } else {
-      limit.setDate(limit.getDate() - 365);
-    }
-    return limit.toISOString().split('T')[0];
-  }, [period]);
 
-  // Filtered transactions for selected period
-  const filteredTxns = useMemo(() => {
-    return transactions.filter((t) => t.date >= dateLimit);
-  }, [transactions, dateLimit]);
+  const { activeCurrency } = useCurrencyStore();
+  const [metrics, setMetrics] = useState({ totalSpent: 0, avgDailySpend: 0, topCategory: 'None', savingsRate: 0 });
+  const [spendingTrendData, setSpendingTrendData] = useState<any[]>([]);
+  const [expenseBreakdownData, setExpenseBreakdownData] = useState({ data: [] as any[], total: 0 });
+  const [cashFlowData, setCashFlowData] = useState<any[]>([]);
+  const [categoryComparisonData, setCategoryComparisonData] = useState<any[]>([]);
+  const [monthlyTableData, setMonthlyTableData] = useState<any[]>([]);
+  const [, setIsLoading] = useState(true); // @ts-ignore
 
-  // Summary Metrics calculations
-  const metrics = useMemo(() => {
-    const totalIncome = filteredTxns
-      .filter((t) => t.type === 'income')
-      .reduce((sum, t) => sum + t.amount, 0);
+  useEffect(() => {
+    let isMounted = true;
+    const fetchAnalytics = async () => {
+      setIsLoading(true);
+      try {
+        const [dashRes, spendRes, trendRes, monthlyRes, cashRes] = await Promise.all([
+          analyticsService.getDashboardMetrics(),
+          analyticsService.getSpendingBreakdown(period === 'quarter' ? '3months' : period),
+          analyticsService.getTrends(period === 'quarter' ? '3months' : period),
+          analyticsService.getMonthlyComparison(),
+          analyticsService.getCashFlow()
+        ]);
+        if (!isMounted) return;
 
-    const totalExpense = filteredTxns
-      .filter((t) => t.type === 'expense')
-      .reduce((sum, t) => sum + Math.abs(t.amount), 0);
+        const totalSpent = dashRes?.monthlyExpenses || 0;
+        const days = period === 'month' ? 30 : period === 'quarter' ? 90 : 365;
+        const avgDailySpend = totalSpent / days;
+        const topCategory = spendRes?.length > 0 ? spendRes[0].category : 'None';
+        const savingsRate = dashRes?.savingsRate || 0;
+        setMetrics({ totalSpent, avgDailySpend, topCategory, savingsRate });
 
-    // Dynamic Average Daily Spend
-    const days = period === 'month' ? 30 : period === 'quarter' ? 90 : 365;
-    const avgDailySpend = totalExpense / days;
+        const totalExp = spendRes?.reduce((sum: number, item: any) => sum + item.amount, 0) || 0;
+        const pieData = spendRes?.map((item: any) => ({
+          name: item.category,
+          value: item.amount,
+          percentage: item.percentage,
+          color: item.color
+        })) || [];
+        setExpenseBreakdownData({ data: pieData, total: totalExp });
+        setCategoryComparisonData(pieData);
 
-    // Top Category
-    const categoryTotals: Record<string, number> = {};
-    filteredTxns
-      .filter((t) => t.type === 'expense')
-      .forEach((t) => {
-        categoryTotals[t.category] = (categoryTotals[t.category] || 0) + Math.abs(t.amount);
-      });
+        setSpendingTrendData(trendRes?.map((item: any) => ({
+          label: item.date,
+          income: item.income,
+          expense: item.expenses
+        })) || []);
 
-    let topCategory = 'None';
-    let maxSpent = 0;
-    Object.entries(categoryTotals).forEach(([cat, val]) => {
-      if (val > maxSpent) {
-        maxSpent = val;
-        topCategory = cat;
+        setMonthlyTableData(monthlyRes?.map((item: any) => {
+          const parts = item.month.split(' ');
+          return {
+            monthName: parts[0],
+            monthIdx: new Date(`${item.month} 1`).getMonth(),
+            year: parseInt(parts[1], 10) || new Date().getFullYear(),
+            income: item.income,
+            expense: item.expenses,
+            savings: item.savings,
+            savingsRate: item.savingsRate
+          };
+        }) || []);
+
+        setCashFlowData(cashRes?.map((item: any) => ({
+          name: item.name || item.date,
+          income: item.income,
+          expenses: item.expenses
+        })) || []);
+
+      } catch (err) {
+        console.error("Failed to fetch analytics", err);
+      } finally {
+        if (isMounted) setIsLoading(false);
       }
-    });
-
-    // Savings Rate: (Income - Expense) / Income * 100
-    const savingsRate = totalIncome > 0 ? Math.max(0, ((totalIncome - totalExpense) / totalIncome) * 100) : 0;
-
-    return {
-      totalSpent: totalExpense,
-      avgDailySpend,
-      topCategory,
-      savingsRate,
     };
-  }, [filteredTxns, period]);
-
-  // CHART 1: SPENDING TREND (Bar Chart daily/weekly/monthly grouped)
-  const spendingTrendData = useMemo(() => {
-    const groups: Record<string, { label: string; income: number; expense: number }> = {};
-
-    if (period === 'month') {
-      // Group by daily ranges (last 30 days)
-      for (let i = 29; i >= 0; i--) {
-        const d = new Date();
-        d.setDate(d.getDate() - i);
-        const key = d.toISOString().split('T')[0];
-        const label = d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
-        groups[key] = { label, income: 0, expense: 0 };
-      }
-    } else if (period === 'quarter') {
-      // Group by weekly intervals (last 12 weeks)
-      for (let i = 11; i >= 0; i--) {
-        const key = `W${i}`;
-        const label = `Wk ${12 - i}`;
-        groups[key] = { label, income: 0, expense: 0 };
-      }
-    } else {
-      // Group by monthly intervals (last 12 months)
-      for (let i = 11; i >= 0; i--) {
-        const d = new Date();
-        d.setMonth(d.getMonth() - i);
-        const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-        const label = d.toLocaleDateString('en-IN', { month: 'short' });
-        groups[key] = { label, income: 0, expense: 0 };
-      }
-    }
-
-    // Populate Groups
-    filteredTxns.forEach((t) => {
-      const amt = Math.abs(t.amount);
-      if (period === 'month') {
-        if (groups[t.date]) {
-          if (t.type === 'income') groups[t.date].income += amt;
-          else if (t.type === 'expense') groups[t.date].expense += amt;
-        }
-      } else if (period === 'quarter') {
-        // Calculate week offset
-        const daysDiff = Math.floor((new Date().getTime() - new Date(t.date).getTime()) / (1000 * 60 * 60 * 24));
-        const weekIdx = Math.floor(daysDiff / 7);
-        const key = `W${weekIdx}`;
-        if (groups[key]) {
-          if (t.type === 'income') groups[key].income += amt;
-          else if (t.type === 'expense') groups[key].expense += amt;
-        }
-      } else {
-        const key = t.date.substring(0, 7); // YYYY-MM
-        if (groups[key]) {
-          if (t.type === 'income') groups[key].income += amt;
-          else if (t.type === 'expense') groups[key].expense += amt;
-        }
-      }
-    });
-
-    return Object.values(groups);
-  }, [filteredTxns, period]);
-
-  // CHART 2: EXPENSE BREAKDOWN (Pie Chart)
-  const expenseBreakdownData = useMemo(() => {
-    const categoryTotals: Record<string, number> = {};
-    filteredTxns
-      .filter((t) => t.type === 'expense')
-      .forEach((t) => {
-        categoryTotals[t.category] = (categoryTotals[t.category] || 0) + Math.abs(t.amount);
-      });
-
-    const total = Object.values(categoryTotals).reduce((sum, val) => sum + val, 0);
-
-    const data = Object.entries(categoryTotals)
-      .map(([name, value]) => ({
-        name,
-        value,
-        percentage: total > 0 ? (value / total) * 100 : 0,
-        color: getCategoryColor(name),
-      }))
-      .sort((a, b) => b.value - a.value);
-
-    return { data, total };
-  }, [filteredTxns]);
-
-  // CHART 3: CASH FLOW (Area Chart)
-  const cashFlowData = useMemo(() => {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const data = months.map((m) => ({ name: m, income: 0, expenses: 0 }));
-
-    transactions.forEach((t) => {
-      const d = new Date(t.date);
-      const mIdx = d.getMonth();
-      const amt = Math.abs(t.amount);
-      if (t.type === 'income') {
-        data[mIdx].income += amt;
-      } else if (t.type === 'expense') {
-        data[mIdx].expenses += amt;
-      }
-    });
-
-    // Return last 6 months to avoid cramped look
-    const currentMonthIdx = new Date().getMonth();
-    const result = [];
-    for (let i = 5; i >= 0; i--) {
-      const idx = (currentMonthIdx - i + 12) % 12;
-      result.push(data[idx]);
-    }
-    return result;
-  }, [transactions]);
-
-  // CHART 4: CATEGORY COMPARISON (Horizontal Bars)
-  const categoryComparisonData = useMemo(() => {
-    return expenseBreakdownData.data;
-  }, [expenseBreakdownData]);
-
-  // CHART 5: MONTHLY COMPARISON TABLE (Last 6 Months)
-  const monthlyTableData = useMemo(() => {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const data = months.map((m, index) => {
-      const year = new Date().getFullYear();
-      return {
-        monthName: m,
-        monthIdx: index,
-        year,
-        income: 0,
-        expense: 0,
-      };
-    });
-
-    transactions.forEach((t) => {
-      const d = new Date(t.date);
-      const mIdx = d.getMonth();
-      const amt = Math.abs(t.amount);
-      if (t.type === 'income') {
-        data[mIdx].income += amt;
-      } else if (t.type === 'expense') {
-        data[mIdx].expense += amt;
-      }
-    });
-
-    const currentMonthIdx = new Date().getMonth();
-    const result = [];
-    for (let i = 5; i >= 0; i--) {
-      const idx = (currentMonthIdx - i + 12) % 12;
-      const item = data[idx];
-      const savings = item.income - item.expense;
-      const savingsRate = item.income > 0 ? (savings / item.income) * 100 : 0;
-      result.push({
-        ...item,
-        savings,
-        savingsRate,
-      });
-    }
-
-    return result;
-  }, [transactions]);
+    fetchAnalytics();
+    return () => { isMounted = false; };
+  }, [period]);
 
   // Recharts styling constants
   const chartStyles = {
@@ -357,10 +218,15 @@ export const AnalyticsPage: React.FC = () => {
         <div className="glassmorphism bg-bg-surface/30 p-5 border border-white/8 rounded-2xl">
           <div className="flex items-center justify-between border-b border-white/5 pb-3 mb-4">
             <h3 className="text-sm font-bold text-white">Spending & Income Trend</h3>
-            <span className="text-[10px] text-white/35 font-semibold">Rupees (₹)</span>
+            <span className="text-[10px] text-white/35 font-semibold">Currency ({activeCurrency.symbol})</span>
           </div>
-          <div className="h-72 w-full">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="h-72 w-full relative">
+            <ResponsiveContainer width="100%" height={288}>
+              {spendingTrendData.length === 0 ? (
+                <div className="flex items-center justify-center h-full w-full absolute inset-0 z-10">
+                  <p className="text-sm text-white/30">No data yet — add transactions to see your analytics</p>
+                </div>
+              ) : null}
               <BarChart data={spendingTrendData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <CartesianGrid {...chartStyles.cartesianGrid} vertical={false} />
                 <XAxis dataKey="label" {...chartStyles.xAxis} />
@@ -384,7 +250,12 @@ export const AnalyticsPage: React.FC = () => {
             
             <div className="flex-1 relative flex items-center justify-center min-h-0">
               <div className="relative w-full h-[220px]">
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height={220}>
+                  {expenseBreakdownData.data.length === 0 ? (
+                    <div className="flex items-center justify-center h-full w-full absolute inset-0 z-10">
+                      <p className="text-sm text-white/30">No data yet — add transactions to see your analytics</p>
+                    </div>
+                  ) : null}
                   <PieChart>
                     <Pie
                       data={expenseBreakdownData.data}
@@ -454,8 +325,13 @@ export const AnalyticsPage: React.FC = () => {
               <span className="text-[10px] text-white/35 font-semibold">Last 6 Months</span>
             </div>
 
-            <div className="flex-1 w-full mt-4 min-h-0">
-              <ResponsiveContainer width="100%" height="100%">
+            <div className="flex-1 w-full mt-4 min-h-0 relative">
+              <ResponsiveContainer width="100%" height={300}>
+                {cashFlowData.length === 0 ? (
+                  <div className="flex items-center justify-center h-full w-full absolute inset-0 z-10">
+                    <p className="text-sm text-white/30">No data yet — add transactions to see your analytics</p>
+                  </div>
+                ) : null}
                 <AreaChart data={cashFlowData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="area-income" x1="0" y1="0" x2="0" y2="1">

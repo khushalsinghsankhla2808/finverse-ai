@@ -7,6 +7,7 @@ import { Plus, Edit2, Trash2, TrendingUp, TrendingDown } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
 import { useFinanceStore } from "@/stores/financeStore";
+import { useCurrencyStore } from "@/stores/currencyStore";
 import { useToast } from "@/hooks/useToast";
 import { formatINR, formatDate } from "@/lib/utils";
 import PageTransition from "@/components/common/PageTransition";
@@ -99,6 +100,7 @@ export const InvestmentsPage: React.FC = () => {
     deleteInvestment,
     fetchInvestments,
   } = useFinanceStore();
+  const { activeCurrency } = useCurrencyStore();
   const { showToast } = useToast();
 
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -720,7 +722,7 @@ export const InvestmentsPage: React.FC = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
                     <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
-                      Purchase Price (₹)
+                      Purchase Price ({activeCurrency.symbol})
                     </label>
                     <input
                       type="number"
@@ -738,7 +740,7 @@ export const InvestmentsPage: React.FC = () => {
 
                   <div className="flex flex-col gap-1.5">
                     <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
-                      Current Price (₹)
+                      Current Price ({activeCurrency.symbol})
                     </label>
                     <input
                       type="number"

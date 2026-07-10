@@ -82,6 +82,28 @@ export const useFinanceStore = create<FinanceState>()(
       ...getInitialMockData(),
 
       // Transaction actions
+
+      fetchTransactions: async () => {
+        try {
+          const hasToken = !!localStorage.getItem('finverse_access_token');
+          if (hasToken) {
+            const res = await transactionService.getAll();
+            const txns = res.data.transactions.map((txn: any) => ({
+              id: txn._id,
+              name: txn.name,
+              category: txn.category,
+              amount: txn.amount,
+              date: txn.date.split('T')[0],
+              type: txn.type,
+              merchant: txn.merchant,
+              note: txn.note,
+            }));
+            const updatedBudgets = recalculateSpent(txns, get().budgets);
+            set({ transactions: txns, budgets: updatedBudgets });
+          }
+        } catch (err) {}
+      },
+
       addTransaction: async (t) => {
         try {
           const hasToken = !!localStorage.getItem('finverse_access_token');
@@ -472,10 +494,10 @@ export const useFinanceStore = create<FinanceState>()(
               purchaseDate: inv.purchaseDate.split('T')[0],
               platform: inv.platform,
               notes: inv.notes,
-              totalInvested: inv.totalInvested,
-              currentValue: inv.currentValue,
-              gainLoss: inv.gainLoss,
-              gainLossPercent: inv.gainLossPercent,
+              totalInvested: inv.totalInvested !== undefined ? inv.totalInvested : (inv.units * inv.purchasePrice),
+              currentValue: inv.currentValue !== undefined ? inv.currentValue : (inv.units * inv.currentPrice),
+              gainLoss: inv.gainLoss !== undefined ? inv.gainLoss : ((inv.units * inv.currentPrice) - (inv.units * inv.purchasePrice)),
+              gainLossPercent: inv.gainLossPercent !== undefined ? inv.gainLossPercent : (inv.units * inv.purchasePrice > 0 ? (((inv.units * inv.currentPrice) - (inv.units * inv.purchasePrice)) / (inv.units * inv.purchasePrice)) * 100 : 0),
             }));
             const portfolioSummary = res.data.summary;
             set({ investments, portfolioSummary });

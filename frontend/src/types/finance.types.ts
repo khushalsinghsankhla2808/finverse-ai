@@ -66,6 +66,7 @@ export interface FinanceState {
   portfolioSummary: PortfolioSummary | null;
 
   // Transaction actions
+  fetchTransactions: () => Promise<void>;
   addTransaction: (t: Omit<Transaction, 'id'>) => Promise<void> | void;
   updateTransaction: (id: string, t: Partial<Transaction>) => Promise<void> | void;
   deleteTransaction: (id: string) => Promise<void> | void;

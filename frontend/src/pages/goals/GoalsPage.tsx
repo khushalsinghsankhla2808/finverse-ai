@@ -13,6 +13,7 @@ import {
   Trophy,
 } from "lucide-react";
 import { useFinanceStore } from "@/stores/financeStore";
+import { useCurrencyStore } from "@/stores/currencyStore";
 import { useToast } from "@/hooks/useToast";
 import type { Goal } from "@/types/finance.types";
 import { formatINR, formatDate } from "@/lib/utils";
@@ -32,7 +33,7 @@ const goalCreateSchema = z.object({
   targetAmount: z
     .number({ message: "Target amount is required" })
     .positive("Target must be greater than 0")
-    .max(100000000, "Target cannot exceed ₹100,000,000"),
+    .max(100000000, "Target cannot exceed 100,000,000"),
   currentAmount: z
     .number({ message: "Saved amount is required" })
     .min(0, "Saved amount cannot be negative"),
@@ -135,6 +136,7 @@ export const GoalsPage: React.FC = () => {
   const { goals, addGoal, updateGoal, deleteGoal, addToGoal } =
     useFinanceStore();
   const { showToast } = useToast();
+  const { activeCurrency } = useCurrencyStore();
 
   // Dialog and edit state
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -265,7 +267,7 @@ export const GoalsPage: React.FC = () => {
       addingMoneyGoal.targetAmount - addingMoneyGoal.currentAmount;
     if (values.amount > remaining) {
       showToast(
-        `Amount cannot exceed the remaining needed (₹${remaining})`,
+        `Amount cannot exceed the remaining needed (${activeCurrency.symbol}${remaining})`,
         "warning",
       );
       return;
@@ -274,7 +276,7 @@ export const GoalsPage: React.FC = () => {
     try {
       addToGoal(addingMoneyGoal.id, values.amount);
       showToast(
-        `₹${values.amount} added to ${addingMoneyGoal.name}!`,
+        `${activeCurrency.symbol}${values.amount} added to ${addingMoneyGoal.name}!`,
         "success",
       );
       setAddingMoneyGoal(null);
@@ -384,10 +386,10 @@ export const GoalsPage: React.FC = () => {
             {/* Goals cards grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {goals.map((g) => {
-                const percentage =
+                const percentage = Math.min(100,
                   g.targetAmount > 0
                     ? (g.currentAmount / g.targetAmount) * 100
-                    : 0;
+                    : 0);
                 const isCompleted = percentage >= 100;
                 const remaining = g.targetAmount - g.currentAmount;
 

@@ -15,6 +15,7 @@ import {
   ChevronLeft,
 } from 'lucide-react';
 import { useFinanceStore } from '@/stores/financeStore';
+import { useCurrencyStore } from '@/stores/currencyStore';
 import { useToast } from '@/hooks/useToast';
 import type { Budget } from '@/types/finance.types';
 import { formatINR } from '@/lib/utils';
@@ -30,7 +31,7 @@ const budgetCreateSchema = z.object({
   limit: z
     .number({ message: 'Limit is required' })
     .positive('Limit must be greater than 0')
-    .max(10000000, 'Limit cannot exceed ₹1,000,0000'),
+    .max(10000000, 'Limit cannot exceed 10,000,000'),
   period: z.enum(['monthly', 'weekly']),
   alertThreshold: z.number().min(0).max(100),
 });
@@ -54,6 +55,7 @@ const CATEGORIES_MAPPINGS = [
 export const BudgetsPage: React.FC = () => {
   const { budgets, addBudget, updateBudget, deleteBudget } = useFinanceStore();
   const { showToast } = useToast();
+  const { activeCurrency } = useCurrencyStore();
 
   // Dialog and edit state
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -447,7 +449,7 @@ export const BudgetsPage: React.FC = () => {
                 <div className="flex flex-col items-center py-4 border-b border-white/10 focus-within:border-purple-primary transition-colors">
                   <span className="text-xs text-white/40 uppercase font-bold tracking-wider mb-2">Limit Amount</span>
                   <div className="flex items-center justify-center w-full">
-                    <span className="text-4xl font-display font-bold mr-2 text-purple-light">₹</span>
+                    <span className="text-4xl font-display font-bold mr-2 text-purple-light">{activeCurrency.symbol}</span>
                     <input
                       type="number"
                       placeholder="0"
@@ -583,7 +585,7 @@ export const BudgetsPage: React.FC = () => {
             <div className="flex flex-col items-center py-4 border-b border-white/10 focus-within:border-purple-primary transition-colors">
               <span className="text-xs text-white/40 uppercase font-bold tracking-wider mb-2">Limit Amount</span>
               <div className="flex items-center justify-center w-full">
-                <span className="text-4xl font-display font-bold mr-2 text-purple-light">₹</span>
+                <span className="text-4xl font-display font-bold mr-2 text-purple-light">{activeCurrency.symbol}</span>
                 <input
                   type="number"
                   placeholder="0"

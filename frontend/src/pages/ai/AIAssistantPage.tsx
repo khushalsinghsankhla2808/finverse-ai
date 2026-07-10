@@ -10,6 +10,7 @@ import {
 
 import aiService from '@/services/aiService';
 import { useToast } from '@/hooks/useToast';
+import { useCurrencyStore } from '@/stores/currencyStore';
 import PageTransition from '@/components/common/PageTransition';
 
 interface Message {
@@ -26,11 +27,11 @@ interface ChatSession {
 }
 
 // Simple Helper to highlight Currency values (e.g. ₹5,000) in gold
-const renderHighlightedContent = (text: string) => {
+const renderHighlightedContent = (text: string, currencySymbol: string) => {
   // Regex to match Rupee symbol followed by numbers and comma formatting
-  const parts = text.split(/(₹\d+(?:,\d+)*(?:\.\d+)?)/g);
+  const parts = text.split(new RegExp(`(\\\${currencySymbol}\\d+(?:,\\d+)*(?:\\.\\d+)?)`, 'g'));
   return parts.map((part, i) => {
-    if (part.startsWith('₹')) {
+    if (part.startsWith(currencySymbol)) {
       return (
         <span key={i} className="text-yellow-500 font-bold font-mono">
           {part}
@@ -43,6 +44,7 @@ const renderHighlightedContent = (text: string) => {
 
 export const AIAssistantPage: React.FC = () => {
   const { showToast } = useToast();
+  const { activeCurrency } = useCurrencyStore();
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   // States
@@ -320,7 +322,7 @@ export const AIAssistantPage: React.FC = () => {
                           ? 'bg-purple-primary border-purple-primary/40 text-white rounded-tr-none'
                           : 'bg-bg-surface/50 border-white/5 text-white/90 rounded-tl-none leading-relaxed'
                       }`}>
-                        {isUser ? msg.content : renderHighlightedContent(msg.content)}
+                        {isUser ? msg.content : renderHighlightedContent(msg.content, activeCurrency.symbol)}
                       </div>
                     </div>
                   );
@@ -356,8 +358,9 @@ export const AIAssistantPage: React.FC = () => {
                   type="text"
                   placeholder="Ask FinVerse AI..."
                   value={inputValue}
+                  disabled={isLoading}
                   onChange={(e) => setInputValue(e.target.value)}
-                  className="flex-1 bg-transparent text-xs text-white placeholder:text-white/20 focus:outline-hidden focus:ring-0 focus:border-transparent py-1"
+                  className="flex-1 bg-transparent text-xs text-white placeholder:text-white/20 focus:outline-hidden focus:ring-0 focus:border-transparent py-1 disabled:opacity-50"
                 />
                 <button
                   type="submit"

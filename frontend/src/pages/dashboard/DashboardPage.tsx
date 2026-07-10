@@ -121,6 +121,21 @@ export const DashboardPage: React.FC = () => {
 
   // Compute stats dynamically, preserving checklist base values on load
   const stats = useMemo(() => {
+    const today = new Date();
+    const currentMonth = today.getMonth();
+    const currentYear = today.getFullYear();
+    const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+    const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+
+    const isThisMonth = (dateStr: string) => {
+      const d = new Date(dateStr);
+      return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+    };
+    const isLastMonth = (dateStr: string) => {
+      const d = new Date(dateStr);
+      return d.getMonth() === lastMonth && d.getFullYear() === lastMonthYear;
+    };
+
     const balance = transactions.reduce((sum, t) => sum + t.amount, 0);
 
     const income = transactions
@@ -135,12 +150,32 @@ export const DashboardPage: React.FC = () => {
       .filter((t) => t.category === 'Investment')
       .reduce((sum, t) => sum + Math.abs(t.amount), 0);
 
+    const thisMonthIncome = transactions.filter(t => t.type === 'income' && isThisMonth(t.date)).reduce((sum, t) => sum + t.amount, 0);
+    const lastMonthIncome = transactions.filter(t => t.type === 'income' && isLastMonth(t.date)).reduce((sum, t) => sum + t.amount, 0);
+    const thisMonthExpense = transactions.filter(t => t.type === 'expense' && isThisMonth(t.date)).reduce((sum, t) => sum + Math.abs(t.amount), 0);
+    const lastMonthExpense = transactions.filter(t => t.type === 'expense' && isLastMonth(t.date)).reduce((sum, t) => sum + Math.abs(t.amount), 0);
+    
+    const thisMonthBalance = thisMonthIncome - thisMonthExpense;
+    const lastMonthBalance = lastMonthIncome - lastMonthExpense;
+
+    const calcMom = (current: number, prev: number) => {
+      if (prev === 0) return undefined;
+      return ((current - prev) / Math.abs(prev)) * 100;
+    };
+
     return {
       totalBalance: balance,
       income,
       expenses: expense,
       savings: investment,
       netWorth: balance,
+      balanceChange: calcMom(thisMonthBalance, lastMonthBalance),
+      incomeChange: calcMom(thisMonthIncome, lastMonthIncome),
+      expenseChange: calcMom(thisMonthExpense, lastMonthExpense),
+      savingsChange: calcMom(
+        Math.max(0, thisMonthBalance),
+        Math.max(0, lastMonthBalance)
+      )
     };
   }, [transactions]);
 
@@ -154,7 +189,8 @@ export const DashboardPage: React.FC = () => {
   // Dynamic date range for Net Worth footer
   const dateRange = useMemo(() => {
     if (transactions.length === 0) {
-      return { start: 'Start', end: 'Today' };
+      const todayStr = formatDate(new Date().toISOString().split('T')[0]);
+      return { start: todayStr, end: todayStr };
     }
     const sorted = [...transactions].sort((a, b) => a.date.localeCompare(b.date));
     return {
@@ -313,6 +349,8 @@ export const DashboardPage: React.FC = () => {
                     <KPICard
                       title="Total Balance"
                       value={stats.totalBalance}
+                      change={stats.balanceChange}
+                      changeLabel="vs last month"
                       icon={Wallet}
                       iconColor="purple-primary"
                       glowColor="purple"
@@ -323,6 +361,8 @@ export const DashboardPage: React.FC = () => {
                     <KPICard
                       title="Total Income"
                       value={stats.income}
+                      change={stats.incomeChange}
+                      changeLabel="vs last month"
                       icon={ArrowUpRight}
                       iconColor="green-positive"
                       glowColor="green"
@@ -333,6 +373,8 @@ export const DashboardPage: React.FC = () => {
                     <KPICard
                       title="Total Expenses"
                       value={stats.expenses}
+                      change={stats.expenseChange}
+                      changeLabel="vs last month"
                       icon={ArrowDownRight}
                       iconColor="red-negative"
                       glowColor="red"
@@ -343,6 +385,8 @@ export const DashboardPage: React.FC = () => {
                     <KPICard
                       title="Target Savings"
                       value={stats.savings}
+                      change={stats.savingsChange}
+                      changeLabel="vs last month"
                       icon={Target}
                       iconColor="gold-savings"
                       glowColor="gold"
@@ -356,7 +400,7 @@ export const DashboardPage: React.FC = () => {
             {/* Row 2: Net Worth, 3D Globe, Quick Actions */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
               {/* Net Worth (33%) */}
-              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 sm:h-auto lg:h-[400px] hover:shadow-glow-purple/2 transition-all duration-300">
+              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-auto lg:h-[380px] hover:shadow-glow-purple/2 transition-all duration-300">
                 <div>
                   <span className="text-[11px] font-bold uppercase tracking-wider text-white/40 leading-none">
                     Equity Valuations
@@ -370,6 +414,11 @@ export const DashboardPage: React.FC = () => {
                     <span className="text-3xl font-display font-extrabold text-white tracking-tight">
                       <AnimatedNumber value={stats.netWorth} prefix={activeCurrency.symbol} decimals={0} />
                     </span>
+                    {stats.balanceChange !== undefined && (
+                      <span className={stats.balanceChange >= 0 ? 'text-green-positive text-sm font-semibold' : 'text-red-negative text-sm font-semibold'}>
+                        {stats.balanceChange >= 0 ? '+' : ''}{stats.balanceChange.toFixed(1)}%
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -392,7 +441,7 @@ export const DashboardPage: React.FC = () => {
               </div>
 
               {/* 3D Finance Globe (33%) */}
-              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 sm:h-auto lg:h-[400px] hover:shadow-glow-purple/5 transition-all duration-300">
+              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-auto lg:h-[380px] hover:shadow-glow-purple/5 transition-all duration-300">
                 <div className="flex justify-between items-center border-b border-white/5 pb-2">
                   <div>
                     <span className="text-[11px] font-bold uppercase tracking-wider text-white/40 leading-none">
@@ -417,14 +466,14 @@ export const DashboardPage: React.FC = () => {
               {/* Quick Actions (33%) */}
               <QuickActions
                 onAddTransaction={() => setIsAddModalOpen(true)}
-                className="lg:col-span-4 sm:h-auto lg:h-[400px]"
+                className="glassmorphism rounded-2xl border border-white/8 lg:col-span-4 h-auto lg:h-[380px] hover:shadow-glow-purple/2 transition-all duration-300"
               />
             </div>
 
             {/* Row 3: Recharts Charts & Recent Transactions */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
               {/* Recharts Pie (33%) */}
-              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 sm:h-auto lg:h-[360px]">
+              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-auto lg:h-[360px]">
                 <div>
                   <span className="text-[11px] font-bold uppercase tracking-wider text-white/40">
                     Expense Breakdown
@@ -473,7 +522,7 @@ export const DashboardPage: React.FC = () => {
               </div>
 
               {/* Cash Flow Analysis (33%) */}
-              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 sm:h-auto lg:h-[360px]">
+              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-auto lg:h-[360px]">
                 <div>
                   <span className="text-[11px] font-bold uppercase tracking-wider text-white/40">
                     Rolling Cash Flow
@@ -501,7 +550,7 @@ export const DashboardPage: React.FC = () => {
               </div>
 
               {/* Recent Transactions List (33%) */}
-              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 sm:h-auto lg:h-[360px]">
+              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-auto lg:h-[360px]">
                 <div className="flex justify-between items-center border-b border-white/5 pb-2 mb-2">
                   <div>
                     <span className="text-[11px] font-bold uppercase tracking-wider text-white/40">

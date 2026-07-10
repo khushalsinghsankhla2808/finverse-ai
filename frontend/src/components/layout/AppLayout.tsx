@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
 import MobileNav from './MobileNav';
@@ -10,6 +10,12 @@ import ToastContainer from '../common/ToastContainer';
 export const AppLayout: React.FC = () => {
   const { sidebarCollapsed } = useUIStore();
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const location = useLocation();
+  useEffect(() => {
+    const path = location.pathname.substring(1);
+    const title = path ? path.charAt(0).toUpperCase() + path.slice(1) : 'Dashboard';
+    document.title = `FinVerse | ${title}`;
+  }, [location]);
 
   return (
     <div className="min-h-screen bg-bg-base text-white">

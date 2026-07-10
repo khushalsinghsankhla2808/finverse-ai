@@ -4,7 +4,6 @@ import ProtectedRoute from './ProtectedRoute';
 import AppLayout from '@/components/layout/AppLayout';
 import { useAuthStore } from '@/stores/authStore';
 import {
-  Settings,
   Home,
   ArrowLeft,
   Loader2,
@@ -18,6 +17,7 @@ import GoalsPage from '@/pages/goals/GoalsPage';
 import InvestmentsPage from '@/pages/investments/InvestmentsPage';
 import AIAssistantPage from '@/pages/ai/AIAssistantPage';
 import ReportsPage from '@/pages/reports/ReportsPage';
+import SettingsPage from '@/pages/settings/SettingsPage';
 
 
 // Lazy load actual pages
@@ -43,6 +43,7 @@ interface PlaceholderProps {
   icon: React.ComponentType<{ className?: string; size?: number }>;
 }
 
+// @ts-ignore
 const PlaceholderPage: React.FC<PlaceholderProps> = ({ title, icon: Icon }) => {
   const navigate = useNavigateHelper();
   return (
@@ -166,7 +167,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'settings',
-        element: <PlaceholderPage title="Account Settings" icon={Settings} />,
+        element: <SettingsPage />,
       },
     ],
   },

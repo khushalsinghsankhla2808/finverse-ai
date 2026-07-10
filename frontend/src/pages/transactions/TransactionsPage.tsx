@@ -20,6 +20,7 @@ import {
   Filter,
 } from 'lucide-react';
 import { useFinanceStore } from '@/stores/financeStore';
+import { useCurrencyStore } from '@/stores/currencyStore';
 import { useToast } from '@/hooks/useToast';
 import type { Transaction } from '@/types/finance.types';
 import { formatINR, formatDate, getCategoryColor } from '@/lib/utils';
@@ -36,7 +37,7 @@ const transactionSchema = z.object({
   amount: z
     .number({ message: 'Amount is required' })
     .positive('Amount must be greater than 0')
-    .max(10000000, 'Amount cannot exceed ₹1,000,0000'),
+    .max(10000000, 'Amount cannot exceed 10,000,000'),
   category: z.string().min(1, 'Category is required'),
   merchant: z.string().min(2, 'Merchant must be at least 2 characters').max(50, 'Max 50 characters'),
   date: z.string().min(1, 'Date is required'),
@@ -61,7 +62,8 @@ const CATEGORY_OPTIONS = [
 ];
 
 export const TransactionsPage: React.FC = () => {
-  const { transactions, addTransaction, updateTransaction, deleteTransaction } = useFinanceStore();
+  const { transactions, addTransaction, updateTransaction, deleteTransaction, fetchTransactions } = useFinanceStore();
+  const { activeCurrency } = useCurrencyStore();
   const { showToast } = useToast();
 
   // Filter and pagination states
@@ -182,13 +184,14 @@ export const TransactionsPage: React.FC = () => {
 
     // Search query
     if (search.trim()) {
-      const q = search.toLowerCase();
+      const escapeRegex = (str: string) => str.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&');
+      const regex = new RegExp(escapeRegex(search.trim()), 'i');
       result = result.filter(
         (t) =>
-          t.name.toLowerCase().includes(q) ||
-          t.category.toLowerCase().includes(q) ||
-          (t.merchant && t.merchant.toLowerCase().includes(q)) ||
-          (t.note && t.note.toLowerCase().includes(q))
+          regex.test(t.name) ||
+          regex.test(t.category) ||
+          (t.merchant && regex.test(t.merchant)) ||
+          (t.note && regex.test(t.note))
       );
     }
 
@@ -267,7 +270,8 @@ export const TransactionsPage: React.FC = () => {
         receiptUrl: receiptFile || undefined,
       };
 
-      addTransaction(payload);
+      await addTransaction(payload);
+      await fetchTransactions();
       showToast('Transaction added successfully', 'success');
       setIsAddModalOpen(false);
       reset();
@@ -293,7 +297,8 @@ export const TransactionsPage: React.FC = () => {
         receiptUrl: receiptFile || undefined,
       };
 
-      updateTransaction(editingTransaction.id, payload);
+      await updateTransaction(editingTransaction.id, payload);
+      await fetchTransactions();
       showToast('Transaction updated successfully', 'success');
       setEditingTransaction(null);
     } catch (err) {
@@ -301,15 +306,17 @@ export const TransactionsPage: React.FC = () => {
     }
   };
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (!deletingTransactionId) return;
-    deleteTransaction(deletingTransactionId);
+    await deleteTransaction(deletingTransactionId);
+    await fetchTransactions();
     showToast('Transaction deleted', 'error');
     setDeletingTransactionId(null);
   };
 
-  const handleBulkDelete = () => {
-    selectedIds.forEach((id) => deleteTransaction(id));
+  const handleBulkDelete = async () => {
+    await Promise.all(selectedIds.map((id) => deleteTransaction(id)));
+    await fetchTransactions();
     showToast(`${selectedIds.length} transactions deleted`, 'error');
     setSelectedIds([]);
     setIsBulkDeleteOpen(false);
@@ -828,7 +835,7 @@ export const TransactionsPage: React.FC = () => {
                           : 'text-red-negative'
                       }`}
                     >
-                      ₹
+                      {activeCurrency.symbol}
                     </span>
                     <input
                       type="number"
@@ -1048,7 +1055,7 @@ export const TransactionsPage: React.FC = () => {
                           : 'text-red-negative'
                       }`}
                     >
-                      ₹
+                      {activeCurrency.symbol}
                     </span>
                     <input
                       type="number"
