@@ -2,12 +2,12 @@ import { Router } from 'express';
 import { generateReport, downloadReportFile } from '../controllers/report.controller';
 import protect from '../middleware/auth.middleware';
 import validate from '../middleware/validate.middleware';
-import { reportSchema } from '../utils/validation';
+import { reportSchema, downloadFilenameSchema } from '../schemas/report.schema';
 
 const router = Router();
 
-// Public download endpoint for direct browser tab redirections
-router.get('/download/:filename', downloadReportFile);
+// Public download endpoint — validated with strict filename schema to prevent path traversal
+router.get('/download/:filename', validate({ params: downloadFilenameSchema }), downloadReportFile);
 
 // Protected report generation
 router.post('/generate', protect as any, validate(reportSchema), generateReport as any);

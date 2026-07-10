@@ -5,6 +5,7 @@ import NotificationModel from '../models/Notification.model';
 import { sendSuccess, sendError } from '../utils/response.utils';
 import { AuthenticatedRequest } from '../middleware/auth.middleware';
 import redis from '../config/redis';
+import { escapeRegex } from '../schemas/common.schema';
 
 // Helper to invalidate all cache keys related to a user
 export const invalidateCache = async (userId: string): Promise<void> => {
@@ -56,7 +57,8 @@ export const getTransactions = async (
 
     // Search query matching name, merchant or note
     if (search) {
-      const regex = new RegExp(search as string, 'i');
+      const sanitized = escapeRegex(search as string);
+      const regex = new RegExp(sanitized, 'i');
       query.$or = [
         { name: regex },
         { merchant: regex },

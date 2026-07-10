@@ -235,12 +235,42 @@ export const generateReport = async (
 
 export const downloadReportFile = (req: Request, res: Response): void => {
   const { filename } = req.params;
-  const filePath = path.join(LOCAL_REPORTS_DIR, filename);
+
+  // Defense-in-depth: even though the route-level schema validates the filename,
+  // we re-check here to prevent path traversal if the middleware is bypassed.
+  if (
+    !filename ||
+    filename.includes('..') ||
+    filename.includes('/') ||
+    filename.includes('\\')
+  ) {
+    res.status(400).json({ success: false, message: 'Invalid filename' });
+    return;
+  }
+
+  const filePath = path.resolve(LOCAL_REPORTS_DIR, path.basename(filename));
+
+  // Ensure the resolved path stays within the reports directory
+  if (!filePath.startsWith(path.resolve(LOCAL_REPORTS_DIR))) {
+    res.status(403).json({ success: false, message: 'Access denied' });
+    return;
+  }
 
   if (fs.existsSync(filePath)) {
-    res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+    // Determine Content-Type from extension
+    const ext = path.extname(filename).toLowerCase();
+    const contentTypes: Record<string, string> = {
+      '.pdf': 'application/pdf',
+      '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      '.csv': 'text/csv',
+    };
+
+    res.setHeader('Content-Type', contentTypes[ext] || 'application/octet-stream');
+    res.setHeader('Content-Disposition', `attachment; filename="${path.basename(filename)}"`);
+    res.setHeader('X-Content-Type-Options', 'nosniff');
     res.sendFile(filePath);
   } else {
     res.status(404).json({ success: false, message: 'Requested report file not found or expired' });
   }
 };
+

@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import rateLimit from 'express-rate-limit';
 
 import authRoutes from './routes/auth.routes';
 import transactionRoutes from './routes/transaction.routes';
@@ -15,6 +14,12 @@ import reportRoutes from './routes/report.routes';
 import protect from './middleware/auth.middleware';
 import errorHandler from './middleware/error.middleware';
 import { morganMiddleware } from './middleware/logger.middleware';
+import {
+  authIpLimiter,
+  authAccountLimiter,
+  authenticatedLimiter,
+  globalLimiter,
+} from './middleware/rateLimiter.middleware';
 
 const app = express();
 
@@ -31,13 +36,9 @@ app.use(
   })
 );
 
-// Rate Limiting
-const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 200, // max 200 requests per IP
-  message: { success: false, message: 'Too many requests from this IP, please try again later' },
-});
-app.use('/api/', apiLimiter);
+// Global Rate Limiting — generous safety net across all /api/* routes
+// Tier-specific limits (auth, public, authenticated) do the real work.
+app.use('/api/', globalLimiter);
 
 // Body Parsing
 app.use(express.json({ limit: '10mb' }));
@@ -51,15 +52,19 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date() });
 });
 
-// Routing Map
-app.use('/api/auth', authRoutes);
-app.use('/api/transactions', protect as any, transactionRoutes);
-app.use('/api/budgets', protect as any, budgetRoutes);
-app.use('/api/goals', protect as any, goalRoutes);
-app.use('/api/investments', protect as any, investmentRoutes);
-app.use('/api/analytics', protect as any, analyticsRoutes);
-app.use('/api/ai', protect as any, aiRoutes);
-app.use('/api/reports', reportRoutes); // pdf/excel report has inside route protecting, download is public
+// ─── Routing Map ─────────────────────────────────────────────────────
+
+// Auth routes — Tier 1: dual-axis per-IP + per-account with exponential backoff
+app.use('/api/auth', authIpLimiter, authAccountLimiter, authRoutes);
+
+// Authenticated routes — Tier 3: per-userId (200 req/min)
+app.use('/api/transactions', protect as any, authenticatedLimiter, transactionRoutes);
+app.use('/api/budgets', protect as any, authenticatedLimiter, budgetRoutes);
+app.use('/api/goals', protect as any, authenticatedLimiter, goalRoutes);
+app.use('/api/investments', protect as any, authenticatedLimiter, investmentRoutes);
+app.use('/api/analytics', protect as any, authenticatedLimiter, analyticsRoutes);
+app.use('/api/ai', aiRoutes); // has mixed public/protected routes — limiters applied per-route inside
+app.use('/api/reports', reportRoutes); // has mixed public/protected routes — limiters applied per-route inside
 
 // 404 Route handler
 app.use('*', (req, res) => {

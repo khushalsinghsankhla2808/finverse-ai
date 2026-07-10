@@ -1,5 +1,6 @@
 import Redis from 'ioredis';
 import env from './env';
+import { logger } from '../middleware/logger.middleware';
 
 let redisInstance: Redis | null = null;
 let useMemoryFallback = false;
@@ -24,11 +25,11 @@ try {
   
   redisInstance.on('connect', () => {
     useMemoryFallback = false;
-    console.log('📡 Redis Client Connected Successfully');
+    logger.info('📡 Redis Client Connected Successfully');
   });
 } catch (error) {
   useMemoryFallback = true;
-  console.warn('⚠️ Redis Initialization Failed. Falling back to in-memory caching.');
+  logger.warn('⚠️ Redis Initialization Failed. Falling back to in-memory caching.');
 }
 
 // In-memory cache fallback store
