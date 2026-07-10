@@ -29,7 +29,6 @@ const FloatingText: React.FC<FloatingTextProps> = ({ text, position, speed = 1 }
       color="#A855F7" // var(--purple-light)
       anchorX="center"
       anchorY="middle"
-      font="https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2oWgo00dBhY7a8qy38186g.woff" // custom mono font loader
     >
       {text}
     </Text>
@@ -38,7 +37,7 @@ const FloatingText: React.FC<FloatingTextProps> = ({ text, position, speed = 1 }
 
 export const FinanceGlobe: React.FC = () => {
   return (
-    <div className="w-full h-[220px] relative flex items-center justify-center select-none">
+    <div className="w-full h-[300px] relative flex items-center justify-center select-none">
       <Canvas
         camera={{ position: [0, 0, 4.5], fov: 60 }}
         style={{ background: 'transparent', width: '100%', height: '100%' }}

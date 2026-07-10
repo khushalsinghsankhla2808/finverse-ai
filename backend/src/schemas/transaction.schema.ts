@@ -33,27 +33,45 @@ export const transactionSchema = z.object({
     .max(500, 'Note must not exceed 500 characters')
     .optional()
     .default(''),
+  name: z
+    .string()
+    .min(1)
+    .max(100)
+    .optional(),
+  receiptUrl: z
+    .string()
+    .url('Invalid receipt URL format')
+    .or(z.string().length(0))
+    .nullable()
+    .optional(),
 }).strict();
+
+// Helper to convert empty string query parameters to undefined
+const emptyToUndefined = <T extends z.ZodTypeAny>(schema: T) =>
+  z.preprocess((val) => (val === '' ? undefined : val), schema);
 
 /**
  * Query params for GET /transactions.
  * All optional — filters, search, and pagination.
  */
 export const transactionQuerySchema = paginationQuerySchema.extend({
-  type: z.enum(['income', 'expense', 'transfer']).optional(),
-  category: z.string().max(50).optional(),
-  startDate: z.string().refine(
-    (val) => !val || !isNaN(Date.parse(val)),
-    { message: 'Invalid startDate format' }
+  type: emptyToUndefined(z.enum(['income', 'expense', 'transfer'])).optional(),
+  category: emptyToUndefined(z.string().max(50)).optional(),
+  startDate: emptyToUndefined(
+    z.string().refine(
+      (val) => !val || !isNaN(Date.parse(val)),
+      { message: 'Invalid startDate format' }
+    )
   ).optional(),
-  endDate: z.string().refine(
-    (val) => !val || !isNaN(Date.parse(val)),
-    { message: 'Invalid endDate format' }
+  endDate: emptyToUndefined(
+    z.string().refine(
+      (val) => !val || !isNaN(Date.parse(val)),
+      { message: 'Invalid endDate format' }
+    )
   ).optional(),
-  search: z
-    .string()
-    .max(100, 'Search query must not exceed 100 characters')
-    .optional(),
+  search: emptyToUndefined(
+    z.string().max(100, 'Search query must not exceed 100 characters')
+  ).optional(),
 });
 
 /**
