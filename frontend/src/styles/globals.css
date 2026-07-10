@@ -1,0 +1,128 @@
+@import "tailwindcss";
+@import "@fontsource/inter/index.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+@import "@fontsource/jetbrains-mono/index.css";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/700.css";
+@import "./animations.css";
+
+:root {
+  /* BACKGROUNDS */
+  --bg-base: #050810;
+  --bg-card: #0A0F1E;
+  --bg-surface: #0D1530;
+  --bg-overlay: #111827;
+
+  /* BRAND COLORS */
+  --purple-primary: #7C3AED;
+  --purple-primary-rgba: rgba(124, 58, 237, 0.1);
+  --purple-primary-border: rgba(124, 58, 237, 0.2);
+  --purple-primary-glow: rgba(124, 58, 237, 0.15);
+
+  --purple-light: #A855F7;
+  --blue-primary: #2563EB;
+  --blue-light: #60A5FA;
+  --cyan-data: #06B6D4;
+
+  --green-positive: #10B981;
+  --green-positive-rgba: rgba(16, 185, 129, 0.1);
+  --green-positive-border: rgba(16, 185, 129, 0.2);
+  --green-positive-glow: rgba(16, 185, 129, 0.15);
+
+  --red-negative: #F43F5E;
+  --red-negative-rgba: rgba(244, 63, 94, 0.1);
+  --red-negative-border: rgba(244, 63, 94, 0.2);
+  --red-negative-glow: rgba(244, 63, 94, 0.15);
+
+  --gold-savings: #F59E0B;
+  --gold-savings-rgba: rgba(245, 158, 11, 0.1);
+  --gold-savings-border: rgba(245, 158, 11, 0.2);
+  --gold-savings-glow: rgba(245, 158, 11, 0.15);
+
+  --gold-light: #FCD34D;
+
+  /* GLOW SHADOWS */
+  --glow-purple: 0 0 40px rgba(124, 58, 237, 0.4);
+  --glow-cyan: 0 0 30px rgba(6, 182, 212, 0.3);
+  --glow-green: 0 0 20px rgba(16, 185, 129, 0.35);
+  --glow-red: 0 0 20px rgba(244, 63, 94, 0.35);
+  --glow-gold: 0 0 20px rgba(245, 158, 11, 0.35);
+
+  /* GLASSMORPHISM */
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-blur: blur(20px) saturate(180%);
+
+  /* TYPOGRAPHY */
+  --font-display: 'Clash Display', 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+@theme {
+  --color-bg-base: var(--bg-base);
+  --color-bg-card: var(--bg-card);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-overlay: var(--bg-overlay);
+
+  --color-purple-primary: var(--purple-primary);
+  --color-purple-light: var(--purple-light);
+  --color-blue-primary: var(--blue-primary);
+  --color-blue-light: var(--blue-light);
+  --color-cyan-data: var(--cyan-data);
+  --color-green-positive: var(--green-positive);
+  --color-red-negative: var(--red-negative);
+  --color-gold-savings: var(--gold-savings);
+  --color-gold-light: var(--gold-light);
+
+  --shadow-glow-purple: var(--glow-purple);
+  --shadow-glow-cyan: var(--glow-cyan);
+  --shadow-glow-green: var(--glow-green);
+  --shadow-glow-red: var(--glow-red);
+  --shadow-glow-gold: var(--glow-gold);
+
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+}
+
+/* Custom base resets */
+html, body {
+  background-color: var(--bg-base);
+  color: #F3F4F6; /* text-gray-100 */
+  font-family: var(--font-body);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar for premium dark theme */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--glass-border);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--purple-primary);
+}
+
+/* Glassmorphism card class */
+.glassmorphism {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
