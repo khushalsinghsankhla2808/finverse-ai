@@ -61,137 +61,18 @@ const calculatePortfolioSummary = (investments: Investment[]): PortfolioSummary 
 };
 
 const getInitialMockData = () => {
-  const MOCK_TRANSACTIONS: Transaction[] = [
-    // JULY 2026
-    { id: uuidv4(), name: 'Salary', category: 'Income', amount: 125000, date: '2026-07-01', type: 'income', merchant: 'Employer' },
-    { id: uuidv4(), name: 'Rent', category: 'Housing', amount: -22000, date: '2026-07-02', type: 'expense', merchant: 'Landlord' },
-    { id: uuidv4(), name: 'Amazon India', category: 'Shopping', amount: -3499, date: '2026-07-05', type: 'expense', merchant: 'Amazon' },
-    { id: uuidv4(), name: 'Zomato', category: 'Food', amount: -680, date: '2026-07-06', type: 'expense', merchant: 'Zomato' },
-    { id: uuidv4(), name: 'Ola', category: 'Transport', amount: -350, date: '2026-07-08', type: 'expense', merchant: 'Ola' },
-    { id: uuidv4(), name: 'Netflix', category: 'Entertainment', amount: -649, date: '2026-07-09', type: 'expense', merchant: 'Netflix' },
-    { id: uuidv4(), name: 'Swiggy', category: 'Food', amount: -420, date: '2026-07-10', type: 'expense', merchant: 'Swiggy' },
-    { id: uuidv4(), name: 'BSNL Broadband', category: 'Utilities', amount: -999, date: '2026-07-11', type: 'expense', merchant: 'BSNL' },
-    { id: uuidv4(), name: 'Freelance Work', category: 'Income', amount: 35000, date: '2026-07-12', type: 'income', merchant: 'Client' },
-    { id: uuidv4(), name: 'BigBasket', category: 'Groceries', amount: -2840, date: '2026-07-13', type: 'expense', merchant: 'BigBasket' },
-
-    // JUNE 2026
-    { id: uuidv4(), name: 'Salary', category: 'Income', amount: 125000, date: '2026-06-01', type: 'income', merchant: 'Employer' },
-    { id: uuidv4(), name: 'Rent', category: 'Housing', amount: -22000, date: '2026-06-02', type: 'expense', merchant: 'Landlord' },
-    { id: uuidv4(), name: 'Myntra', category: 'Shopping', amount: -4299, date: '2026-06-08', type: 'expense', merchant: 'Myntra' },
-    { id: uuidv4(), name: 'PVR Cinemas', category: 'Entertainment', amount: -1200, date: '2026-06-12', type: 'expense', merchant: 'PVR' },
-    { id: uuidv4(), name: 'Zepto', category: 'Groceries', amount: -1650, date: '2026-06-15', type: 'expense', merchant: 'Zepto' },
-    { id: uuidv4(), name: 'Rapido', category: 'Transport', amount: -220, date: '2026-06-18', type: 'expense', merchant: 'Rapido' },
-  ];
-
-  const MOCK_BUDGETS: Budget[] = [
-    { id: uuidv4(), category: 'Housing', limit: 25000, spent: 0, period: 'monthly', color: '#7C3AED', icon: '🏠', alertThreshold: 80 },
-    { id: uuidv4(), category: 'Food', limit: 8000, spent: 0, period: 'monthly', color: '#06B6D4', icon: '🍔', alertThreshold: 80 },
-    { id: uuidv4(), category: 'Transport', limit: 3000, spent: 0, period: 'monthly', color: '#10B981', icon: '🚗', alertThreshold: 80 },
-    { id: uuidv4(), category: 'Shopping', limit: 10000, spent: 0, period: 'monthly', color: '#F59E0B', icon: '🛍️', alertThreshold: 80 },
-    { id: uuidv4(), category: 'Entertainment', limit: 2000, spent: 0, period: 'monthly', color: '#F43F5E', icon: '🎬', alertThreshold: 80 },
-    { id: uuidv4(), category: 'Groceries', limit: 5000, spent: 0, period: 'monthly', color: '#8B5CF6', icon: '🛒', alertThreshold: 80 },
-    { id: uuidv4(), category: 'Utilities', limit: 2000, spent: 0, period: 'monthly', color: '#EC4899', icon: '⚡', alertThreshold: 80 },
-  ];
-
-  const MOCK_GOALS: Goal[] = [
-    { id: uuidv4(), name: 'Emergency Fund', targetAmount: 300000, currentAmount: 185000, deadline: '2026-12-31', category: 'Safety', color: '#10B981', icon: '🛡️' },
-    { id: uuidv4(), name: 'Europe Trip', targetAmount: 250000, currentAmount: 87500, deadline: '2027-06-30', category: 'Travel', color: '#7C3AED', icon: '✈️' },
-    { id: uuidv4(), name: 'New MacBook', targetAmount: 180000, currentAmount: 72000, deadline: '2026-10-01', category: 'Tech', color: '#06B6D4', icon: '💻' },
-    { id: uuidv4(), name: 'Dream Bike', targetAmount: 120000, currentAmount: 45000, deadline: '2027-03-31', category: 'Vehicle', color: '#F59E0B', icon: '🏍️' },
-  ];
-
-  const MOCK_INVESTMENTS: Investment[] = [
-    {
-      id: uuidv4(),
-      name: 'Reliance Industries',
-      assetType: 'stocks',
-      symbol: 'RELIANCE',
-      units: 10,
-      purchasePrice: 2400,
-      currentPrice: 2900,
-      purchaseDate: '2026-01-10',
-      platform: 'Zerodha',
-      notes: 'Bluechip core portfolio stock',
-      totalInvested: 24000,
-      currentValue: 29000,
-      gainLoss: 5000,
-      gainLossPercent: 20.83,
-    },
-    {
-      id: uuidv4(),
-      name: 'HDFC Nifty 50 Fund',
-      assetType: 'mutual_funds',
-      symbol: 'HDFCN50',
-      units: 100,
-      purchasePrice: 120,
-      currentPrice: 145,
-      purchaseDate: '2026-02-15',
-      platform: 'Groww',
-      notes: 'Monthly SIP passive index mutual fund',
-      totalInvested: 12000,
-      currentValue: 14500,
-      gainLoss: 2500,
-      gainLossPercent: 20.83,
-    },
-    {
-      id: uuidv4(),
-      name: 'Digital Gold',
-      assetType: 'gold',
-      symbol: 'GOLD',
-      units: 5,
-      purchasePrice: 6000,
-      currentPrice: 7200,
-      purchaseDate: '2026-03-01',
-      platform: 'Paytm Gold',
-      notes: 'Hedge asset class inflation guard',
-      totalInvested: 30000,
-      currentValue: 36000,
-      gainLoss: 6000,
-      gainLossPercent: 20.00,
-    },
-    {
-      id: uuidv4(),
-      name: 'Bitcoin',
-      assetType: 'crypto',
-      symbol: 'BTC',
-      units: 0.05,
-      purchasePrice: 5500000,
-      currentPrice: 6200000,
-      purchaseDate: '2026-04-10',
-      platform: 'CoinDCX',
-      notes: 'High volatility speculative allocation',
-      totalInvested: 275000,
-      currentValue: 310000,
-      gainLoss: 35000,
-      gainLossPercent: 12.73,
-    },
-    {
-      id: uuidv4(),
-      name: 'SBI Fixed Deposit',
-      assetType: 'fixed_deposit',
-      symbol: 'SBI-FD',
-      units: 1,
-      purchasePrice: 100000,
-      currentPrice: 107000,
-      purchaseDate: '2026-05-01',
-      platform: 'SBI NetBanking',
-      notes: 'Safe low-risk fixed return instrument',
-      totalInvested: 100000,
-      currentValue: 107000,
-      gainLoss: 7000,
-      gainLossPercent: 7.00,
-    },
-  ];
-
-  const computedBudgets = recalculateSpent(MOCK_TRANSACTIONS, MOCK_BUDGETS);
-  const computedSummary = calculatePortfolioSummary(MOCK_INVESTMENTS);
-
   return {
-    transactions: MOCK_TRANSACTIONS,
-    budgets: computedBudgets,
-    goals: MOCK_GOALS,
-    investments: MOCK_INVESTMENTS,
-    portfolioSummary: computedSummary,
+    transactions: [],
+    budgets: [],
+    goals: [],
+    investments: [],
+    portfolioSummary: {
+      totalInvested: 0,
+      currentValue: 0,
+      totalGainLoss: 0,
+      totalGainLossPercent: 0,
+      assetAllocation: {},
+    },
   };
 };
 

@@ -19,6 +19,7 @@ import PageTransition from '@/components/common/PageTransition';
 import Modal from '@/components/common/Modal';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import Button from '@/components/common/Button';
+import EmptyState from '@/components/common/EmptyState';
 
 // Asset colors
 const ASSET_COLORS: Record<string, string> = {
@@ -215,231 +216,247 @@ export const InvestmentsPage: React.FC = () => {
           </Button>
         </div>
 
-        {/* Portfolio Summary Widgets */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {/* Total Invested */}
-          <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-purple/2">
-            <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">Total Invested</span>
-            <h2 className="text-2xl font-bold text-white font-mono mt-2">
-              {formatINR(portfolioSummary?.totalInvested || 0)}
-            </h2>
-          </div>
+        {investments.length === 0 ? (
+          <EmptyState
+            icon={TrendingUp}
+            title="No investments tracked"
+            description="No investments tracked. Add an investment to monitor your portfolio."
+            actionLabel="Add Investment"
+            onAction={() => setIsAddOpen(true)}
+          />
+        ) : (
+          <>
+            {/* Portfolio Summary Widgets */}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {/* Total Invested */}
+              <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-purple/2">
+                <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">Total Invested</span>
+                <h2 className="text-2xl font-bold text-white font-mono mt-2">
+                  {formatINR(portfolioSummary?.totalInvested || 0)}
+                </h2>
+              </div>
 
-          {/* Current Value */}
-          <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-blue/2">
-            <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">Current Value</span>
-            <h2 className="text-2xl font-bold text-white font-mono mt-2">
-              {formatINR(portfolioSummary?.currentValue || 0)}
-            </h2>
-          </div>
+              {/* Current Value */}
+              <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-blue/2">
+                <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">Current Value</span>
+                <h2 className="text-2xl font-bold text-white font-mono mt-2">
+                  {formatINR(portfolioSummary?.currentValue || 0)}
+                </h2>
+              </div>
 
-          {/* Gain/Loss */}
-          <div className={`glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 ${
-            (portfolioSummary?.totalGainLoss || 0) >= 0 ? 'shadow-glow-green/2 border-green-positive/20' : 'shadow-glow-red/2 border-red-negative/20'
-          }`}>
-            <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">Total Gain / Loss</span>
-            <h2 className={`text-2xl font-bold font-mono mt-2 ${
-              (portfolioSummary?.totalGainLoss || 0) >= 0 ? 'text-green-positive' : 'text-red-negative'
-            }`}>
-              {(portfolioSummary?.totalGainLoss || 0) >= 0 ? '+' : ''}
-              {formatINR(portfolioSummary?.totalGainLoss || 0)}
-            </h2>
-          </div>
-
-          {/* Returns Rate */}
-          <div className={`glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 ${
-            (portfolioSummary?.totalGainLossPercent || 0) >= 0 ? 'shadow-glow-green/2 border-green-positive/20' : 'shadow-glow-red/2 border-red-negative/20'
-          }`}>
-            <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">Returns %</span>
-            <div className="flex items-center gap-1.5 mt-2">
-              {(portfolioSummary?.totalGainLossPercent || 0) >= 0 ? (
-                <TrendingUp className="text-green-positive" size={20} />
-              ) : (
-                <TrendingDown className="text-red-negative" size={20} />
-              )}
-              <h2 className={`text-2xl font-bold font-mono ${
-                (portfolioSummary?.totalGainLossPercent || 0) >= 0 ? 'text-green-positive' : 'text-red-negative'
+              {/* Gain/Loss */}
+              <div className={`glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 ${
+                (portfolioSummary?.totalGainLoss || 0) >= 0 ? 'shadow-glow-green/2 border-green-positive/20' : 'shadow-glow-red/2 border-red-negative/20'
               }`}>
-                {(portfolioSummary?.totalGainLossPercent || 0).toFixed(2)}%
-              </h2>
-            </div>
-          </div>
-        </div>
+                <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">Total Gain / Loss</span>
+                <h2 className={`text-2xl font-bold font-mono mt-2 ${
+                  (portfolioSummary?.totalGainLoss || 0) >= 0 ? 'text-green-positive' : 'text-red-negative'
+                }`}>
+                  {(portfolioSummary?.totalGainLoss || 0) >= 0 ? '+' : ''}
+                  {formatINR(portfolioSummary?.totalGainLoss || 0)}
+                </h2>
+              </div>
 
-        {/* Charts & Table Segment */}
-        <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
-          {/* Allocation Donut */}
-          <div className="glassmorphism bg-bg-surface/30 p-5 border border-white/8 rounded-2xl lg:col-span-4 h-[340px] flex flex-col justify-between">
-            <div>
-              <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider block">Portfolio Split</span>
-              <h3 className="text-sm font-bold text-white mt-0.5">Asset Allocation</h3>
-            </div>
-
-            <div className="flex-1 relative flex items-center justify-center min-h-0 my-3">
-              {pieData.length === 0 ? (
-                <span className="text-xs text-white/30">No investments added</span>
-              ) : (
-                <div className="w-full h-[180px] relative">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={pieData}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={50}
-                        outerRadius={70}
-                        paddingAngle={3}
-                        dataKey="value"
-                      >
-                        {pieData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                    </PieChart>
-                  </ResponsiveContainer>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none leading-none">
-                    <span className="text-[9px] text-white/40 font-bold uppercase tracking-wider">Asset</span>
-                    <span className="text-sm font-bold text-white mt-1">Split</span>
-                  </div>
+              {/* Returns Rate */}
+              <div className={`glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 ${
+                (portfolioSummary?.totalGainLossPercent || 0) >= 0 ? 'shadow-glow-green/2 border-green-positive/20' : 'shadow-glow-red/2 border-red-negative/20'
+              }`}>
+                <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">Returns %</span>
+                <div className="flex items-center gap-1.5 mt-2">
+                  {(portfolioSummary?.totalGainLossPercent || 0) >= 0 ? (
+                    <TrendingUp className="text-green-positive" size={20} />
+                  ) : (
+                    <TrendingDown className="text-red-negative" size={20} />
+                  )}
+                  <h2 className={`text-2xl font-bold font-mono ${
+                    (portfolioSummary?.totalGainLossPercent || 0) >= 0 ? 'text-green-positive' : 'text-red-negative'
+                  }`}>
+                    {(portfolioSummary?.totalGainLossPercent || 0).toFixed(2)}%
+                  </h2>
                 </div>
-              )}
+              </div>
             </div>
 
-            <div className="flex flex-wrap gap-2 justify-center max-h-[60px] overflow-y-auto">
-              {pieData.map((p) => (
-                <div key={p.name} className="flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: p.color }} />
-                  <span className="text-[9px] text-white/70 font-semibold truncate">{p.name} ({p.percentage.toFixed(0)}%)</span>
+            {/* Charts & Table Segment */}
+            <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
+              {/* Allocation Donut */}
+              <div className="glassmorphism bg-bg-surface/30 p-5 border border-white/8 rounded-2xl lg:col-span-4 h-[340px] flex flex-col justify-between">
+                <div>
+                  <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider block">Portfolio Split</span>
+                  <h3 className="text-sm font-bold text-white mt-0.5">Asset Allocation</h3>
                 </div>
-              ))}
-            </div>
-          </div>
 
-          {/* Performance Table */}
-          <div className="glassmorphism bg-bg-surface/30 p-5 border border-white/8 rounded-2xl lg:col-span-6 h-[340px] flex flex-col justify-between">
-            <div>
-              <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider block">Performance</span>
-              <h3 className="text-sm font-bold text-white mt-0.5">Asset Performance Ranking</h3>
-            </div>
-
-            <div className="flex-1 mt-4 overflow-y-auto pr-1 text-xs">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-white/5 text-[9px] uppercase font-bold text-white/40 tracking-wider">
-                    <th className="py-2.5 px-3">Asset Type</th>
-                    <th className="py-2.5 px-3 text-right">Invested</th>
-                    <th className="py-2.5 px-3 text-right">Current</th>
-                    <th className="py-2.5 px-3 text-right">Gain/Loss</th>
-                    <th className="py-2.5 px-3 text-right">Return %</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Object.entries(portfolioSummary?.assetAllocation || {}).map(([type, item]: [string, any]) => {
-                    const gain = item.value - (investments.filter(i=>i.assetType===type).reduce((s,i)=>s+i.totalInvested, 0));
-                    const invested = investments.filter(i=>i.assetType===type).reduce((s,i)=>s+i.totalInvested, 0);
-                    const gainPercent = invested > 0 ? (gain / invested) * 100 : 0;
-
-                    return (
-                      <tr key={type} className="border-b border-white/3 font-medium text-white/80">
-                        <td className="py-3 px-3 flex items-center gap-2">
-                          <span>{ASSET_EMOJIS[type]}</span>
-                          <span className="font-semibold text-white">{ASSET_LABELS[type]}</span>
-                        </td>
-                        <td className="py-3 px-3 text-right font-mono">{formatINR(invested)}</td>
-                        <td className="py-3 px-3 text-right font-mono">{formatINR(item.value)}</td>
-                        <td className={`py-3 px-3 text-right font-mono font-bold ${gain >= 0 ? 'text-green-positive' : 'text-red-negative'}`}>
-                          {gain >= 0 ? '+' : ''}{formatINR(gain)}
-                        </td>
-                        <td className={`py-3 px-3 text-right font-mono font-bold ${gainPercent >= 0 ? 'text-green-positive' : 'text-red-negative'}`}>
-                          {gainPercent.toFixed(1)}%
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        {/* Investment Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {investments.map((inv) => {
-            const initialInvested = inv.units * inv.purchasePrice;
-            const currentTotalValue = inv.units * inv.currentPrice;
-            const gain = currentTotalValue - initialInvested;
-            const gainPercent = initialInvested > 0 ? (gain / initialInvested) * 100 : 0;
-
-
-            return (
-              <motionBase.div
-                key={inv.id}
-                layout
-                className={`glassmorphism bg-bg-surface/40 rounded-2xl p-5 border border-white/8 flex flex-col justify-between hover:scale-[1.01] transition-all duration-300 relative`}
-              >
-                {/* Header */}
-                <div className="flex justify-between items-start gap-4">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl leading-none w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center select-none">
-                      {ASSET_EMOJIS[inv.assetType]}
-                    </span>
-                    <div className="min-w-0 flex flex-col">
-                      <h3 className="font-display font-bold text-sm text-white truncate max-w-[120px]">{inv.name}</h3>
-                      <span className="text-[10px] text-white/40 font-mono truncate">{inv.symbol || ASSET_LABELS[inv.assetType]}</span>
+                <div className="flex-1 relative flex items-center justify-center min-h-0 my-3">
+                  {pieData.length === 0 ? (
+                    <span className="text-xs text-white/30">No investments added</span>
+                  ) : (
+                    <div className="w-full h-[180px] relative">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={pieData}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={50}
+                            outerRadius={70}
+                            paddingAngle={3}
+                            dataKey="value"
+                          >
+                            {pieData.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.color} />
+                            ))}
+                          </Pie>
+                        </PieChart>
+                      </ResponsiveContainer>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none leading-none">
+                        <span className="text-[9px] text-white/40 font-bold uppercase tracking-wider">Asset</span>
+                        <span className="text-sm font-bold text-white mt-1">Split</span>
+                      </div>
                     </div>
-                  </div>
+                  )}
+                </div>
 
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    {inv.platform && (
-                      <span className="px-2 py-0.5 rounded-full text-[8px] font-bold bg-white/5 border border-white/10 text-white/60">
-                        {inv.platform}
+                <div className="flex flex-wrap gap-2 justify-center max-h-[60px] overflow-y-auto">
+                  {pieData.map((p) => (
+                    <div key={p.name} className="flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: p.color }} />
+                      <span className="text-[9px] text-white/70 font-semibold truncate">{p.name} ({p.percentage.toFixed(0)}%)</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Performance Table */}
+              <div className="glassmorphism bg-bg-surface/30 p-5 border border-white/8 rounded-2xl lg:col-span-6 h-[340px] flex flex-col justify-between">
+                <div>
+                  <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider block">Performance</span>
+                  <h3 className="text-sm font-bold text-white mt-0.5">Asset Performance Ranking</h3>
+                </div>
+
+                <div className="flex-1 mt-4 overflow-y-auto pr-1 text-xs">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="border-b border-white/5 text-[9px] uppercase font-bold text-white/40 tracking-wider">
+                        <th className="py-2.5 px-3">Asset Type</th>
+                        <th className="py-2.5 px-3 text-right">Invested</th>
+                        <th className="py-2.5 px-3 text-right">Current</th>
+                        <th className="py-2.5 px-3 text-right">Gain/Loss</th>
+                        <th className="py-2.5 px-3 text-right">Return %</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Object.entries(portfolioSummary?.assetAllocation || {}).map(([type, item]: [string, any]) => {
+                        const gain = item.value - (investments.filter(i=>i.assetType===type).reduce((s,i)=>s+i.totalInvested, 0));
+                        const invested = investments.filter(i=>i.assetType===type).reduce((s,i)=>s+i.totalInvested, 0);
+                        const gainPercent = invested > 0 ? (gain / invested) * 100 : 0;
+
+                        return (
+                          <tr key={type} className="border-b border-white/3 font-medium text-white/80">
+                            <td className="py-3 px-3 flex items-center gap-2">
+                              <span>{ASSET_EMOJIS[type]}</span>
+                              <span className="font-semibold text-white">{ASSET_LABELS[type]}</span>
+                            </td>
+                            <td className="py-3 px-3 text-right font-mono">{formatINR(invested)}</td>
+                            <td className="py-3 px-3 text-right font-mono">{formatINR(item.value)}</td>
+                            <td className={`py-3 px-3 text-right font-mono font-bold ${gain >= 0 ? 'text-green-positive' : 'text-red-negative'}`}>
+                              {gain >= 0 ? '+' : ''}{formatINR(gain)}
+                            </td>
+                            <td className={`py-3 px-3 text-right font-mono font-bold ${gainPercent >= 0 ? 'text-green-positive' : 'text-red-negative'}`}>
+                              {gainPercent >= 0 ? '+' : ''}{gainPercent.toFixed(1)}%
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="border-t border-white/5 pt-2 flex justify-between items-center text-[10px] text-white/35 font-medium uppercase tracking-wider">
+                  <span>Sorted by Current Valuation</span>
+                  <span>Active Live Allocation Ranking</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Individual Assets Ledger Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {investments.map((inv) => {
+                const initialInvested = inv.units * inv.purchasePrice;
+                const currentTotalValue = inv.units * inv.currentPrice;
+                const gain = currentTotalValue - initialInvested;
+                const gainPercent = initialInvested > 0 ? (gain / initialInvested) * 100 : 0;
+
+                return (
+                  <motionBase.div
+                    key={inv.id}
+                    layout
+                    className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 flex flex-col justify-between hover:scale-[1.01] hover:shadow-glow-purple/2 transition-all duration-300 relative overflow-hidden"
+                  >
+                    {/* Header */}
+                    <div className="flex justify-between items-start gap-4">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span className="text-2xl leading-none w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center select-none">
+                          {ASSET_EMOJIS[inv.assetType]}
+                        </span>
+                        <div className="min-w-0 flex flex-col">
+                          <h3 className="font-display font-bold text-sm text-white truncate max-w-[120px]">{inv.name}</h3>
+                          <span className="text-[10px] text-white/40 font-mono truncate">{inv.symbol || ASSET_LABELS[inv.assetType]}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        {inv.platform && (
+                          <span className="px-2 py-0.5 rounded-full text-[8px] font-bold bg-white/5 border border-white/10 text-white/60">
+                            {inv.platform}
+                          </span>
+                        )}
+                        <button
+                          onClick={() => setEditingInvestment(inv)}
+                          className="p-1 rounded-lg text-white/30 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
+                        >
+                          <Edit2 size={12} />
+                        </button>
+                        <button
+                          onClick={() => setDeletingId(inv.id)}
+                          className="p-1 rounded-lg text-white/30 hover:text-red-negative hover:bg-red-negative/5 transition-all cursor-pointer"
+                        >
+                          <Trash2 size={12} />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Performance details */}
+                    <div className="my-5 grid grid-cols-2 gap-4 border-b border-white/5 pb-4">
+                      <div>
+                        <span className="text-[9px] text-white/40 uppercase font-bold tracking-wider leading-none">Invested</span>
+                        <span className="text-sm font-bold font-mono text-white block mt-1">{formatINR(initialInvested)}</span>
+                        <span className="text-[10px] text-white/30 font-medium block mt-0.5">{inv.units} units @ {formatINR(inv.purchasePrice)}</span>
+                      </div>
+                      <div>
+                        <span className="text-[9px] text-white/40 uppercase font-bold tracking-wider leading-none">Current Value</span>
+                        <span className="text-sm font-bold font-mono text-white block mt-1">{formatINR(currentTotalValue)}</span>
+                        <span className="text-[10px] text-white/30 font-medium block mt-0.5">Price: {formatINR(inv.currentPrice)}</span>
+                      </div>
+                    </div>
+
+                    {/* Returns summary footer */}
+                    <div className="flex justify-between items-center">
+                      <div className="flex flex-col">
+                        <span className="text-[9px] text-white/40 uppercase font-bold tracking-wider">Total Returns</span>
+                        <span className={`text-sm font-bold font-mono mt-0.5 ${gain >= 0 ? 'text-green-positive' : 'text-red-negative'}`}>
+                          {gain >= 0 ? '+' : ''}{formatINR(gain)} ({gainPercent.toFixed(1)}%)
+                        </span>
+                      </div>
+                      <span className="text-[9px] text-white/30 font-medium block">
+                        {formatDate(inv.purchaseDate)}
                       </span>
-                    )}
-                    <button
-                      onClick={() => setEditingInvestment(inv)}
-                      className="p-1 rounded-lg text-white/30 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
-                    >
-                      <Edit2 size={12} />
-                    </button>
-                    <button
-                      onClick={() => setDeletingId(inv.id)}
-                      className="p-1 rounded-lg text-white/30 hover:text-red-negative hover:bg-red-negative/5 transition-all cursor-pointer"
-                    >
-                      <Trash2 size={12} />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Performance details */}
-                <div className="my-5 grid grid-cols-2 gap-4 border-b border-white/5 pb-4">
-                  <div>
-                    <span className="text-[9px] text-white/40 uppercase font-bold tracking-wider leading-none">Invested</span>
-                    <span className="text-sm font-bold font-mono text-white block mt-1">{formatINR(initialInvested)}</span>
-                    <span className="text-[10px] text-white/30 font-medium block mt-0.5">{inv.units} units @ {formatINR(inv.purchasePrice)}</span>
-                  </div>
-                  <div>
-                    <span className="text-[9px] text-white/40 uppercase font-bold tracking-wider leading-none">Current Value</span>
-                    <span className="text-sm font-bold font-mono text-white block mt-1">{formatINR(currentTotalValue)}</span>
-                    <span className="text-[10px] text-white/30 font-medium block mt-0.5">Price: {formatINR(inv.currentPrice)}</span>
-                  </div>
-                </div>
-
-                {/* Returns summary footer */}
-                <div className="flex justify-between items-center">
-                  <div className="flex flex-col">
-                    <span className="text-[9px] text-white/40 uppercase font-bold tracking-wider">Total Returns</span>
-                    <span className={`text-sm font-bold font-mono mt-0.5 ${gain >= 0 ? 'text-green-positive' : 'text-red-negative'}`}>
-                      {gain >= 0 ? '+' : ''}{formatINR(gain)} ({gainPercent.toFixed(1)}%)
-                    </span>
-                  </div>
-                  <span className="text-[9px] text-white/30 font-medium block">
-                    {formatDate(inv.purchaseDate)}
-                  </span>
-                </div>
-              </motionBase.div>
-            );
-          })}
-        </div>
+                    </div>
+                  </motionBase.div>
+                );
+              })}
+            </div>
+          </>
+        )}
 
         {/* Delete Confirmation */}
         <ConfirmDialog

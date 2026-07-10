@@ -22,6 +22,7 @@ import PageTransition from '@/components/common/PageTransition';
 import Modal from '@/components/common/Modal';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import Button from '@/components/common/Button';
+import EmptyState from '@/components/common/EmptyState';
 
 // Zod validation schemas
 const budgetCreateSchema = z.object({
@@ -186,159 +187,174 @@ export const BudgetsPage: React.FC = () => {
           </Button>
         </div>
 
-        {/* Summary Row */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-purple/2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Total Budgeted</span>
-              <div className="w-8 h-8 rounded-lg bg-purple-primary/10 border border-purple-primary/20 flex items-center justify-center text-purple-light">
-                <Sliders size={16} />
-              </div>
-            </div>
-            <h2 className="text-2xl font-bold text-white font-mono mt-3">{formatINR(summary.limit)}</h2>
-          </div>
-
-          <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-red/2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Total Spent</span>
-              <div className="w-8 h-8 rounded-lg bg-red-negative/10 border border-red-negative/20 flex items-center justify-center text-red-negative">
-                <TrendingDown size={16} />
-              </div>
-            </div>
-            <h2 className="text-2xl font-bold text-white font-mono mt-3">{formatINR(summary.spent)}</h2>
-          </div>
-
-          <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-green/2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Remaining Budget</span>
-              <div className="w-8 h-8 rounded-lg bg-green-positive/10 border border-green-positive/20 flex items-center justify-center text-green-positive">
-                <Wallet size={16} />
-              </div>
-            </div>
-            <h2 className={`text-2xl font-bold font-mono mt-3 ${summary.remaining >= 0 ? 'text-green-positive' : 'text-red-negative'}`}>
-              {formatINR(summary.remaining)}
-            </h2>
-          </div>
-        </div>
-
-        {/* Budgets Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {budgets.map((b) => {
-            const percentage = b.limit > 0 ? (b.spent / b.limit) * 100 : 0;
-            const isApproaching = percentage >= b.alertThreshold && percentage < 100;
-            const isOverBudget = percentage >= 100;
-            const remaining = b.limit - b.spent;
-
-            // Border style maps based on alert threshold state
-            const cardGlow = isOverBudget
-              ? 'border-red-negative shadow-glow-red/5'
-              : isApproaching
-              ? 'border-gold-savings/35 border-l-gold-savings border-l-[3px]'
-              : 'border-white/8 hover:shadow-glow-purple/2';
-
-            return (
-              <motion.div
-                key={b.id}
-                layout
-                // Shakes card on mount if over budget
-                animate={isOverBudget ? { x: [0, -6, 6, -6, 6, -3, 3, 0] } : {}}
-                transition={{ duration: 0.5 }}
-                className={`glassmorphism bg-bg-surface/40 rounded-2xl p-5 border flex flex-col justify-between hover:scale-[1.01] transition-all duration-300 relative ${cardGlow}`}
-              >
-                {/* Header */}
+        {budgets.length === 0 ? (
+          <EmptyState
+            icon={Sliders}
+            title="No budgets set"
+            description="No budgets set. Create a budget to start managing your spending."
+            actionLabel="Create Budget"
+            onAction={() => {
+              setCurrentStep(1);
+              setIsCreateOpen(true);
+            }}
+          />
+        ) : (
+          <>
+            {/* Summary Row */}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-purple/2">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="text-xl leading-none bg-white/5 w-8 h-8 rounded-lg flex items-center justify-center select-none">
-                      {b.icon}
-                    </span>
-                    <div>
-                      <h3 className="font-display font-bold text-sm text-white">{b.category}</h3>
-                      <span className="text-[10px] text-white/35 font-bold uppercase tracking-wider">
-                        {b.period}
-                      </span>
+                  <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Total Budgeted</span>
+                  <div className="w-8 h-8 rounded-lg bg-purple-primary/10 border border-purple-primary/20 flex items-center justify-center text-purple-light">
+                    <Sliders size={16} />
+                  </div>
+                </div>
+                <h2 className="text-2xl font-bold text-white font-mono mt-3">{formatINR(summary.limit)}</h2>
+              </div>
+
+              <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-red/2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Total Spent</span>
+                  <div className="w-8 h-8 rounded-lg bg-red-negative/10 border border-red-negative/20 flex items-center justify-center text-red-negative">
+                    <TrendingDown size={16} />
+                  </div>
+                </div>
+                <h2 className="text-2xl font-bold text-white font-mono mt-3">{formatINR(summary.spent)}</h2>
+              </div>
+
+              <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-green/2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Remaining Budget</span>
+                  <div className="w-8 h-8 rounded-lg bg-green-positive/10 border border-green-positive/20 flex items-center justify-center text-green-positive">
+                    <Wallet size={16} />
+                  </div>
+                </div>
+                <h2 className={`text-2xl font-bold font-mono mt-3 ${summary.remaining >= 0 ? 'text-green-positive' : 'text-red-negative'}`}>
+                  {formatINR(summary.remaining)}
+                </h2>
+              </div>
+            </div>
+
+            {/* Budgets Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {budgets.map((b) => {
+                const percentage = b.limit > 0 ? (b.spent / b.limit) * 100 : 0;
+                const isApproaching = percentage >= b.alertThreshold && percentage < 100;
+                const isOverBudget = percentage >= 100;
+                const remaining = b.limit - b.spent;
+
+                // Border style maps based on alert threshold state
+                const cardGlow = isOverBudget
+                  ? 'border-red-negative shadow-glow-red/5'
+                  : isApproaching
+                  ? 'border-gold-savings/35 border-l-gold-savings border-l-[3px]'
+                  : 'border-white/8 hover:shadow-glow-purple/2';
+
+                return (
+                  <motion.div
+                    key={b.id}
+                    layout
+                    // Shakes card on mount if over budget
+                    animate={isOverBudget ? { x: [0, -6, 6, -6, 6, -3, 3, 0] } : {}}
+                    transition={{ duration: 0.5 }}
+                    className={`glassmorphism bg-bg-surface/40 rounded-2xl p-5 border flex flex-col justify-between hover:scale-[1.01] transition-all duration-300 relative ${cardGlow}`}
+                  >
+                    {/* Header */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <span className="text-xl leading-none bg-white/5 w-8 h-8 rounded-lg flex items-center justify-center select-none">
+                          {b.icon}
+                        </span>
+                        <div>
+                          <h3 className="font-display font-bold text-sm text-white">{b.category}</h3>
+                          <span className="text-[10px] text-white/35 font-bold uppercase tracking-wider">
+                            {b.period}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        {isOverBudget && (
+                          <div className="w-5 h-5 rounded-full bg-red-negative/10 flex items-center justify-center text-red-negative" title="Over budget!">
+                            <AlertTriangle size={12} />
+                          </div>
+                        )}
+                        {isApproaching && (
+                          <div className="w-5 h-5 rounded-full bg-gold-savings/10 flex items-center justify-center text-gold-savings" title="Approaching budget limit!">
+                            <AlertTriangle size={12} />
+                          </div>
+                        )}
+                        
+                        <button
+                          onClick={() => triggerEdit(b)}
+                          className="p-1 rounded-lg text-white/30 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
+                        >
+                          <Edit2 size={13} />
+                        </button>
+                        <button
+                          onClick={() => setDeletingBudgetId(b.id)}
+                          className="p-1 rounded-lg text-white/30 hover:text-red-negative hover:bg-red-negative/5 transition-all cursor-pointer"
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="flex items-center gap-2">
-                    {isOverBudget && (
-                      <div className="w-5 h-5 rounded-full bg-red-negative/10 flex items-center justify-center text-red-negative" title="Over budget!">
-                        <AlertTriangle size={12} />
+                    {/* Amount section */}
+                    <div className="my-6">
+                      <div className="flex items-baseline gap-1.5">
+                        <span className="text-xl font-bold font-mono text-white leading-none">
+                          {formatINR(b.spent)}
+                        </span>
+                        <span className="text-xs text-white/40 font-medium">spent of {formatINR(b.limit)}</span>
                       </div>
-                    )}
-                    {isApproaching && (
-                      <div className="w-5 h-5 rounded-full bg-gold-savings/10 flex items-center justify-center text-gold-savings" title="Approaching budget limit!">
-                        <AlertTriangle size={12} />
+
+                      {/* Remaining / Over Indicator */}
+                      <div className="text-[11px] font-bold mt-2">
+                        {isOverBudget ? (
+                          <span className="text-red-negative font-display">
+                            🔴 Over budget by {formatINR(Math.abs(remaining))}
+                          </span>
+                        ) : (
+                          <span className="text-green-positive font-display">
+                            {formatINR(remaining)} remaining
+                          </span>
+                        )}
                       </div>
-                    )}
-                    
-                    <button
-                      onClick={() => triggerEdit(b)}
-                      className="p-1 rounded-lg text-white/30 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
-                    >
-                      <Edit2 size={13} />
-                    </button>
-                    <button
-                      onClick={() => setDeletingBudgetId(b.id)}
-                      className="p-1 rounded-lg text-white/30 hover:text-red-negative hover:bg-red-negative/5 transition-all cursor-pointer"
-                    >
-                      <Trash2 size={13} />
-                    </button>
-                  </div>
-                </div>
+                    </div>
 
-                {/* Amount section */}
-                <div className="my-6">
-                  <div className="flex items-baseline gap-1.5">
-                    <span className="text-xl font-bold font-mono text-white leading-none">
-                      {formatINR(b.spent)}
-                    </span>
-                    <span className="text-xs text-white/40 font-medium">spent of {formatINR(b.limit)}</span>
-                  </div>
+                    {/* Progress bar container */}
+                    <div className="space-y-1.5">
+                      <div className="flex justify-between items-center text-[10px] text-white/40 font-bold font-mono">
+                        <span>Progress</span>
+                        <span>{percentage.toFixed(0)}%</span>
+                      </div>
+                      
+                      <div className="w-full h-2 bg-white/4 rounded-full overflow-hidden relative">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${Math.min(100, percentage)}%` }}
+                          transition={{ duration: 0.8, ease: 'easeOut' }}
+                          className="h-full rounded-full"
+                          style={{
+                            backgroundColor: getProgressColor(percentage),
+                            boxShadow: isOverBudget ? '0 0 10px rgba(244,63,94,0.6)' : 'none',
+                          }}
+                        />
+                      </div>
 
-                  {/* Remaining / Over Indicator */}
-                  <div className="text-[11px] font-bold mt-2">
-                    {isOverBudget ? (
-                      <span className="text-red-negative font-display">
-                        🔴 Over budget by {formatINR(Math.abs(remaining))}
-                      </span>
-                    ) : (
-                      <span className="text-green-positive font-display">
-                        {formatINR(remaining)} remaining
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Progress bar container */}
-                <div className="space-y-1.5">
-                  <div className="flex justify-between items-center text-[10px] text-white/40 font-bold font-mono">
-                    <span>Progress</span>
-                    <span>{percentage.toFixed(0)}%</span>
-                  </div>
-                  
-                  <div className="w-full h-2 bg-white/4 rounded-full overflow-hidden relative">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${Math.min(100, percentage)}%` }}
-                      transition={{ duration: 0.8, ease: 'easeOut' }}
-                      className="h-full rounded-full"
-                      style={{
-                        backgroundColor: getProgressColor(percentage),
-                        boxShadow: isOverBudget ? '0 0 10px rgba(244,63,94,0.6)' : 'none',
-                      }}
-                    />
-                  </div>
-
-                  {isApproaching && (
-                    <span className="text-[10px] text-gold-savings font-semibold block pt-1 animate-pulse">
-                      ⚠️ Approaching Limit ({b.alertThreshold}%)
-                    </span>
-                  )}
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
+                      {isApproaching && (
+                        <span className="text-[10px] text-gold-savings font-semibold block pt-1 animate-pulse">
+                          ⚠️ Approaching Limit ({b.alertThreshold}%)
+                        </span>
+                      )}
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </>
+        )}
 
         {/* Delete Confirmation */}
         <ConfirmDialog

@@ -43,6 +43,8 @@ import PageTransition from '@/components/common/PageTransition';
 import AnimatedNumber from '@/components/common/AnimatedNumber';
 import Modal from '@/components/common/Modal';
 import Button from '@/components/common/Button';
+import EmptyState from '@/components/common/EmptyState';    
+
 
 // Add validation schema for Quick Action modal
 const quickTxnSchema = z.object({
@@ -119,31 +121,26 @@ export const DashboardPage: React.FC = () => {
 
   // Compute stats dynamically, preserving checklist base values on load
   const stats = useMemo(() => {
-    // Benchmark date is the date of initial seed transaction imports
-    const benchmarkDate = '2026-07-13';
+    const balance = transactions.reduce((sum, t) => sum + t.amount, 0);
 
-    const newTxns = transactions.filter((t) => t.date > benchmarkDate);
-
-    const newBalance = newTxns.reduce((sum, t) => sum + t.amount, 0);
-
-    const newIncome = newTxns
+    const income = transactions
       .filter((t) => t.type === 'income')
       .reduce((sum, t) => sum + t.amount, 0);
 
-    const newExpense = newTxns
+    const expense = transactions
       .filter((t) => t.type === 'expense')
       .reduce((sum, t) => sum + Math.abs(t.amount), 0);
 
-    const newInvestment = newTxns
+    const investment = transactions
       .filter((t) => t.category === 'Investment')
       .reduce((sum, t) => sum + Math.abs(t.amount), 0);
 
     return {
-      totalBalance: 2045250 + newBalance,
-      income: 125000 + newIncome,
-      expenses: 48750 + newExpense,
-      savings: 76250 + newInvestment,
-      netWorth: 5842000 + newBalance,
+      totalBalance: balance,
+      income,
+      expenses: expense,
+      savings: investment,
+      netWorth: balance,
     };
   }, [transactions]);
 
@@ -274,325 +271,319 @@ export const DashboardPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Row 1: KPI Cards */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={loading ? 'hidden' : 'visible'}
-          className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
-        >
-          {loading ? (
-            <>
-              <KPICardSkeleton />
-              <KPICardSkeleton />
-              <KPICardSkeleton />
-              <KPICardSkeleton />
-            </>
-          ) : (
-            <>
-              <motion.div variants={itemVariants}>
-                <KPICard
-                  title="Total Balance"
-                  value={stats.totalBalance}
-                  change={12.4}
-                  changeLabel="vs last month"
-                  icon={Wallet}
-                  iconColor="purple-primary"
-                  glowColor="purple"
-                  prefix={activeCurrency.symbol}
-                />
-              </motion.div>
-              <motion.div variants={itemVariants}>
-                <KPICard
-                  title="Total Income"
-                  value={stats.income}
-                  change={8.2}
-                  changeLabel="vs last month"
-                  icon={ArrowUpRight}
-                  iconColor="green-positive"
-                  glowColor="green"
-                  prefix={activeCurrency.symbol}
-                />
-              </motion.div>
-              <motion.div variants={itemVariants}>
-                <KPICard
-                  title="Total Expenses"
-                  value={stats.expenses}
-                  change={-4.8}
-                  changeLabel="vs last month"
-                  icon={ArrowDownRight}
-                  iconColor="red-negative"
-                  glowColor="red"
-                  prefix={activeCurrency.symbol}
-                />
-              </motion.div>
-              <motion.div variants={itemVariants}>
-                <KPICard
-                  title="Target Savings"
-                  value={stats.savings}
-                  change={15.3}
-                  changeLabel="vs last month"
-                  icon={Target}
-                  iconColor="gold-savings"
-                  glowColor="gold"
-                  prefix={activeCurrency.symbol}
-                />
-              </motion.div>
-            </>
-          )}
-        </motion.div>
-
-        {/* Row 2: Net Worth, 3D Globe, Quick Actions */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-10">
-          {/* Net Worth (30%) */}
-          <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-3 h-[380px] hover:shadow-glow-purple/2 transition-all duration-300">
-            <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-white/40 leading-none">
-                Equity Valuations
-              </span>
-              <h3 className="text-sm font-bold font-display text-white mt-0.5">Net Worth Projection</h3>
-            </div>
-
-            <div className="my-auto py-3">
-              <span className="text-[10px] text-white/35 font-bold uppercase tracking-wider">Estimated Valuation</span>
-              <div className="flex items-baseline mt-1 gap-1">
-                <span className="text-3xl font-display font-extrabold text-white tracking-tight">
-                  <AnimatedNumber value={stats.netWorth} prefix={activeCurrency.symbol} decimals={0} />
-                </span>
-                <span className="text-green-positive text-xs font-bold font-mono">+18.5%</span>
-              </div>
-            </div>
-
-            {/* Sparkline Graphic */}
-            <div className="h-16 relative w-full overflow-hidden rounded-xl border border-white/5 bg-white/2 p-2">
-              <div className="absolute inset-0">
-                <svg className="w-full h-full" viewBox="0 0 100 30" preserveAspectRatio="none">
-                  <defs>
-                    <linearGradient id="sparkline-grad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="var(--purple-primary)" stopOpacity="0.4" />
-                      <stop offset="100%" stopColor="var(--purple-primary)" stopOpacity="0" />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    d="M0 22 C10 18, 20 20, 30 12 C40 6, 50 14, 60 4 C70 -2, 80 6, 90 2 C95 -1, 100 1, 100 1 L100 30 L0 30 Z"
-                    fill="url(#sparkline-grad)"
-                  />
-                  <path
-                    d="M0 22 C10 18, 20 20, 30 12 C40 6, 50 14, 60 4 C70 -2, 80 6, 90 2 C95 -1, 100 1, 100 1"
-                    fill="none"
-                    stroke="var(--purple-primary)"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                </svg>
-                <div className="absolute top-2 left-2 flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-purple-light animate-ping" />
-                  <span className="text-[10px] text-white/50 font-semibold tracking-wider uppercase">Live tracking</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-between items-center text-xs text-white/40 font-medium">
-              <span>May 1</span>
-              <span>Today</span>
-            </div>
-          </div>
-
-          {/* 3D Finance Globe (40%) */}
-          <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-[380px] hover:shadow-glow-purple/5 transition-all duration-300">
-            <div className="flex justify-between items-center border-b border-white/5 pb-2">
-              <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-white/40 leading-none">
-                  Asset Coordinates
-                </span>
-                <h3 className="text-sm font-bold font-display text-white mt-0.5">3D Financial Globe</h3>
-              </div>
-              <span className="text-[10px] text-cyan-data font-semibold flex items-center gap-1 bg-cyan-data/10 border border-cyan-data/20 px-2 py-0.5 rounded-full">
-                Interactive
-              </span>
-            </div>
-
-            <div className="flex-1 min-h-0 relative h-[300px]">
-              <GlobeErrorBoundary>
-                <Suspense fallback={<GlobeFallback />}>
-                  <FinanceGlobe />
-                </Suspense>
-              </GlobeErrorBoundary>
-            </div>
-          </div>
-
-          {/* Quick Actions (30%) */}
-          <div className="lg:col-span-3 h-[380px]">
-            <QuickActions onAddTransaction={() => setIsAddModalOpen(true)} />
-          </div>
-        </div>
-
-        {/* Row 3: Recharts Charts & Recent Transactions */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-10">
-          {/* Recharts Pie (35%) */}
-          <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-3 h-[360px]">
-            <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-white/40">
-                Expense Breakdown
-              </span>
-              <h3 className="text-sm font-bold font-display text-white mt-0.5">Category Allocations</h3>
-            </div>
-
-            <div className="flex-1 relative flex items-center justify-center min-h-0 my-3">
-              {pieChartData.length === 0 ? (
-                <span className="text-xs text-white/30">No expenses recorded</span>
+        {transactions.length === 0 ? (
+          <EmptyState
+            icon={Wallet}
+            title="Welcome to FinVerse"
+            description="Welcome to FinVerse. Start by adding your first transaction."
+            actionLabel="Add Transaction"
+            onAction={() => setIsAddModalOpen(true)}
+          />
+        ) : (
+          <>
+            {/* Row 1: KPI Cards */}
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate={loading ? 'hidden' : 'visible'}
+              className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
+            >
+              {loading ? (
+                <>
+                  <KPICardSkeleton />
+                  <KPICardSkeleton />
+                  <KPICardSkeleton />
+                  <KPICardSkeleton />
+                </>
               ) : (
-                <div className="w-full h-[180px] relative">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={pieChartData}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={50}
-                        outerRadius={70}
-                        paddingAngle={3}
-                        dataKey="value"
-                      >
-                        {pieChartData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                    </PieChart>
-                  </ResponsiveContainer>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none leading-none">
-                    <span className="text-[9px] text-white/40 font-bold uppercase tracking-wider">Top 5</span>
-                    <span className="text-sm font-bold font-mono text-white mt-1">Expenses</span>
-                  </div>
-                </div>
+                <>
+                  <motion.div variants={itemVariants}>
+                    <KPICard
+                      title="Total Balance"
+                      value={stats.totalBalance}
+                      change={12.4}
+                      changeLabel="vs last month"
+                      icon={Wallet}
+                      iconColor="purple-primary"
+                      glowColor="purple"
+                      prefix={activeCurrency.symbol}
+                    />
+                  </motion.div>
+                  <motion.div variants={itemVariants}>
+                    <KPICard
+                      title="Total Income"
+                      value={stats.income}
+                      change={8.2}
+                      changeLabel="vs last month"
+                      icon={ArrowUpRight}
+                      iconColor="green-positive"
+                      glowColor="green"
+                      prefix={activeCurrency.symbol}
+                    />
+                  </motion.div>
+                  <motion.div variants={itemVariants}>
+                    <KPICard
+                      title="Total Expenses"
+                      value={stats.expenses}
+                      change={-4.8}
+                      changeLabel="vs last month"
+                      icon={ArrowDownRight}
+                      iconColor="red-negative"
+                      glowColor="red"
+                      prefix={activeCurrency.symbol}
+                    />
+                  </motion.div>
+                  <motion.div variants={itemVariants}>
+                    <KPICard
+                      title="Target Savings"
+                      value={stats.savings}
+                      change={15.3}
+                      changeLabel="vs last month"
+                      icon={Target}
+                      iconColor="gold-savings"
+                      glowColor="gold"
+                      prefix={activeCurrency.symbol}
+                    />
+                  </motion.div>
+                </>
               )}
-            </div>
+            </motion.div>
 
-            <div className="border-t border-white/5 pt-3 flex justify-between items-center text-xs">
-              <div className="flex flex-wrap gap-2 max-w-[70%]">
-                {pieChartData.map((p) => (
-                  <div key={p.name} className="flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: p.color }} />
-                    <span className="text-[9px] text-white/60 font-semibold truncate max-w-[50px]">{p.name}</span>
-                  </div>
-                ))}
-              </div>
-              <Link
-                to="/analytics"
-                className="text-[10px] font-bold text-purple-light hover:text-purple-primary flex items-center gap-0.5 shrink-0 uppercase tracking-wider"
-              >
-                View All <ChevronRight size={12} />
-              </Link>
-            </div>
-          </div>
-
-          {/* Recharts Bar (30%) */}
-          <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-3 h-[360px]">
-            <div className="flex justify-between items-start">
-              <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-white/40">
-                  Cash Flow Monitor
-                </span>
-                <h3 className="text-sm font-bold font-display text-white mt-0.5">Last 7 Days Flow</h3>
-              </div>
-              <div className="flex gap-2 text-[9px] font-semibold uppercase tracking-wider">
-                <span className="flex items-center gap-1 text-green-positive">
-                  <span className="h-1 w-1 rounded-full bg-green-positive" /> In
-                </span>
-                <span className="flex items-center gap-1 text-red-negative">
-                  <span className="h-1 w-1 rounded-full bg-red-negative" /> Out
-                </span>
-              </div>
-            </div>
-
-            <div className="flex-1 w-full h-[180px] mt-4 min-h-0">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={barChartData} margin={{ top: 5, right: 0, left: -25, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-                  <XAxis dataKey="name" tick={{ fill: '#6B7280', fontSize: 9 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.06)' }} />
-                  <YAxis tick={{ fill: '#6B7280', fontSize: 9 }} tickLine={false} axisLine={false} tickFormatter={formatINRCompact} />
-                  <Bar dataKey="income" fill="#10B981" radius={[2, 2, 0, 0]} opacity={0.7} />
-                  <Bar dataKey="expense" fill="#F43F5E" radius={[2, 2, 0, 0]} opacity={0.7} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-
-            <div className="border-t border-white/5 pt-2.5 text-center">
-              <span className="text-[10px] text-white/35 font-medium uppercase tracking-wider">
-                Active live transactions chart
-              </span>
-            </div>
-          </div>
-
-          {/* Recent Transactions List (35%) */}
-          <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-[360px]">
-            <div className="flex justify-between items-center border-b border-white/5 pb-2 mb-2">
-              <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-white/40">
-                  Transactions
-                </span>
-                <h3 className="text-sm font-bold font-display text-white mt-0.5">Recent Activity</h3>
-              </div>
-              <Link
-                to="/transactions"
-                className="text-xs font-semibold text-purple-light hover:text-purple-primary flex items-center transition-colors"
-              >
-                View All <ChevronRight size={14} />
-              </Link>
-            </div>
-
-            <div className="flex-1 flex flex-col justify-center divide-y divide-white/5 max-h-[260px] overflow-y-auto pr-1">
-              {recentTransactions.length === 0 ? (
-                <div className="h-full flex items-center justify-center text-xs text-white/30">
-                  No activity found
+            {/* Row 2: Net Worth, 3D Globe, Quick Actions */}
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-10">
+              {/* Net Worth (30%) */}
+              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-3 h-[380px] hover:shadow-glow-purple/2 transition-all duration-300">
+                <div>
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-white/40 leading-none">
+                    Equity Valuations
+                  </span>
+                  <h3 className="text-sm font-bold font-display text-white mt-0.5">Net Worth Projection</h3>
                 </div>
-              ) : (
-                recentTransactions.map((txn) => {
-                  const isExpense = txn.type === 'expense';
-                  const isTransfer = txn.type === 'transfer';
-                  const categoryColor = getCategoryColor(txn.category);
 
-                  return (
-                    <div
-                      key={txn.id}
-                      className="flex items-center justify-between py-2.5 hover:bg-white/2 px-2 rounded-xl transition-all duration-200 group"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div
-                          className="h-8.5 w-8.5 flex items-center justify-center rounded-xl text-white font-bold text-xs"
-                          style={{
-                            backgroundColor: `${categoryColor}15`,
-                            color: categoryColor,
-                            border: `1px solid ${categoryColor}30`,
-                          }}
-                        >
-                          {getTxnIcon(txn.category)}
-                        </div>
+                <div className="my-auto py-3">
+                  <span className="text-[10px] text-white/35 font-bold uppercase tracking-wider">Estimated Valuation</span>
+                  <div className="flex items-baseline mt-1 gap-1">
+                    <span className="text-3xl font-display font-extrabold text-white tracking-tight">
+                      <AnimatedNumber value={stats.netWorth} prefix={activeCurrency.symbol} decimals={0} />
+                    </span>
+                    <span className="text-green-positive text-xs font-bold font-mono">+18.5%</span>
+                  </div>
+                </div>
 
-                        <div className="flex flex-col min-w-0">
-                          <span className="text-sm font-semibold text-white/80 group-hover:translate-x-[2px] transition-transform duration-200 truncate max-w-[150px]">
-                            {txn.merchant || txn.name}
-                          </span>
-                          <span className="text-[10px] text-white/40 font-medium truncate max-w-[150px]">
-                            {txn.category} &bull; {formatDate(txn.date)}
-                          </span>
-                        </div>
-                      </div>
-
-                      <span
-                        className={`text-sm font-bold font-mono ${
-                          isExpense ? 'text-red-negative' : isTransfer ? 'text-blue-primary' : 'text-green-positive'
-                        }`}
-                      >
-                        {isExpense ? '-' : isTransfer ? '' : '+'}{formatINR(Math.abs(txn.amount))}
-                      </span>
+                {/* Sparkline Graphic */}
+                <div className="h-16 relative w-full overflow-hidden rounded-xl border border-white/5 bg-white/2 p-2">
+                  <div className="absolute inset-0">
+                    <svg className="w-full h-full" viewBox="0 0 100 30" preserveAspectRatio="none">
+                      <defs>
+                        <linearGradient id="sparkline-grad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="var(--purple-primary)" stopOpacity="0.4" />
+                          <stop offset="100%" stopColor="var(--purple-primary)" stopOpacity="0" />
+                        </linearGradient>
+                      </defs>
+                      <path
+                        d="M0 22 C10 18, 20 20, 30 12 C40 6, 50 14, 60 4 C70 -2, 80 6, 90 2 C95 -1, 100 1, 100 1 L100 30 L0 30 Z"
+                        fill="url(#sparkline-grad)"
+                      />
+                      <path
+                        d="M0 22 C10 18, 20 20, 30 12 C40 6, 50 14, 60 4 C70 -2, 80 6, 90 2 C95 -1, 100 1, 100 1"
+                        fill="none"
+                        stroke="var(--purple-primary)"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    <div className="absolute top-2 left-2 flex items-center gap-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-purple-light animate-ping" />
+                      <span className="text-[10px] text-white/50 font-semibold tracking-wider uppercase">Live tracking</span>
                     </div>
-                  );
-                })
-              )}
+                  </div>
+                </div>
+
+                <div className="flex justify-between items-center text-xs text-white/40 font-medium">
+                  <span>May 1</span>
+                  <span>Today</span>
+                </div>
+              </div>
+
+              {/* 3D Finance Globe (40%) */}
+              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-[380px] hover:shadow-glow-purple/5 transition-all duration-300">
+                <div className="flex justify-between items-center border-b border-white/5 pb-2">
+                  <div>
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-white/40 leading-none">
+                      Asset Coordinates
+                    </span>
+                    <h3 className="text-sm font-bold font-display text-white mt-0.5">3D Financial Globe</h3>
+                  </div>
+                  <span className="text-[10px] text-cyan-data font-semibold flex items-center gap-1 bg-cyan-data/10 border border-cyan-data/20 px-2 py-0.5 rounded-full">
+                    Interactive
+                  </span>
+                </div>
+
+                <div className="flex-1 min-h-0 relative h-[300px]">
+                  <GlobeErrorBoundary>
+                    <Suspense fallback={<GlobeFallback />}>
+                      <FinanceGlobe />
+                    </Suspense>
+                  </GlobeErrorBoundary>
+                </div>
+              </div>
+
+              {/* Quick Actions (30%) */}
+              <div className="lg:col-span-3 h-[380px]">
+                <QuickActions onAddTransaction={() => setIsAddModalOpen(true)} />
+              </div>
             </div>
-          </div>
-        </div>
+
+            {/* Row 3: Recharts Charts & Recent Transactions */}
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-10">
+              {/* Recharts Pie (35%) */}
+              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-3 h-[360px]">
+                <div>
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-white/40">
+                    Expense Breakdown
+                  </span>
+                  <h3 className="text-sm font-bold font-display text-white mt-0.5">Category Allocations</h3>
+                </div>
+
+                <div className="flex-1 relative flex items-center justify-center min-h-0 my-3">
+                  {pieChartData.length === 0 ? (
+                    <span className="text-xs text-white/30">No expenses recorded</span>
+                  ) : (
+                    <div className="w-full h-[180px] relative">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={pieChartData}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={50}
+                            outerRadius={70}
+                            paddingAngle={3}
+                            dataKey="value"
+                          >
+                            {pieChartData.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.color} />
+                            ))}
+                          </Pie>
+                        </PieChart>
+                      </ResponsiveContainer>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none leading-none">
+                        <span className="text-[9px] text-white/40 font-bold uppercase tracking-wider">Top 5</span>
+                        <span className="text-sm font-bold text-white mt-1">Split</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex flex-wrap gap-2 justify-center max-h-[60px] overflow-y-auto">
+                  {pieChartData.map((p) => (
+                    <div key={p.name} className="flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: p.color }} />
+                      <span className="text-[9px] text-white/70 font-semibold truncate">{p.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Cash Flow Analysis (40%) */}
+              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-3 h-[360px]">
+                <div>
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-white/40">
+                    Rolling Cash Flow
+                  </span>
+                  <h3 className="text-sm font-bold font-display text-white mt-0.5">Last 7 Days</h3>
+                </div>
+
+                <div className="flex-1 w-full h-[180px] mt-4 min-h-0">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={barChartData} margin={{ top: 5, right: 0, left: -25, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+                      <XAxis dataKey="name" tick={{ fill: '#6B7280', fontSize: 9 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.06)' }} />
+                      <YAxis tick={{ fill: '#6B7280', fontSize: 9 }} tickLine={false} axisLine={false} tickFormatter={formatINRCompact} />
+                      <Bar dataKey="income" fill="#10B981" radius={[2, 2, 0, 0]} opacity={0.7} />
+                      <Bar dataKey="expense" fill="#F43F5E" radius={[2, 2, 0, 0]} opacity={0.7} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+
+                <div className="border-t border-white/5 pt-2.5 text-center">
+                  <span className="text-[10px] text-white/35 font-medium uppercase tracking-wider">
+                    Active live transactions chart
+                  </span>
+                </div>
+              </div>
+
+              {/* Recent Transactions List (35%) */}
+              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-[360px]">
+                <div className="flex justify-between items-center border-b border-white/5 pb-2 mb-2">
+                  <div>
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-white/40">
+                      Transactions
+                    </span>
+                    <h3 className="text-sm font-bold font-display text-white mt-0.5">Recent Activity</h3>
+                  </div>
+                  <Link
+                    to="/transactions"
+                    className="text-xs font-semibold text-purple-light hover:text-purple-primary flex items-center transition-colors"
+                  >
+                    View All <ChevronRight size={14} />
+                  </Link>
+                </div>
+
+                <div className="flex-1 flex flex-col justify-center divide-y divide-white/5 max-h-[260px] overflow-y-auto pr-1">
+                  {recentTransactions.length === 0 ? (
+                    <div className="h-full flex items-center justify-center text-xs text-white/30">
+                      No activity found
+                    </div>
+                  ) : (
+                    recentTransactions.map((txn) => {
+                      const isExpense = txn.type === 'expense';
+                      const isTransfer = txn.type === 'transfer';
+                      const categoryColor = getCategoryColor(txn.category);
+
+                      return (
+                        <div
+                          key={txn.id}
+                          className="flex items-center justify-between py-2.5 hover:bg-white/2 px-2 rounded-xl transition-all duration-200 group"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div
+                              className="h-8.5 w-8.5 flex items-center justify-center rounded-xl text-white font-bold text-xs"
+                              style={{
+                                backgroundColor: `${categoryColor}15`,
+                                color: categoryColor,
+                                border: `1px solid ${categoryColor}30`,
+                              }}
+                            >
+                              {getTxnIcon(txn.category)}
+                            </div>
+
+                            <div className="flex flex-col min-w-0">
+                              <span className="text-sm font-semibold text-white/80 group-hover:translate-x-[2px] transition-transform duration-200 truncate max-w-[150px]">
+                                {txn.merchant || txn.name}
+                              </span>
+                              <span className="text-[10px] text-white/40 font-medium truncate max-w-[150px]">
+                                {txn.category} &bull; {formatDate(txn.date)}
+                              </span>
+                            </div>
+                          </div>
+
+                          <span
+                            className={`text-sm font-bold font-mono ${
+                              isExpense ? 'text-red-negative' : isTransfer ? 'text-blue-primary' : 'text-green-positive'
+                            }`}
+                          >
+                            {isExpense ? '-' : isTransfer ? '' : '+'}{formatINR(Math.abs(txn.amount))}
+                          </span>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
 
         {/* Add Transaction Quick Modal */}
         <Modal

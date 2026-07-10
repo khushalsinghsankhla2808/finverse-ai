@@ -20,6 +20,7 @@ import PageTransition from '@/components/common/PageTransition';
 import Modal from '@/components/common/Modal';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
 import Button from '@/components/common/Button';
+import EmptyState from '@/components/common/EmptyState';
 
 // Validation schemas
 const goalCreateSchema = z.object({
@@ -254,180 +255,192 @@ export const GoalsPage: React.FC = () => {
           </Button>
         </div>
 
-        {/* Summary Row */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-purple/2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Active Goals</span>
-              <div className="w-8 h-8 rounded-lg bg-purple-primary/10 border border-purple-primary/20 flex items-center justify-center text-purple-light">
-                <Target size={16} />
-              </div>
-            </div>
-            <h2 className="text-2xl font-bold text-white font-mono mt-3">{summary.active}</h2>
-          </div>
-
-          <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-blue/2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Total Saved</span>
-              <div className="w-8 h-8 rounded-lg bg-blue-primary/10 border border-blue-primary/20 flex items-center justify-center text-blue-primary">
-                <TrendingUp size={16} />
-              </div>
-            </div>
-            <h2 className="text-2xl font-bold text-white font-mono mt-3">{summary.saved}</h2>
-          </div>
-
-          <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-green/2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Total Target</span>
-              <div className="w-8 h-8 rounded-lg bg-green-positive/10 border border-green-positive/20 flex items-center justify-center text-green-positive">
-                <Trophy size={16} />
-              </div>
-            </div>
-            <h2 className="text-2xl font-bold text-white font-mono mt-3">{summary.target}</h2>
-          </div>
-        </div>
-
-        {/* Goals cards grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {goals.map((g) => {
-            const percentage = g.targetAmount > 0 ? (g.currentAmount / g.targetAmount) * 100 : 0;
-            const isCompleted = percentage >= 100;
-            const remaining = g.targetAmount - g.currentAmount;
-            
-            const daysLeft = getDaysRemaining(g.deadline);
-            const daysBadge = getDaysBadge(daysLeft);
-
-            // Circular progress calculations
-            const radius = 45;
-            const circumference = 2 * Math.PI * radius;
-            const strokeOffset = circumference * (1 - Math.min(100, percentage) / 100);
-
-            // Card borders
-            const cardStyles = isCompleted
-              ? 'border-gold-savings shadow-glow-gold/10'
-              : 'border-white/8 hover:shadow-glow-purple/2';
-
-            return (
-              <motion.div
-                key={g.id}
-                layout
-                className={`glassmorphism bg-bg-surface/40 rounded-[20px] p-6 border flex flex-col justify-between hover:scale-[1.01] transition-all duration-300 relative ${cardStyles}`}
-              >
-                {/* Render Confetti on achiever state */}
-                {isCompleted && <GoalConfetti />}
-
-                {/* Top Section */}
-                <div className="flex justify-between items-start gap-4">
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl leading-none w-14 h-14 bg-white/4 rounded-xl flex items-center justify-center shadow-inner select-none">
-                      {g.icon}
-                    </span>
-                    <div className="flex flex-col gap-1 min-w-0">
-                      <h3 className="font-display font-bold text-base text-white truncate pr-6">
-                        {g.name}
-                      </h3>
-                      <span className="text-[10px] uppercase font-bold tracking-wider text-white/40">
-                        {g.category}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-1.5 shrink-0 z-20">
-                    <button
-                      onClick={() => triggerEdit(g)}
-                      className="p-1 rounded-lg text-white/30 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
-                    >
-                      <Edit2 size={13} />
-                    </button>
-                    <button
-                      onClick={() => setDeletingGoalId(g.id)}
-                      className="p-1 rounded-lg text-white/30 hover:text-red-negative hover:bg-red-negative/5 transition-all cursor-pointer"
-                    >
-                      <Trash2 size={13} />
-                    </button>
+        {goals.length === 0 ? (
+          <EmptyState
+            icon={Target}
+            title="No goals yet"
+            description="No goals yet. Set a financial goal to start saving."
+            actionLabel="Create Goal"
+            onAction={() => setIsCreateOpen(true)}
+          />
+        ) : (
+          <>
+            {/* Summary Row */}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-purple/2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Active Goals</span>
+                  <div className="w-8 h-8 rounded-lg bg-purple-primary/10 border border-purple-primary/20 flex items-center justify-center text-purple-light">
+                    <Target size={16} />
                   </div>
                 </div>
+                <h2 className="text-2xl font-bold text-white font-mono mt-3">{summary.active}</h2>
+              </div>
 
-                {/* Ring & Data content */}
-                <div className="flex items-center justify-between gap-6 my-6">
-                  {/* Left Column values */}
-                  <div className="space-y-3 min-w-0">
-                    <div className="flex flex-col">
-                      <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider leading-none">Saved amount</span>
-                      <span className="text-xl font-bold font-mono mt-1.5 leading-none" style={{ color: g.color }}>
-                        {formatINR(g.currentAmount)}
-                      </span>
-                      <span className="text-xs text-white/40 mt-1 leading-none">of {formatINR(g.targetAmount)}</span>
+              <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-blue/2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Total Saved</span>
+                  <div className="w-8 h-8 rounded-lg bg-blue-primary/10 border border-blue-primary/20 flex items-center justify-center text-blue-primary">
+                    <TrendingUp size={16} />
+                  </div>
+                </div>
+                <h2 className="text-2xl font-bold text-white font-mono mt-3">{summary.saved}</h2>
+              </div>
+
+              <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-green/2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Total Target</span>
+                  <div className="w-8 h-8 rounded-lg bg-green-positive/10 border border-green-positive/20 flex items-center justify-center text-green-positive">
+                    <Trophy size={16} />
+                  </div>
+                </div>
+                <h2 className="text-2xl font-bold text-white font-mono mt-3">{summary.target}</h2>
+              </div>
+            </div>
+
+            {/* Goals cards grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {goals.map((g) => {
+                const percentage = g.targetAmount > 0 ? (g.currentAmount / g.targetAmount) * 100 : 0;
+                const isCompleted = percentage >= 100;
+                const remaining = g.targetAmount - g.currentAmount;
+                
+                const daysLeft = getDaysRemaining(g.deadline);
+                const daysBadge = getDaysBadge(daysLeft);
+
+                // Circular progress calculations
+                const radius = 45;
+                const circumference = 2 * Math.PI * radius;
+                const strokeOffset = circumference * (1 - Math.min(100, percentage) / 100);
+
+                // Card borders
+                const cardStyles = isCompleted
+                  ? 'border-gold-savings shadow-glow-gold/10'
+                  : 'border-white/8 hover:shadow-glow-purple/2';
+
+                return (
+                  <motion.div
+                    key={g.id}
+                    layout
+                    className={`glassmorphism bg-bg-surface/40 rounded-[20px] p-6 border flex flex-col justify-between hover:scale-[1.01] transition-all duration-300 relative ${cardStyles}`}
+                  >
+                    {/* Render Confetti on achiever state */}
+                    {isCompleted && <GoalConfetti />}
+
+                    {/* Top Section */}
+                    <div className="flex justify-between items-start gap-4">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span className="text-2xl shrink-0 w-11 h-11 rounded-2xl bg-white/4 border border-white/8 flex items-center justify-center select-none">
+                          {g.icon}
+                        </span>
+                        <div className="min-w-0">
+                          <h3 className="font-display font-extrabold text-sm text-white truncate">
+                            {g.name}
+                          </h3>
+                          <span className="text-[10px] uppercase font-bold tracking-wider text-white/40">
+                            {g.category}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 shrink-0 z-20">
+                        <button
+                          onClick={() => triggerEdit(g)}
+                          className="p-1 rounded-lg text-white/30 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
+                        >
+                          <Edit2 size={13} />
+                        </button>
+                        <button
+                          onClick={() => setDeletingGoalId(g.id)}
+                          className="p-1 rounded-lg text-white/30 hover:text-red-negative hover:bg-red-negative/5 transition-all cursor-pointer"
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
                     </div>
 
-                    <p className="text-xs text-white/50">
-                      {isCompleted ? (
-                        <span className="text-gold-savings font-bold">🎉 Goal Achieved!</span>
-                      ) : (
-                        <span>{formatINR(remaining)} to go</span>
+                    {/* Ring & Data content */}
+                    <div className="flex items-center justify-between gap-6 my-6">
+                      {/* Left Column values */}
+                      <div className="space-y-3 min-w-0">
+                        <div className="flex flex-col">
+                          <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider leading-none">Saved amount</span>
+                          <span className="text-xl font-bold font-mono mt-1.5 leading-none" style={{ color: g.color }}>
+                            {formatINR(g.currentAmount)}
+                          </span>
+                          <span className="text-xs text-white/40 mt-1 leading-none">of {formatINR(g.targetAmount)}</span>
+                        </div>
+
+                        <p className="text-xs text-white/50">
+                          {isCompleted ? (
+                            <span className="text-gold-savings font-bold">🎉 Goal Achieved!</span>
+                          ) : (
+                            <span>{formatINR(remaining)} to go</span>
+                          )}
+                        </p>
+                      </div>
+
+                      {/* SVG progress ring */}
+                      <div className="relative shrink-0 flex items-center justify-center w-24 h-24 select-none">
+                        <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+                          <circle
+                            cx="50"
+                            cy="50"
+                            r={radius}
+                            className="stroke-white/5"
+                            strokeWidth="7"
+                            fill="transparent"
+                          />
+                          <motion.circle
+                            cx="50"
+                            cy="50"
+                            r={radius}
+                            stroke={isCompleted ? '#F59E0B' : g.color}
+                            strokeWidth="7"
+                            fill="transparent"
+                            strokeLinecap="round"
+                            strokeDasharray={circumference}
+                            initial={{ strokeDashoffset: circumference }}
+                            animate={{ strokeDashoffset: strokeOffset }}
+                            transition={{ duration: 1.0, ease: 'easeOut' }}
+                          />
+                        </svg>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center leading-none">
+                          <span className="text-base font-bold font-mono text-white">
+                            {percentage.toFixed(0)}%
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Bottom stats row */}
+                    <div className="border-t border-white/5 pt-4 space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5 text-white/50 text-xs">
+                          <Calendar size={13} className="shrink-0" />
+                          <span>Target: {formatDate(g.deadline)}</span>
+                        </div>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${daysBadge.style}`}>
+                          {daysBadge.text}
+                        </span>
+                      </div>
+
+                      {!isCompleted && (
+                        <button
+                          onClick={() => setAddingMoneyGoal(g)}
+                          className="w-full py-2 border border-dashed rounded-xl text-xs font-bold transition-all hover:bg-white/4 cursor-pointer"
+                          style={{ borderColor: `${g.color}35`, color: g.color }}
+                        >
+                          + Save Money
+                        </button>
                       )}
-                    </p>
-                  </div>
-
-                  {/* SVG progress ring */}
-                  <div className="relative shrink-0 flex items-center justify-center w-24 h-24 select-none">
-                    <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-                      <circle
-                        cx="50"
-                        cy="50"
-                        r={radius}
-                        className="stroke-white/5"
-                        strokeWidth="7"
-                        fill="transparent"
-                      />
-                      <motion.circle
-                        cx="50"
-                        cy="50"
-                        r={radius}
-                        stroke={isCompleted ? '#F59E0B' : g.color}
-                        strokeWidth="7"
-                        fill="transparent"
-                        strokeLinecap="round"
-                        strokeDasharray={circumference}
-                        initial={{ strokeDashoffset: circumference }}
-                        animate={{ strokeDashoffset: strokeOffset }}
-                        transition={{ duration: 1.0, ease: 'easeOut' }}
-                      />
-                    </svg>
-                    <div className="absolute inset-0 flex flex-col items-center justify-center leading-none">
-                      <span className="text-base font-bold font-mono text-white">
-                        {percentage.toFixed(0)}%
-                      </span>
                     </div>
-                  </div>
-                </div>
-
-                {/* Bottom stats row */}
-                <div className="border-t border-white/5 pt-4 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 text-white/50 text-xs">
-                      <Calendar size={13} className="shrink-0" />
-                      <span>Target: {formatDate(g.deadline)}</span>
-                    </div>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${daysBadge.style}`}>
-                      {daysBadge.text}
-                    </span>
-                  </div>
-
-                  {!isCompleted && (
-                    <button
-                      onClick={() => setAddingMoneyGoal(g)}
-                      className="w-full py-2 border border-dashed rounded-xl text-xs font-bold transition-all hover:bg-white/4 cursor-pointer"
-                      style={{ borderColor: `${g.color}35`, color: g.color }}
-                    >
-                      + Save Money
-                    </button>
-                  )}
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </>
+        )}
 
         {/* Delete Confirmation */}
         <ConfirmDialog

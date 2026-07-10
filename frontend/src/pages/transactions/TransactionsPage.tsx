@@ -503,7 +503,15 @@ export const TransactionsPage: React.FC = () => {
 
         {/* Transactions Table Workspace */}
         <div className="glassmorphism bg-bg-surface/20 border border-white/8 rounded-2xl overflow-hidden shadow-xl">
-          {filteredTransactions.length === 0 ? (
+          {transactions.length === 0 ? (
+            <EmptyState
+              icon={Plus}
+              title="No transactions yet"
+              description="No transactions yet. Add your first transaction to start tracking your money."
+              actionLabel="Add Transaction"
+              onAction={() => setIsAddModalOpen(true)}
+            />
+          ) : filteredTransactions.length === 0 ? (
             <EmptyState
               icon={Search}
               title="No transactions found"
