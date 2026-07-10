@@ -356,7 +356,7 @@ export const DashboardPage: React.FC = () => {
             {/* Row 2: Net Worth, 3D Globe, Quick Actions */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
               {/* Net Worth (33%) */}
-              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 sm:h-auto lg:h-[380px] hover:shadow-glow-purple/2 transition-all duration-300">
+              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 sm:h-auto lg:h-[400px] hover:shadow-glow-purple/2 transition-all duration-300">
                 <div>
                   <span className="text-[11px] font-bold uppercase tracking-wider text-white/40 leading-none">
                     Equity Valuations
@@ -392,7 +392,7 @@ export const DashboardPage: React.FC = () => {
               </div>
 
               {/* 3D Finance Globe (33%) */}
-              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 sm:h-auto lg:h-[380px] hover:shadow-glow-purple/5 transition-all duration-300">
+              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 sm:h-auto lg:h-[400px] hover:shadow-glow-purple/5 transition-all duration-300">
                 <div className="flex justify-between items-center border-b border-white/5 pb-2">
                   <div>
                     <span className="text-[11px] font-bold uppercase tracking-wider text-white/40 leading-none">
@@ -417,7 +417,7 @@ export const DashboardPage: React.FC = () => {
               {/* Quick Actions (33%) */}
               <QuickActions
                 onAddTransaction={() => setIsAddModalOpen(true)}
-                className="lg:col-span-4 sm:h-auto lg:h-[380px]"
+                className="lg:col-span-4 sm:h-auto lg:h-[400px]"
               />
             </div>
 

@@ -55,14 +55,14 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ onAddTransaction, cl
         </p>
       </div>
 
-      <div className="flex flex-col gap-2.5">
+      <div className="flex flex-col gap-2">
         {actions.map((action, index) => {
           const Icon = action.icon;
           return (
             <button
               key={index}
               onClick={() => handleActionClick(action)}
-              className="group relative flex items-center justify-between p-3 rounded-xl bg-white/2 hover:bg-white/5 border border-white/5 hover:border-white/10 transition-all duration-300 cursor-pointer overflow-hidden text-left"
+              className="group relative flex items-center justify-between py-2.5 px-3.5 rounded-xl bg-white/2 hover:bg-white/5 border border-white/5 hover:border-white/10 transition-all duration-300 cursor-pointer overflow-hidden text-left"
             >
               {/* Left Accent Bar on Hover */}
               <motion.div
