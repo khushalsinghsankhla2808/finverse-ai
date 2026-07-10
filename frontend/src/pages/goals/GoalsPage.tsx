@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import React, { useState, useMemo } from "react";
+import { motion } from "framer-motion";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import {
   Plus,
   Edit2,
@@ -11,52 +11,90 @@ import {
   TrendingUp,
   Target,
   Trophy,
-} from 'lucide-react';
-import { useFinanceStore } from '@/stores/financeStore';
-import { useToast } from '@/hooks/useToast';
-import type { Goal } from '@/types/finance.types';
-import { formatINR, formatDate } from '@/lib/utils';
-import PageTransition from '@/components/common/PageTransition';
-import Modal from '@/components/common/Modal';
-import ConfirmDialog from '@/components/common/ConfirmDialog';
-import Button from '@/components/common/Button';
-import EmptyState from '@/components/common/EmptyState';
+} from "lucide-react";
+import { useFinanceStore } from "@/stores/financeStore";
+import { useToast } from "@/hooks/useToast";
+import type { Goal } from "@/types/finance.types";
+import { formatINR, formatDate } from "@/lib/utils";
+import PageTransition from "@/components/common/PageTransition";
+import Modal from "@/components/common/Modal";
+import ConfirmDialog from "@/components/common/ConfirmDialog";
+import Button from "@/components/common/Button";
+import EmptyState from "@/components/common/EmptyState";
 
 // Validation schemas
 const goalCreateSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters').max(50, 'Max 50 characters'),
-  category: z.string().min(1, 'Category is required'),
+  name: z
+    .string()
+    .min(2, "Name must be at least 2 characters")
+    .max(50, "Max 50 characters"),
+  category: z.string().min(1, "Category is required"),
   targetAmount: z
-    .number({ message: 'Target amount is required' })
-    .positive('Target must be greater than 0')
-    .max(100000000, 'Target cannot exceed ₹100,000,000'),
+    .number({ message: "Target amount is required" })
+    .positive("Target must be greater than 0")
+    .max(100000000, "Target cannot exceed ₹100,000,000"),
   currentAmount: z
-    .number({ message: 'Saved amount is required' })
-    .min(0, 'Saved amount cannot be negative'),
-  deadline: z.string().min(1, 'Deadline date is required'),
-  color: z.string().min(1, 'Color is required'),
-  icon: z.string().min(1, 'Icon emoji is required'),
+    .number({ message: "Saved amount is required" })
+    .min(0, "Saved amount cannot be negative"),
+  deadline: z.string().min(1, "Deadline date is required"),
+  color: z.string().min(1, "Color is required"),
+  icon: z.string().min(1, "Icon emoji is required"),
 });
 
 const addMoneySchema = z.object({
   amount: z
-    .number({ message: 'Amount is required' })
-    .positive('Amount must be greater than 0'),
+    .number({ message: "Amount is required" })
+    .positive("Amount must be greater than 0"),
 });
 
 type GoalFormValues = z.infer<typeof goalCreateSchema>;
 
 // Preset colors and emojis
-const PRESET_COLORS = ['#10B981', '#7C3AED', '#06B6D4', '#F59E0B', '#EF4444', '#EC4899'];
+const PRESET_COLORS = [
+  "#10B981",
+  "#7C3AED",
+  "#06B6D4",
+  "#F59E0B",
+  "#EF4444",
+  "#EC4899",
+];
 
-const PRESET_EMOJIS = ['🛡️', '✈️', '💻', '🏍️', '🏠', '🎓', '💍', '🚗', '💵', '🎄', '🎁', '📈'];
+const PRESET_EMOJIS = [
+  "🛡️",
+  "✈️",
+  "💻",
+  "🏍️",
+  "🏠",
+  "🎓",
+  "💍",
+  "🚗",
+  "💵",
+  "🎄",
+  "🎁",
+  "📈",
+];
 
-const CATEGORY_OPTIONS = ['Safety', 'Travel', 'Tech', 'Vehicle', 'Home', 'Education', 'Other'];
+const CATEGORY_OPTIONS = [
+  "Safety",
+  "Travel",
+  "Tech",
+  "Vehicle",
+  "Home",
+  "Education",
+  "Other",
+];
 
 // Confetti Effect for Completed Goals
 const GoalConfetti: React.FC = () => {
   const confettiParticles = useMemo(() => {
-    const colors = ['#F59E0B', '#10B981', '#06B6D4', '#7C3AED', '#EF4444', '#EC4899'];
+    const colors = [
+      "#F59E0B",
+      "#10B981",
+      "#06B6D4",
+      "#7C3AED",
+      "#EF4444",
+      "#EC4899",
+    ];
     return Array.from({ length: 25 }).map((_, i) => ({
       id: i,
       left: `${Math.random() * 100}%`,
@@ -78,7 +116,7 @@ const GoalConfetti: React.FC = () => {
             duration: p.duration,
             delay: p.delay,
             repeat: Infinity,
-            ease: 'linear',
+            ease: "linear",
           }}
           className="absolute rounded-full"
           style={{
@@ -94,7 +132,8 @@ const GoalConfetti: React.FC = () => {
 };
 
 export const GoalsPage: React.FC = () => {
-  const { goals, addGoal, updateGoal, deleteGoal, addToGoal } = useFinanceStore();
+  const { goals, addGoal, updateGoal, deleteGoal, addToGoal } =
+    useFinanceStore();
   const { showToast } = useToast();
 
   // Dialog and edit state
@@ -114,18 +153,18 @@ export const GoalsPage: React.FC = () => {
   } = useForm<GoalFormValues>({
     resolver: zodResolver(goalCreateSchema),
     defaultValues: {
-      name: '',
-      category: 'Safety',
+      name: "",
+      category: "Safety",
       targetAmount: undefined,
       currentAmount: 0,
-      deadline: '',
+      deadline: "",
       color: PRESET_COLORS[0],
       icon: PRESET_EMOJIS[0],
     },
   });
 
-  const formColor = watchGoal('color');
-  const formIcon = watchGoal('icon');
+  const formColor = watchGoal("color");
+  const formIcon = watchGoal("icon");
 
   const {
     register: registerMoney,
@@ -152,10 +191,27 @@ export const GoalsPage: React.FC = () => {
   };
 
   const getDaysBadge = (days: number) => {
-    if (days < 0) return { text: 'Overdue', style: 'bg-red-negative/10 border-red-negative/20 text-red-negative' };
-    if (days < 30) return { text: `${days} days left`, style: 'bg-red-negative/10 border-red-negative/20 text-red-negative animate-pulse' };
-    if (days <= 90) return { text: `${days} days left`, style: 'bg-gold-savings/10 border-gold-savings/20 text-gold-savings' };
-    return { text: `${days} days left`, style: 'bg-green-positive/10 border-green-positive/20 text-green-positive' };
+    if (days < 0)
+      return {
+        text: "Overdue",
+        style: "bg-red-negative/10 border-red-negative/20 text-red-negative",
+      };
+    if (days < 30)
+      return {
+        text: `${days} days left`,
+        style:
+          "bg-red-negative/10 border-red-negative/20 text-red-negative animate-pulse",
+      };
+    if (days <= 90)
+      return {
+        text: `${days} days left`,
+        style: "bg-gold-savings/10 border-gold-savings/20 text-gold-savings",
+      };
+    return {
+      text: `${days} days left`,
+      style:
+        "bg-green-positive/10 border-green-positive/20 text-green-positive",
+    };
   };
 
   // Submit create goal
@@ -171,11 +227,11 @@ export const GoalsPage: React.FC = () => {
         icon: values.icon,
       });
 
-      showToast('Saving goal created successfully', 'success');
+      showToast("Saving goal created successfully", "success");
       setIsCreateOpen(false);
       resetGoal();
     } catch (err) {
-      showToast('Failed to create goal', 'error');
+      showToast("Failed to create goal", "error");
     }
   };
 
@@ -194,10 +250,10 @@ export const GoalsPage: React.FC = () => {
         icon: values.icon,
       });
 
-      showToast('Goal updated successfully', 'success');
+      showToast("Goal updated successfully", "success");
       setEditingGoal(null);
     } catch (err) {
-      showToast('Failed to update goal', 'error');
+      showToast("Failed to update goal", "error");
     }
   };
 
@@ -205,26 +261,33 @@ export const GoalsPage: React.FC = () => {
   const onAddMoneySubmit = async (values: { amount: number }) => {
     if (!addingMoneyGoal) return;
 
-    const remaining = addingMoneyGoal.targetAmount - addingMoneyGoal.currentAmount;
+    const remaining =
+      addingMoneyGoal.targetAmount - addingMoneyGoal.currentAmount;
     if (values.amount > remaining) {
-      showToast(`Amount cannot exceed the remaining needed (₹${remaining})`, 'warning');
+      showToast(
+        `Amount cannot exceed the remaining needed (₹${remaining})`,
+        "warning",
+      );
       return;
     }
 
     try {
       addToGoal(addingMoneyGoal.id, values.amount);
-      showToast(`₹${values.amount} added to ${addingMoneyGoal.name}!`, 'success');
+      showToast(
+        `₹${values.amount} added to ${addingMoneyGoal.name}!`,
+        "success",
+      );
       setAddingMoneyGoal(null);
       resetMoney();
     } catch (err) {
-      showToast('Failed to save money to goal', 'error');
+      showToast("Failed to save money to goal", "error");
     }
   };
 
   const handleDeleteConfirm = () => {
     if (!deletingGoalId) return;
     deleteGoal(deletingGoalId);
-    showToast('Goal deleted successfully', 'error');
+    showToast("Goal deleted successfully", "error");
     setDeletingGoalId(null);
   };
 
@@ -247,10 +310,18 @@ export const GoalsPage: React.FC = () => {
         {/* Header Row */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3xl font-display font-bold text-white tracking-tight">Savings Goals</h1>
-            <p className="text-xs text-white/50 font-medium">Set, target, and monitor wealth objectives</p>
+            <h1 className="text-3xl font-display font-bold text-white tracking-tight">
+              Savings Goals
+            </h1>
+            <p className="text-xs text-white/50 font-medium">
+              Set, target, and monitor wealth objectives
+            </p>
           </div>
-          <Button variant="primary" leftIcon={<Plus size={16} />} onClick={() => setIsCreateOpen(true)}>
+          <Button
+            variant="primary"
+            leftIcon={<Plus size={16} />}
+            onClick={() => setIsCreateOpen(true)}
+          >
             Create Goal
           </Button>
         </div>
@@ -269,54 +340,70 @@ export const GoalsPage: React.FC = () => {
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-purple/2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Active Goals</span>
+                  <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">
+                    Active Goals
+                  </span>
                   <div className="w-8 h-8 rounded-lg bg-purple-primary/10 border border-purple-primary/20 flex items-center justify-center text-purple-light">
                     <Target size={16} />
                   </div>
                 </div>
-                <h2 className="text-2xl font-bold text-white font-mono mt-3">{summary.active}</h2>
+                <h2 className="text-2xl font-bold text-white font-mono mt-3">
+                  {summary.active}
+                </h2>
               </div>
 
               <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-blue/2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Total Saved</span>
+                  <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">
+                    Total Saved
+                  </span>
                   <div className="w-8 h-8 rounded-lg bg-blue-primary/10 border border-blue-primary/20 flex items-center justify-center text-blue-primary">
                     <TrendingUp size={16} />
                   </div>
                 </div>
-                <h2 className="text-2xl font-bold text-white font-mono mt-3">{summary.saved}</h2>
+                <h2 className="text-2xl font-bold text-white font-mono mt-3">
+                  {summary.saved}
+                </h2>
               </div>
 
               <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-green/2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Total Target</span>
+                  <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">
+                    Total Target
+                  </span>
                   <div className="w-8 h-8 rounded-lg bg-green-positive/10 border border-green-positive/20 flex items-center justify-center text-green-positive">
                     <Trophy size={16} />
                   </div>
                 </div>
-                <h2 className="text-2xl font-bold text-white font-mono mt-3">{summary.target}</h2>
+                <h2 className="text-2xl font-bold text-white font-mono mt-3">
+                  {summary.target}
+                </h2>
               </div>
             </div>
 
             {/* Goals cards grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {goals.map((g) => {
-                const percentage = g.targetAmount > 0 ? (g.currentAmount / g.targetAmount) * 100 : 0;
+                const percentage =
+                  g.targetAmount > 0
+                    ? (g.currentAmount / g.targetAmount) * 100
+                    : 0;
                 const isCompleted = percentage >= 100;
                 const remaining = g.targetAmount - g.currentAmount;
-                
+
                 const daysLeft = getDaysRemaining(g.deadline);
                 const daysBadge = getDaysBadge(daysLeft);
 
                 // Circular progress calculations
                 const radius = 45;
                 const circumference = 2 * Math.PI * radius;
-                const strokeOffset = circumference * (1 - Math.min(100, percentage) / 100);
+                const strokeOffset =
+                  circumference * (1 - Math.min(100, percentage) / 100);
 
                 // Card borders
                 const cardStyles = isCompleted
-                  ? 'border-gold-savings shadow-glow-gold/10'
-                  : 'border-white/8 hover:shadow-glow-purple/2';
+                  ? "border-gold-savings shadow-glow-gold/10"
+                  : "border-white/8 hover:shadow-glow-purple/2";
 
                 return (
                   <motion.div
@@ -364,16 +451,25 @@ export const GoalsPage: React.FC = () => {
                       {/* Left Column values */}
                       <div className="space-y-3 min-w-0">
                         <div className="flex flex-col">
-                          <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider leading-none">Saved amount</span>
-                          <span className="text-xl font-bold font-mono mt-1.5 leading-none" style={{ color: g.color }}>
+                          <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider leading-none">
+                            Saved amount
+                          </span>
+                          <span
+                            className="text-xl font-bold font-mono mt-1.5 leading-none"
+                            style={{ color: g.color }}
+                          >
                             {formatINR(g.currentAmount)}
                           </span>
-                          <span className="text-xs text-white/40 mt-1 leading-none">of {formatINR(g.targetAmount)}</span>
+                          <span className="text-xs text-white/40 mt-1 leading-none">
+                            of {formatINR(g.targetAmount)}
+                          </span>
                         </div>
 
                         <p className="text-xs text-white/50">
                           {isCompleted ? (
-                            <span className="text-gold-savings font-bold">🎉 Goal Achieved!</span>
+                            <span className="text-gold-savings font-bold">
+                              🎉 Goal Achieved!
+                            </span>
                           ) : (
                             <span>{formatINR(remaining)} to go</span>
                           )}
@@ -382,7 +478,10 @@ export const GoalsPage: React.FC = () => {
 
                       {/* SVG progress ring */}
                       <div className="relative shrink-0 flex items-center justify-center w-24 h-24 select-none">
-                        <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+                        <svg
+                          viewBox="0 0 100 100"
+                          className="w-full h-full -rotate-90"
+                        >
                           <circle
                             cx="50"
                             cy="50"
@@ -395,14 +494,14 @@ export const GoalsPage: React.FC = () => {
                             cx="50"
                             cy="50"
                             r={radius}
-                            stroke={isCompleted ? '#F59E0B' : g.color}
+                            stroke={isCompleted ? "#F59E0B" : g.color}
                             strokeWidth="7"
                             fill="transparent"
                             strokeLinecap="round"
                             strokeDasharray={circumference}
                             initial={{ strokeDashoffset: circumference }}
                             animate={{ strokeDashoffset: strokeOffset }}
-                            transition={{ duration: 1.0, ease: 'easeOut' }}
+                            transition={{ duration: 1.0, ease: "easeOut" }}
                           />
                         </svg>
                         <div className="absolute inset-0 flex flex-col items-center justify-center leading-none">
@@ -420,7 +519,9 @@ export const GoalsPage: React.FC = () => {
                           <Calendar size={13} className="shrink-0" />
                           <span>Target: {formatDate(g.deadline)}</span>
                         </div>
-                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${daysBadge.style}`}>
+                        <span
+                          className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${daysBadge.style}`}
+                        >
                           {daysBadge.text}
                         </span>
                       </div>
@@ -429,7 +530,10 @@ export const GoalsPage: React.FC = () => {
                         <button
                           onClick={() => setAddingMoneyGoal(g)}
                           className="w-full py-2 border border-dashed rounded-xl text-xs font-bold transition-all hover:bg-white/4 cursor-pointer"
-                          style={{ borderColor: `${g.color}35`, color: g.color }}
+                          style={{
+                            borderColor: `${g.color}35`,
+                            color: g.color,
+                          }}
                         >
                           + Save Money
                         </button>
@@ -462,34 +566,48 @@ export const GoalsPage: React.FC = () => {
           size="sm"
         >
           {addingMoneyGoal && (
-            <form onSubmit={handleMoneySubmit(onAddMoneySubmit)} className="space-y-6">
+            <form
+              onSubmit={handleMoneySubmit(onAddMoneySubmit)}
+              className="space-y-6"
+            >
               {/* Progress Summary info */}
               <div className="bg-white/3 border border-white/5 rounded-xl p-4 flex items-center justify-between">
                 <div className="flex flex-col">
-                  <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider">Current savings</span>
+                  <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider">
+                    Current savings
+                  </span>
                   <span className="text-base font-bold font-mono text-white mt-1">
                     {formatINR(addingMoneyGoal.currentAmount)}
                   </span>
                 </div>
                 <div className="flex flex-col text-right">
-                  <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider">Remaining target</span>
+                  <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider">
+                    Remaining target
+                  </span>
                   <span className="text-base font-bold font-mono text-purple-light mt-1">
-                    {formatINR(addingMoneyGoal.targetAmount - addingMoneyGoal.currentAmount)}
+                    {formatINR(
+                      addingMoneyGoal.targetAmount -
+                        addingMoneyGoal.currentAmount,
+                    )}
                   </span>
                 </div>
               </div>
 
               {/* Amount input */}
               <div className="flex flex-col items-center py-4 border-b border-white/10 focus-within:border-purple-primary transition-colors">
-                <span className="text-xs text-white/45 uppercase font-bold tracking-wider mb-2">Contribution Amount</span>
+                <span className="text-xs text-white/45 uppercase font-bold tracking-wider mb-2">
+                  Contribution Amount
+                </span>
                 <div className="flex items-center justify-center w-full">
-                  <span className="text-3xl font-display font-bold mr-2 text-purple-light">₹</span>
+                  <span className="text-3xl font-display font-bold mr-2 text-purple-light">
+                    ₹
+                  </span>
                   <input
                     type="number"
                     step="any"
                     placeholder="0"
                     autoFocus
-                    {...registerMoney('amount', { valueAsNumber: true })}
+                    {...registerMoney("amount", { valueAsNumber: true })}
                     className="bg-transparent text-center font-mono font-bold text-4xl text-white placeholder:text-white/15 focus:outline-hidden min-w-0 max-w-[200px]"
                   />
                 </div>
@@ -511,7 +629,11 @@ export const GoalsPage: React.FC = () => {
                 >
                   Cancel
                 </Button>
-                <Button type="submit" variant="primary" loading={isMoneySubmitting}>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  loading={isMoneySubmitting}
+                >
                   Save Money
                 </Button>
               </div>
@@ -527,10 +649,15 @@ export const GoalsPage: React.FC = () => {
             setEditingGoal(null);
             resetGoal();
           }}
-          title={editingGoal ? 'Edit Savings Goal' : 'Create Savings Goal'}
+          title={editingGoal ? "Edit Savings Goal" : "Create Savings Goal"}
           size="lg"
         >
-          <form onSubmit={handleGoalSubmit(editingGoal ? onEditSubmit : onCreateSubmit)} className="space-y-6">
+          <form
+            onSubmit={handleGoalSubmit(
+              editingGoal ? onEditSubmit : onCreateSubmit,
+            )}
+            className="space-y-6"
+          >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Left Column */}
               <div className="space-y-4">
@@ -541,7 +668,7 @@ export const GoalsPage: React.FC = () => {
                   <input
                     type="text"
                     placeholder="e.g. Dream Bike, Emergency Fund"
-                    {...registerGoal('name')}
+                    {...registerGoal("name")}
                     className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
                   />
                   {goalErrors.name && (
@@ -556,11 +683,15 @@ export const GoalsPage: React.FC = () => {
                     Category <span className="text-red-negative">*</span>
                   </label>
                   <select
-                    {...registerGoal('category')}
+                    {...registerGoal("category")}
                     className="w-full bg-bg-surface border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all"
                   >
                     {CATEGORY_OPTIONS.map((c) => (
-                      <option key={c} value={c} className="bg-bg-surface text-white">
+                      <option
+                        key={c}
+                        value={c}
+                        className="bg-bg-surface text-white"
+                      >
                         {c}
                       </option>
                     ))}
@@ -575,12 +706,13 @@ export const GoalsPage: React.FC = () => {
                 {/* Target Amount */}
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
-                    Target Amount (INR) <span className="text-red-negative">*</span>
+                    Target Amount (INR){" "}
+                    <span className="text-red-negative">*</span>
                   </label>
                   <input
                     type="number"
                     placeholder="e.g. 100000"
-                    {...registerGoal('targetAmount', { valueAsNumber: true })}
+                    {...registerGoal("targetAmount", { valueAsNumber: true })}
                     className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20 font-mono"
                   />
                   {goalErrors.targetAmount && (
@@ -599,7 +731,9 @@ export const GoalsPage: React.FC = () => {
                     <input
                       type="number"
                       placeholder="e.g. 10000"
-                      {...registerGoal('currentAmount', { valueAsNumber: true })}
+                      {...registerGoal("currentAmount", {
+                        valueAsNumber: true,
+                      })}
                       className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20 font-mono"
                     />
                     {goalErrors.currentAmount && (
@@ -619,10 +753,13 @@ export const GoalsPage: React.FC = () => {
                     Target Date <span className="text-red-negative">*</span>
                   </label>
                   <div className="relative">
-                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" size={16} />
+                    <Calendar
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30"
+                      size={16}
+                    />
                     <input
                       type="date"
-                      {...registerGoal('deadline')}
+                      {...registerGoal("deadline")}
                       className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:outline-hidden transition-all"
                     />
                   </div>
@@ -636,7 +773,8 @@ export const GoalsPage: React.FC = () => {
                 {/* Color presets selection */}
                 <div className="space-y-2">
                   <label className="text-xs font-bold text-white/50 uppercase tracking-wider block">
-                    Choose Theme Color <span className="text-red-negative">*</span>
+                    Choose Theme Color{" "}
+                    <span className="text-red-negative">*</span>
                   </label>
                   <div className="flex gap-3">
                     {PRESET_COLORS.map((col) => {
@@ -645,13 +783,17 @@ export const GoalsPage: React.FC = () => {
                         <button
                           key={col}
                           type="button"
-                          onClick={() => setGoalValue('color', col)}
+                          onClick={() => setGoalValue("color", col)}
                           style={{ backgroundColor: col }}
                           className={`w-8 h-8 rounded-full border cursor-pointer flex items-center justify-center transition-all ${
-                            isSelected ? 'ring-2 ring-purple-light scale-110 border-white' : 'border-transparent hover:scale-105'
+                            isSelected
+                              ? "ring-2 ring-purple-light scale-110 border-white"
+                              : "border-transparent hover:scale-105"
                           }`}
                         >
-                          {isSelected && <span className="text-xs text-white">✓</span>}
+                          {isSelected && (
+                            <span className="text-xs text-white">✓</span>
+                          )}
                         </button>
                       );
                     })}
@@ -670,11 +812,11 @@ export const GoalsPage: React.FC = () => {
                         <button
                           key={emoji}
                           type="button"
-                          onClick={() => setGoalValue('icon', emoji)}
+                          onClick={() => setGoalValue("icon", emoji)}
                           className={`w-10 h-10 rounded-xl border text-xl flex items-center justify-center transition-all cursor-pointer ${
                             isSelected
-                              ? 'bg-purple-primary/10 border-purple-primary shadow-inner scale-110'
-                              : 'bg-white/2 border-white/5 hover:border-white/15'
+                              ? "bg-purple-primary/10 border-purple-primary shadow-inner scale-110"
+                              : "bg-white/2 border-white/5 hover:border-white/15"
                           }`}
                         >
                           {emoji}
@@ -698,11 +840,8 @@ export const GoalsPage: React.FC = () => {
               >
                 Cancel
               </Button>
-              <Button
-                type="submit"
-                variant="primary"
-              >
-                {editingGoal ? 'Save Changes' : 'Create Goal'}
+              <Button type="submit" variant="primary">
+                {editingGoal ? "Save Changes" : "Create Goal"}
               </Button>
             </div>
           </form>

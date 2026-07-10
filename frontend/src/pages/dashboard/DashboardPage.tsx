@@ -151,6 +151,18 @@ export const DashboardPage: React.FC = () => {
     return sorted.slice(0, 5);
   }, [transactions]);
 
+  // Dynamic date range for Net Worth footer
+  const dateRange = useMemo(() => {
+    if (transactions.length === 0) {
+      return { start: 'Start', end: 'Today' };
+    }
+    const sorted = [...transactions].sort((a, b) => a.date.localeCompare(b.date));
+    return {
+      start: formatDate(sorted[0].date),
+      end: formatDate(new Date().toISOString().split('T')[0]),
+    };
+  }, [transactions]);
+
   // Donut Breakdown: Top 5 Categories Spent
   const pieChartData = useMemo(() => {
     const categoryTotals: Record<string, number> = {};
@@ -301,8 +313,6 @@ export const DashboardPage: React.FC = () => {
                     <KPICard
                       title="Total Balance"
                       value={stats.totalBalance}
-                      change={12.4}
-                      changeLabel="vs last month"
                       icon={Wallet}
                       iconColor="purple-primary"
                       glowColor="purple"
@@ -313,8 +323,6 @@ export const DashboardPage: React.FC = () => {
                     <KPICard
                       title="Total Income"
                       value={stats.income}
-                      change={8.2}
-                      changeLabel="vs last month"
                       icon={ArrowUpRight}
                       iconColor="green-positive"
                       glowColor="green"
@@ -325,8 +333,6 @@ export const DashboardPage: React.FC = () => {
                     <KPICard
                       title="Total Expenses"
                       value={stats.expenses}
-                      change={-4.8}
-                      changeLabel="vs last month"
                       icon={ArrowDownRight}
                       iconColor="red-negative"
                       glowColor="red"
@@ -337,8 +343,6 @@ export const DashboardPage: React.FC = () => {
                     <KPICard
                       title="Target Savings"
                       value={stats.savings}
-                      change={15.3}
-                      changeLabel="vs last month"
                       icon={Target}
                       iconColor="gold-savings"
                       glowColor="gold"
@@ -350,9 +354,9 @@ export const DashboardPage: React.FC = () => {
             </motion.div>
 
             {/* Row 2: Net Worth, 3D Globe, Quick Actions */}
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-10">
-              {/* Net Worth (30%) */}
-              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-3 h-[380px] hover:shadow-glow-purple/2 transition-all duration-300">
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+              {/* Net Worth (33%) */}
+              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 sm:h-auto lg:h-[380px] hover:shadow-glow-purple/2 transition-all duration-300">
                 <div>
                   <span className="text-[11px] font-bold uppercase tracking-wider text-white/40 leading-none">
                     Equity Valuations
@@ -366,47 +370,29 @@ export const DashboardPage: React.FC = () => {
                     <span className="text-3xl font-display font-extrabold text-white tracking-tight">
                       <AnimatedNumber value={stats.netWorth} prefix={activeCurrency.symbol} decimals={0} />
                     </span>
-                    <span className="text-green-positive text-xs font-bold font-mono">+18.5%</span>
                   </div>
                 </div>
 
-                {/* Sparkline Graphic */}
-                <div className="h-16 relative w-full overflow-hidden rounded-xl border border-white/5 bg-white/2 p-2">
-                  <div className="absolute inset-0">
-                    <svg className="w-full h-full" viewBox="0 0 100 30" preserveAspectRatio="none">
-                      <defs>
-                        <linearGradient id="sparkline-grad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="var(--purple-primary)" stopOpacity="0.4" />
-                          <stop offset="100%" stopColor="var(--purple-primary)" stopOpacity="0" />
-                        </linearGradient>
-                      </defs>
-                      <path
-                        d="M0 22 C10 18, 20 20, 30 12 C40 6, 50 14, 60 4 C70 -2, 80 6, 90 2 C95 -1, 100 1, 100 1 L100 30 L0 30 Z"
-                        fill="url(#sparkline-grad)"
-                      />
-                      <path
-                        d="M0 22 C10 18, 20 20, 30 12 C40 6, 50 14, 60 4 C70 -2, 80 6, 90 2 C95 -1, 100 1, 100 1"
-                        fill="none"
-                        stroke="var(--purple-primary)"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                    <div className="absolute top-2 left-2 flex items-center gap-1.5">
-                      <span className="h-1.5 w-1.5 rounded-full bg-purple-light animate-ping" />
-                      <span className="text-[10px] text-white/50 font-semibold tracking-wider uppercase">Live tracking</span>
-                    </div>
+                {/* Dynamic Income vs Expenses Stats */}
+                <div className="border border-white/5 bg-white/2 p-3 rounded-xl flex justify-between items-center text-xs">
+                  <div>
+                    <span className="text-white/40 block text-[9px] uppercase font-bold">This Month Income</span>
+                    <span className="text-green-positive font-mono font-semibold">{formatINR(stats.income)}</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-white/40 block text-[9px] uppercase font-bold">This Month Expenses</span>
+                    <span className="text-red-negative font-mono font-semibold">{formatINR(stats.expenses)}</span>
                   </div>
                 </div>
 
                 <div className="flex justify-between items-center text-xs text-white/40 font-medium">
-                  <span>May 1</span>
-                  <span>Today</span>
+                  <span>{dateRange.start}</span>
+                  <span>{dateRange.end}</span>
                 </div>
               </div>
 
-              {/* 3D Finance Globe (40%) */}
-              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-[380px] hover:shadow-glow-purple/5 transition-all duration-300">
+              {/* 3D Finance Globe (33%) */}
+              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 sm:h-auto lg:h-[380px] hover:shadow-glow-purple/5 transition-all duration-300">
                 <div className="flex justify-between items-center border-b border-white/5 pb-2">
                   <div>
                     <span className="text-[11px] font-bold uppercase tracking-wider text-white/40 leading-none">
@@ -428,16 +414,16 @@ export const DashboardPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Quick Actions (30%) */}
-              <div className="lg:col-span-3 h-[380px]">
+              {/* Quick Actions (33%) */}
+              <div className="glassmorphism rounded-2xl border border-white/8 lg:col-span-4 sm:h-auto lg:h-[380px]">
                 <QuickActions onAddTransaction={() => setIsAddModalOpen(true)} />
               </div>
             </div>
 
             {/* Row 3: Recharts Charts & Recent Transactions */}
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-10">
-              {/* Recharts Pie (35%) */}
-              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-3 h-[360px]">
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+              {/* Recharts Pie (33%) */}
+              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 sm:h-auto lg:h-[360px]">
                 <div>
                   <span className="text-[11px] font-bold uppercase tracking-wider text-white/40">
                     Expense Breakdown
@@ -445,12 +431,12 @@ export const DashboardPage: React.FC = () => {
                   <h3 className="text-sm font-bold font-display text-white mt-0.5">Category Allocations</h3>
                 </div>
 
-                <div className="flex-1 relative flex items-center justify-center min-h-0 my-3">
+                <div className="w-full h-[200px] relative flex items-center justify-center my-3">
                   {pieChartData.length === 0 ? (
                     <span className="text-xs text-white/30">No expenses recorded</span>
                   ) : (
-                    <div className="w-full h-[180px] relative">
-                      <ResponsiveContainer width="100%" height="100%">
+                    <div className="w-full h-[200px] relative">
+                      <ResponsiveContainer width="100%" height={200}>
                         <PieChart>
                           <Pie
                             data={pieChartData}
@@ -485,8 +471,8 @@ export const DashboardPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Cash Flow Analysis (40%) */}
-              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-3 h-[360px]">
+              {/* Cash Flow Analysis (33%) */}
+              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 sm:h-auto lg:h-[360px]">
                 <div>
                   <span className="text-[11px] font-bold uppercase tracking-wider text-white/40">
                     Rolling Cash Flow
@@ -494,8 +480,8 @@ export const DashboardPage: React.FC = () => {
                   <h3 className="text-sm font-bold font-display text-white mt-0.5">Last 7 Days</h3>
                 </div>
 
-                <div className="flex-1 w-full h-[180px] mt-4 min-h-0">
-                  <ResponsiveContainer width="100%" height="100%">
+                <div className="w-full h-[200px] mt-4">
+                  <ResponsiveContainer width="100%" height={200}>
                     <BarChart data={barChartData} margin={{ top: 5, right: 0, left: -25, bottom: 0 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
                       <XAxis dataKey="name" tick={{ fill: '#6B7280', fontSize: 9 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.06)' }} />
@@ -513,8 +499,8 @@ export const DashboardPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Recent Transactions List (35%) */}
-              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-[360px]">
+              {/* Recent Transactions List (33%) */}
+              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 sm:h-auto lg:h-[360px]">
                 <div className="flex justify-between items-center border-b border-white/5 pb-2 mb-2">
                   <div>
                     <span className="text-[11px] font-bold uppercase tracking-wider text-white/40">

@@ -7,8 +7,8 @@ import { cn } from '@/lib/utils';
 interface KPICardProps {
   title: string;
   value: number;
-  change: number; // percentage change (e.g. +5.4 or -2.1)
-  changeLabel: string; // e.g. "from last month"
+  change?: number; // percentage change (e.g. +5.4 or -2.1)
+  changeLabel?: string; // e.g. "from last month"
   icon: LucideIcon;
   iconColor: string; // CSS variable name, e.g. "purple-primary", "green-positive"
   glowColor: 'purple' | 'cyan' | 'green' | 'red' | 'gold';
@@ -27,7 +27,7 @@ export const KPICard: React.FC<KPICardProps> = ({
   prefix,
   suffix = '',
 }) => {
-  const isPositive = change >= 0;
+  const isPositive = change !== undefined ? change >= 0 : true;
 
   const glowClasses = {
     purple: 'hover:shadow-glow-purple hover:border-purple-primary/40',
@@ -69,25 +69,29 @@ export const KPICard: React.FC<KPICardProps> = ({
       </div>
 
       {/* Change badge */}
-      <div className="flex items-center gap-2 mt-2">
-        <div
-          className={cn(
-            'flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold leading-none',
-            isPositive
-              ? 'bg-green-positive/10 text-green-positive border border-green-positive/20'
-              : 'bg-red-negative/10 text-red-negative border border-red-negative/20'
+      {change !== undefined && (
+        <div className="flex items-center gap-2 mt-2">
+          <div
+            className={cn(
+              'flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold leading-none',
+              isPositive
+                ? 'bg-green-positive/10 text-green-positive border border-green-positive/20'
+                : 'bg-red-negative/10 text-red-negative border border-red-negative/20'
+            )}
+          >
+            {isPositive ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+            <span>
+              {isPositive ? '+' : ''}
+              {change.toFixed(1)}%
+            </span>
+          </div>
+          {changeLabel && (
+            <span className="text-[10px] text-white/35 font-medium">
+              {changeLabel}
+            </span>
           )}
-        >
-          {isPositive ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
-          <span>
-            {isPositive ? '+' : ''}
-            {change.toFixed(1)}%
-          </span>
         </div>
-        <span className="text-[10px] text-white/30 font-medium">
-          {changeLabel}
-        </span>
-      </div>
+      )}
     </div>
   );
 };
