@@ -88,12 +88,18 @@ The platform features a premium glassmorphic dark-mode UI with 3D visualizations
 - **Custom Date Ranges** — Filter reports by date range and specific categories
 
 ### 🔐 Authentication & Security
-- JWT-based authentication with access + refresh token rotation
-- Password hashing with bcrypt
-- Input validation with Zod schemas
-- Helmet security headers
-- CORS configuration with credential support
-- API rate limiting (200 requests / 15 min per IP)
+- **JWT Authentication** — Access + refresh token rotation with secure handling
+- **Production-Grade Rate Limiting** — Centralized, environment-driven multi-tier limits:
+  - *Auth Tier*: Dual-axis per-IP (10 req / 15 min) and per-account failed-attempt limiting (5 fails / 30 min) with exponential backoff and automatic reset.
+  - *Public Tier*: Per-IP with burst allowance (60 + 10 requests / min).
+  - *Authenticated User Actions*: Per-userId (200 requests / min) tracking separate windows.
+- **Strict Input Validation** — Custom validate middleware applying Zod schemas on req.body, req.query, and req.params in strict mode.
+- **Secure Error Handling** — Centralized mapping (ValidationError, CastError, MongoError) returning safe client responses with unique, traceable UUID `errorId` for 500 errors.
+- **Data Protection** — Automatic redaction of sensitive body fields (passwords, tokens, cards) from backend logs.
+- **Path Traversal Mitigation** — Strict validation of filename parameters and path confinement for report downloads.
+- **ReDoS Prevention** — Sanitization of user-controlled inputs using RegExp escaping in queries.
+- **Dependency Hardening** — Full dependency audit resolution with forced overrides for transitive vulnerabilities and integrated GitHub Actions security audit.
+
 
 ### 🎨 Premium UI/UX
 - **Glassmorphic Dark Theme** — Deep purple palette with frosted glass effects
@@ -255,6 +261,21 @@ EMAIL_PASS=your-app-password
 
 # Frontend URL (for CORS)
 CLIENT_URL=http://localhost:5173
+
+# Rate Limiting (Optional - defaults mapped automatically)
+# RL_AUTH_IP_WINDOW_MS=900000        # 15 minutes
+# RL_AUTH_IP_MAX=10                 # 10 requests max
+# RL_AUTH_ACCOUNT_WINDOW_MS=1800000 # 30 minutes
+# RL_AUTH_ACCOUNT_MAX_FAILED=5      # 5 failures max
+# RL_AUTH_BACKOFF_BASE_MS=1000      # 1s base delay
+# RL_AUTH_BACKOFF_CEILING_MS=128000 # 128s max ceiling
+# RL_PUBLIC_WINDOW_MS=60000         # 1 minute
+# RL_PUBLIC_MAX=60                  # 60 requests max
+# RL_PUBLIC_BURST=10                # 10 burst allowance
+# RL_AUTH_USER_WINDOW_MS=60000      # 1 minute
+# RL_AUTH_USER_MAX=200              # 200 requests max
+# RL_GLOBAL_WINDOW_MS=900000        # 15 minutes
+# RL_GLOBAL_MAX=500                 # 500 requests safety net
 ```
 
 > **💡 Tip:** Generate secure JWT secrets with:
@@ -389,6 +410,15 @@ finverse-ai/
 │       │   ├── error.middleware.ts   # Global error handler
 │       │   ├── logger.middleware.ts  # Morgan + Winston logging
 │       │   └── validate.middleware.ts # Zod request validation
+│       ├── schemas/                 # Strict Zod schemas for input validation
+│       │   ├── auth.schema.ts
+│       │   ├── transaction.schema.ts
+│       │   ├── budget.schema.ts
+│       │   ├── goal.schema.ts
+│       │   ├── investment.schema.ts
+│       │   ├── report.schema.ts
+│       │   ├── ai.schema.ts
+│       │   └── common.schema.ts
 │       ├── models/
 │       │   ├── User.model.ts
 │       │   ├── Transaction.model.ts
@@ -402,8 +432,7 @@ finverse-ai/
 │           ├── bcrypt.utils.ts      # Password hashing helpers
 │           ├── jwt.utils.ts         # Token sign/verify utilities
 │           ├── format.utils.ts      # INR currency formatter
-│           ├── response.utils.ts    # Standardized API responses
-│           └── validation.ts        # Zod schemas for requests
+│           └── response.utils.ts    # Standardized API responses
 │
 ├── frontend/
 │   ├── index.html                   # HTML entry point
