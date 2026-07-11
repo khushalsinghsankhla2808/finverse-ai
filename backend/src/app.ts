@@ -38,7 +38,7 @@ app.use(
 
 // Global Rate Limiting — generous safety net across all /api/* routes
 // Tier-specific limits (auth, public, authenticated) do the real work.
-app.use('/api/', globalLimiter);
+app.use('/api/v1/', globalLimiter);
 
 // Body Parsing
 app.use(express.json({ limit: '10mb' }));
@@ -55,16 +55,16 @@ app.get('/health', (req, res) => {
 // ─── Routing Map ─────────────────────────────────────────────────────
 
 // Auth routes — Tier 1: dual-axis per-IP + per-account with exponential backoff
-app.use('/api/auth', authIpLimiter, authAccountLimiter, authRoutes);
+app.use('/api/v1/auth', authIpLimiter, authAccountLimiter, authRoutes);
 
 // Authenticated routes — Tier 3: per-userId (200 req/min)
-app.use('/api/transactions', protect as any, authenticatedLimiter, transactionRoutes);
-app.use('/api/budgets', protect as any, authenticatedLimiter, budgetRoutes);
-app.use('/api/goals', protect as any, authenticatedLimiter, goalRoutes);
-app.use('/api/investments', protect as any, authenticatedLimiter, investmentRoutes);
-app.use('/api/analytics', protect as any, authenticatedLimiter, analyticsRoutes);
-app.use('/api/ai', aiRoutes); // has mixed public/protected routes — limiters applied per-route inside
-app.use('/api/reports', reportRoutes); // has mixed public/protected routes — limiters applied per-route inside
+app.use('/api/v1/transactions', protect as any, authenticatedLimiter, transactionRoutes);
+app.use('/api/v1/budgets', protect as any, authenticatedLimiter, budgetRoutes);
+app.use('/api/v1/goals', protect as any, authenticatedLimiter, goalRoutes);
+app.use('/api/v1/investments', protect as any, authenticatedLimiter, investmentRoutes);
+app.use('/api/v1/analytics', protect as any, authenticatedLimiter, analyticsRoutes);
+app.use('/api/v1/ai', aiRoutes); // has mixed public/protected routes — limiters applied per-route inside
+app.use('/api/v1/reports', reportRoutes); // has mixed public/protected routes — limiters applied per-route inside
 
 // 404 Route handler
 app.use('*', (req, res) => {

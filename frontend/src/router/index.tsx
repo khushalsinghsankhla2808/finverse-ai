@@ -40,18 +40,17 @@ const PageSuspenseFallback: React.FC = () => (
 // Reusable Placeholder page for coming modules
 interface PlaceholderProps {
   title: string;
-  icon: React.ComponentType<{ className?: string; size?: number }>;
+  icon: React.ElementType;
 }
 
-// @ts-ignore
-const PlaceholderPage: React.FC<PlaceholderProps> = ({ title, icon: Icon }) => {
+export const PlaceholderPage: React.FC<PlaceholderProps> = ({ title, icon: Icon }) => {
   const navigate = useNavigateHelper();
   return (
     <PageTransition>
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
         <div className="glassmorphism max-w-md w-full p-8 border border-white/8 rounded-2xl flex flex-col items-center gap-6 shadow-glow-purple/5">
           <div className="h-16 w-16 rounded-2xl bg-purple-primary/10 border border-purple-primary/20 flex items-center justify-center text-purple-light shadow-glow-purple/10">
-            <Icon size={30} />
+            {React.createElement(Icon as any, { size: 30 })}
           </div>
           <div className="flex flex-col gap-2">
             <h1 className="text-xl font-bold font-display text-white">{title}</h1>
