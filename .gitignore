@@ -43,3 +43,12 @@ reports/
 # Allow example env files
 !.env.example
 !**/.env.example
+
+# Patch scripts
+patch*.js
+
+# Compiled output in backend root
+backend/server.js
+backend/server.js.map
+backend/server.d.ts
+backend/server.d.ts.map
