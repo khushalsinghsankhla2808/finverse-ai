@@ -16,13 +16,14 @@ import BudgetsPage from '@/pages/budgets/BudgetsPage';
 import GoalsPage from '@/pages/goals/GoalsPage';
 import InvestmentsPage from '@/pages/investments/InvestmentsPage';
 import AIAssistantPage from '@/pages/ai/AIAssistantPage';
-import ReportsPage from '@/pages/reports/ReportsPage';
+
 import SettingsPage from '@/pages/settings/SettingsPage';
 
 
 // Lazy load actual pages
 const LoginPage = lazy(() => import('@/pages/auth/LoginPage'));
 const RegisterPage = lazy(() => import('@/pages/auth/RegisterPage'));
+const ReportsPage = lazy(() => import('@/pages/reports/ReportsPage'));
 
 // Root redirect logic
 const RootRedirect: React.FC = () => {
@@ -163,7 +164,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'reports',
-        element: <ReportsPage />,
+        element: (<Suspense fallback={<PageSuspenseFallback />}><ReportsPage /></Suspense>),
       },
       {
         path: 'settings',
