@@ -9,21 +9,20 @@ import {
   Loader2,
 } from 'lucide-react';
 import PageTransition from '@/components/common/PageTransition';
-import DashboardPage from '@/pages/dashboard/DashboardPage';
-import TransactionsPage from '@/pages/transactions/TransactionsPage';
-import AnalyticsPage from '@/pages/analytics/AnalyticsPage';
-import BudgetsPage from '@/pages/budgets/BudgetsPage';
-import GoalsPage from '@/pages/goals/GoalsPage';
-import InvestmentsPage from '@/pages/investments/InvestmentsPage';
-import AIAssistantPage from '@/pages/ai/AIAssistantPage';
+import { useNavigate as useNavigateHelper } from 'react-router-dom';
 
-import SettingsPage from '@/pages/settings/SettingsPage';
-
-
-// Lazy load actual pages
+// Lazy load all pages
 const LoginPage = lazy(() => import('@/pages/auth/LoginPage'));
 const RegisterPage = lazy(() => import('@/pages/auth/RegisterPage'));
+const DashboardPage = lazy(() => import('@/pages/dashboard/DashboardPage'));
+const TransactionsPage = lazy(() => import('@/pages/transactions/TransactionsPage'));
+const AnalyticsPage = lazy(() => import('@/pages/analytics/AnalyticsPage'));
+const BudgetsPage = lazy(() => import('@/pages/budgets/BudgetsPage'));
+const GoalsPage = lazy(() => import('@/pages/goals/GoalsPage'));
+const InvestmentsPage = lazy(() => import('@/pages/investments/InvestmentsPage'));
+const AIAssistantPage = lazy(() => import('@/pages/ai/AIAssistantPage'));
 const ReportsPage = lazy(() => import('@/pages/reports/ReportsPage'));
+const SettingsPage = lazy(() => import('@/pages/settings/SettingsPage'));
 
 // Root redirect logic
 const RootRedirect: React.FC = () => {
@@ -71,9 +70,6 @@ const PlaceholderPage: React.FC<PlaceholderProps> = ({ title, icon: Icon }) => {
     </PageTransition>
   );
 };
-
-// Navigate helper because router context is active inside routes
-import { useNavigate as useNavigateHelper } from 'react-router-dom';
 
 // Custom 404 Page
 const NotFoundPage: React.FC = () => {
@@ -140,35 +136,67 @@ export const router = createBrowserRouter([
       },
       {
         path: 'transactions',
-        element: <TransactionsPage />,
+        element: (
+          <Suspense fallback={<PageSuspenseFallback />}>
+            <TransactionsPage />
+          </Suspense>
+        ),
       },
       {
         path: 'analytics',
-        element: <AnalyticsPage />,
+        element: (
+          <Suspense fallback={<PageSuspenseFallback />}>
+            <AnalyticsPage />
+          </Suspense>
+        ),
       },
       {
         path: 'budgets',
-        element: <BudgetsPage />,
+        element: (
+          <Suspense fallback={<PageSuspenseFallback />}>
+            <BudgetsPage />
+          </Suspense>
+        ),
       },
       {
         path: 'goals',
-        element: <GoalsPage />,
+        element: (
+          <Suspense fallback={<PageSuspenseFallback />}>
+            <GoalsPage />
+          </Suspense>
+        ),
       },
       {
         path: 'investments',
-        element: <InvestmentsPage />,
+        element: (
+          <Suspense fallback={<PageSuspenseFallback />}>
+            <InvestmentsPage />
+          </Suspense>
+        ),
       },
       {
         path: 'ai-assistant',
-        element: <AIAssistantPage />,
+        element: (
+          <Suspense fallback={<PageSuspenseFallback />}>
+            <AIAssistantPage />
+          </Suspense>
+        ),
       },
       {
         path: 'reports',
-        element: (<Suspense fallback={<PageSuspenseFallback />}><ReportsPage /></Suspense>),
+        element: (
+          <Suspense fallback={<PageSuspenseFallback />}>
+            <ReportsPage />
+          </Suspense>
+        ),
       },
       {
         path: 'settings',
-        element: <SettingsPage />,
+        element: (
+          <Suspense fallback={<PageSuspenseFallback />}>
+            <SettingsPage />
+          </Suspense>
+        ),
       },
     ],
   },
