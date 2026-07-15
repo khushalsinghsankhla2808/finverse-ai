@@ -41,8 +41,8 @@ reports/
 *.sw?
 
 # Allow example env files
-!.env.example
-!**/.env.example
+.env.example
+**/.env.example
 
 # Patch scripts
 patch*.js
