@@ -41,6 +41,7 @@ The platform features a premium glassmorphic dark-mode UI with 3D visualizations
 ## ✨ Features
 
 ### 💰 Transaction Management
+
 - Full CRUD operations for income and expense transactions
 - Category-based organization (Housing, Food, Transport, Shopping, etc.)
 - Merchant tracking and notes support
@@ -48,6 +49,7 @@ The platform features a premium glassmorphic dark-mode UI with 3D visualizations
 - Bulk filtering, sorting, and search
 
 ### 📊 Analytics Dashboard
+
 - **KPI Cards** — Total balance, monthly income/expenses, savings rate
 - **Spending Breakdown** — Category-wise donut charts with percentage allocations
 - **Income vs. Expense Trends** — Daily, weekly, and monthly trend visualizations
@@ -55,24 +57,28 @@ The platform features a premium glassmorphic dark-mode UI with 3D visualizations
 - **Monthly Comparison** — 6-month side-by-side financial performance
 
 ### 🎯 Budget Tracking
+
 - Set category-wise monthly spending limits
 - Real-time progress bars with overspend alerts
 - Automatic budget utilization calculations
 - Visual indicators for budget health
 
 ### 🏆 Savings Goals
+
 - Create named savings targets with deadlines
 - Track progress with percentage completion
 - Automated remaining amount and pace calculations
 - Goal completion status tracking
 
 ### 📈 Investment Portfolio
+
 - Track investments across **6 asset classes**: Stocks, Mutual Funds, Gold, Crypto, Fixed Deposits, and Others
 - Auto-calculated gain/loss (₹ and %) via Mongoose virtuals
 - Purchase price vs. current price tracking
 - Platform and symbol tagging
 
 ### 🤖 AI Financial Advisor
+
 - **Conversational Chat** — Natural language financial Q&A powered by Google Gemini 1.5 Flash
 - **Context-Aware** — Automatically injects your real financial data (transactions, budgets, goals) into every query
 - **Automated Insights** — AI-generated spending warnings, savings milestones, and goal deadline alerts
@@ -81,6 +87,7 @@ The platform features a premium glassmorphic dark-mode UI with 3D visualizations
 - **Graceful Fallback** — Rule-based mock advisor when Gemini API key is not configured
 
 ### 📄 Report Generation
+
 - **PDF Reports** — Branded, multi-page financial statements with cover page, summary metrics, expense allocation tables, and transaction ledgers
 - **Excel Reports** — Multi-sheet workbooks (Summary + Transactions) with styled headers
 - **CSV Export** — Lightweight data exports
@@ -88,6 +95,7 @@ The platform features a premium glassmorphic dark-mode UI with 3D visualizations
 - **Custom Date Ranges** — Filter reports by date range and specific categories
 
 ### 🔐 Authentication & Security
+
 - **JWT Authentication** — Access + refresh token rotation with secure handling
 - **Production-Grade Rate Limiting** — Centralized, environment-driven multi-tier limits:
   - *Auth Tier*: Dual-axis per-IP (10 req / 15 min) and per-account failed-attempt limiting (5 fails / 30 min) with exponential backoff and automatic reset.
@@ -100,14 +108,15 @@ The platform features a premium glassmorphic dark-mode UI with 3D visualizations
 - **ReDoS Prevention** — Sanitization of user-controlled inputs using RegExp escaping in queries.
 - **Dependency Hardening** — Full dependency audit resolution with forced overrides for transitive vulnerabilities and integrated GitHub Actions security audit.
 
-
 ### ⚙️ Settings & Account Management
+
 - **Profile Customization** — Edit display name with validation support.
 - **Currency Preferences** — Configure currency with flag representations that instantly synchronize across the application and backend.
 - **Password Control** — Update account password with confirmation matching and validation constraints.
 - **Cascading Account Deletion** — IRREVERSIBLE delete option that safely wipes user profile, budgets, goals, transactions, investments, notifications, and AI logs in one cascade process.
 
 ### 🎨 Premium UI/UX
+
 - **Glassmorphic Dark Theme** — Deep purple palette with frosted glass effects
 - **3D Globe Visualization** — Interactive Three.js finance globe on the dashboard
 - **Framer Motion Animations** — Page transitions, hover effects, and micro-interactions
@@ -156,7 +165,7 @@ The platform features a premium glassmorphic dark-mode UI with 3D visualizations
 
 ## 🏗 Architecture
 
-```
+```text
 ┌──────────────────────────────────────────────────────────────────┐
 │                        CLIENT (Browser)                          │
 │  React 19 + Vite + Zustand + React Router + Three.js + Recharts │
@@ -285,6 +294,7 @@ CLIENT_URL=http://localhost:5173
 ```
 
 > **💡 Tip:** Generate secure JWT secrets with:
+>
 > ```bash
 > node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 > ```
@@ -393,7 +403,7 @@ All API routes are prefixed with `/api/v1`. Protected routes require a `Bearer` 
 
 ## 📁 Project Structure
 
-```
+```text
 finverse-ai/
 ├── backend/
 │   ├── server.ts                    # Entry point — boots Express + MongoDB
@@ -498,13 +508,15 @@ finverse-ai/
 ## 🧪 Scripts Reference
 
 ### Root (Workspace)
+
 ```bash
 npm run dev:frontend    # Start Vite dev server (frontend)
 npm run dev:backend     # Start nodemon + ts-node (backend)
 npm run dev:all         # Start both concurrently
 ```
 
-### Backend
+### Backend Scripts
+
 ```bash
 cd backend
 npm run dev             # Development with hot-reload
@@ -512,7 +524,8 @@ npm run build           # Compile TypeScript to dist/
 npm run start           # Run compiled production build
 ```
 
-### Frontend
+### Frontend Scripts
+
 ```bash
 cd frontend
 npm run dev             # Vite dev server with HMR
@@ -549,7 +562,7 @@ This project is open-source and available under the [MIT License](LICENSE).
 
 ## 👤 Author
 
-**Khushal Singh Sankhla**
+Khushal Singh Sankhla
 
 - GitHub: [@khushalsinghsankhla2808](https://github.com/khushalsinghsankhla2808)
 
