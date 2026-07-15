@@ -202,6 +202,10 @@ export const generateReport = async (
 
     let downloadUrl = '';
 
+    // Resolve a single base URL for building download links.
+    // CLIENT_URL may be comma-separated (CORS whitelist), so we take the first entry.
+    const clientUrl = env.CLIENT_URL?.split(',')[0]?.trim() || 'http://localhost:5173';
+
     if (hasCloudinary) {
       try {
         const uploadResult = await cloudinary.uploader.upload(filePath, {
@@ -212,11 +216,11 @@ export const generateReport = async (
         downloadUrl = uploadResult.secure_url;
       } catch (err) {
         // Fallback to local link
-        downloadUrl = `${env.CLIENT_URL.replace('5173', '5000')}/api/reports/download/${fileName}`;
+        downloadUrl = `${clientUrl.replace('5173', '5000')}/api/reports/download/${fileName}`;
       }
     } else {
       // Local development link pointing to backend PORT
-      downloadUrl = `${env.CLIENT_URL.replace('5173', '5000')}/api/reports/download/${fileName}`;
+      downloadUrl = `${clientUrl.replace('5173', '5000')}/api/reports/download/${fileName}`;
     }
 
     return sendSuccess(
