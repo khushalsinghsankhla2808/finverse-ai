@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
+import type { Variants } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -9,7 +10,6 @@ import {
   Sliders,
   Bell,
   Shield,
-  ChevronRight,
   Eye,
   EyeOff,
   Crown,
@@ -62,12 +62,12 @@ type PasswordFormValues = z.infer<typeof passwordSchema>;
 
 // ─── Animation Variants ───────────────────────────────────────────────────────
 
-const cardVariants = {
+const cardVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.07, duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+    transition: { delay: i * 0.07, duration: 0.4, ease: 'easeOut' },
   }),
 };
 
@@ -312,7 +312,7 @@ export const SettingsPage: React.FC = () => {
 
   // User initials
   const initials = user?.name ? user.name.slice(0, 2).toUpperCase() : 'US';
-  const isPremium = user?.plan === 'Premium' || user?.plan === 'premium';
+  const isPremium = user?.plan === 'Premium';
 
   // Account created / last login (these come through /auth/me as IUserDocument fields)
   const userDoc = user as any;
