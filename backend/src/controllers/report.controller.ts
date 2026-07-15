@@ -202,9 +202,10 @@ export const generateReport = async (
 
     let downloadUrl = '';
 
-    // Resolve a single base URL for building download links.
-    // CLIENT_URL may be comma-separated (CORS whitelist), so we take the first entry.
-    const clientUrl = env.CLIENT_URL?.split(',')[0]?.trim() || 'http://localhost:5173';
+    // Use BACKEND_URL (set on Render) so the download link always points to the
+    // backend's own origin — CLIENT_URL is the frontend's domain and must never be
+    // used to build a self-referencing backend route.
+    const backendUrl = env.BACKEND_URL || 'http://localhost:5000';
 
     if (hasCloudinary) {
       try {
@@ -215,12 +216,12 @@ export const generateReport = async (
         });
         downloadUrl = uploadResult.secure_url;
       } catch (err) {
-        // Fallback to local link
-        downloadUrl = `${clientUrl.replace('5173', '5000')}/api/reports/download/${fileName}`;
+        // Fallback to self-hosted download route
+        downloadUrl = `${backendUrl}/api/reports/download/${fileName}`;
       }
     } else {
-      // Local development link pointing to backend PORT
-      downloadUrl = `${clientUrl.replace('5173', '5000')}/api/reports/download/${fileName}`;
+      // Local / non-Cloudinary: serve file from this backend
+      downloadUrl = `${backendUrl}/api/reports/download/${fileName}`;
     }
 
     return sendSuccess(
