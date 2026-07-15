@@ -20,6 +20,25 @@ export const authService = {
     const res = await axiosInstance.post('/auth/logout');
     return res.data;
   },
+
+  async updateProfile(data: { name?: string; currency?: string }) {
+    const res = await axiosInstance.put('/auth/profile', data);
+    return res.data;
+  },
+
+  async changePassword(data: {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+  }) {
+    const res = await axiosInstance.put('/auth/password', data);
+    return res.data;
+  },
+
+  async deleteAccount() {
+    const res = await axiosInstance.delete('/auth/account');
+    return res.data;
+  },
 };
 
 export default authService;

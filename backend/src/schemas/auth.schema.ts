@@ -57,8 +57,44 @@ export const refreshSchema = z.object({
     .min(1, 'Refresh token is required'),
 }).strict();
 
+export const updateProfileSchema = z.object({
+  name: z
+    .string()
+    .min(2, 'Name must be at least 2 characters')
+    .max(50, 'Name must not exceed 50 characters')
+    .regex(/^[a-zA-Z0-9_ ]+$/, 'Name can only contain letters, numbers, underscores, and spaces')
+    .trim()
+    .optional(),
+  currency: z
+    .string()
+    .min(2)
+    .max(10)
+    .optional(),
+}).strict();
+
+export const changePasswordSchema = z.object({
+  currentPassword: z
+    .string()
+    .min(1, 'Current password is required')
+    .max(128),
+  newPassword: z
+    .string()
+    .min(8, 'New password must be at least 8 characters')
+    .max(128, 'Password must not exceed 128 characters')
+    .regex(
+      PASSWORD_REGEX,
+      'Password must contain at least one uppercase letter, one number, and one special character'
+    ),
+  confirmPassword: z.string(),
+}).strict().refine((data) => data.newPassword === data.confirmPassword, {
+  message: 'Passwords do not match',
+  path: ['confirmPassword'],
+});
+
 export default {
   registerSchema,
   loginSchema,
   refreshSchema,
+  updateProfileSchema,
+  changePasswordSchema,
 };

@@ -1,5 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import UserModel from '../models/User.model';
+import BudgetModel from '../models/Budget.model';
+import GoalModel from '../models/Goal.model';
+import TransactionModel from '../models/Transaction.model';
+import InvestmentModel from '../models/Investment.model';
+import AIHistoryModel from '../models/AIHistory.model';
+import NotificationModel from '../models/Notification.model';
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '../utils/jwt.utils';
 import { sendSuccess, sendError } from '../utils/response.utils';
 import { AuthenticatedRequest } from '../middleware/auth.middleware';
@@ -148,6 +154,89 @@ export const me = async (req: AuthenticatedRequest, res: Response, next: NextFun
     }
 
     return sendSuccess(res, user, 'Current user profile retrieved successfully');
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ─── Profile & Account Management ────────────────────────────────────────────
+
+export const updateProfile = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void | Response> => {
+  try {
+    const userId = req.user?.id;
+    if (!userId) return sendError(res, 'User session not found', 404);
+
+    const { name, currency } = req.body as { name?: string; currency?: string };
+
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      userId,
+      { ...(name && { name }), ...(currency && { currency }) },
+      { new: true, runValidators: true }
+    ).select('-password -refreshToken');
+
+    if (!updatedUser) return sendError(res, 'User not found', 404);
+
+    return sendSuccess(
+      res,
+      {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        plan: updatedUser.plan,
+        currency: updatedUser.currency,
+        theme: updatedUser.theme,
+      },
+      'Profile updated successfully'
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const changePassword = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void | Response> => {
+  try {
+    const userId = req.user?.id;
+    if (!userId) return sendError(res, 'User session not found', 404);
+
+    const { currentPassword, newPassword } = req.body as {
+      currentPassword: string;
+      newPassword: string;
+    };
+
+    // Re-fetch user WITH password field (auth middleware strips it)
+    const user = await UserModel.findById(userId).select('+password');
+    if (!user) return sendError(res, 'User not found', 404);
+
+    const isMatch = await user.comparePassword(currentPassword);
+    if (!isMatch) return sendError(res, 'Current password is incorrect', 400);
+
+    user.password = newPassword; // pre-save hook will hash it
+    await user.save();
+
+    return sendSuccess(res, null, 'Password changed successfully');
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteAccount = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void | Response> => {
+  try {
+    const userId = req.user?.id;
+    if (!userId) return sendError(res, 'User session not found', 404);
+
+    // Cascade delete all user-owned data
+    await Promise.all([
+      BudgetModel.deleteMany({ userId }),
+      GoalModel.deleteMany({ userId }),
+      TransactionModel.deleteMany({ userId }),
+      InvestmentModel.deleteMany({ userId }),
+      AIHistoryModel.deleteMany({ userId }),
+      NotificationModel.deleteMany({ userId }),
+    ]);
+
+    await UserModel.findByIdAndDelete(userId);
+
+    return sendSuccess(res, null, 'Account and all associated data deleted successfully');
   } catch (error) {
     next(error);
   }
