@@ -27,14 +27,27 @@ const app = express();
 app.use(helmet());
 
 // CORS config
+const allowedOrigins = (process.env.CLIENT_URL || '')
+  .split(',')
+  .map(o => o.trim())
+  .filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`CORS blocked: ${origin} not in allowed list`));
+      }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
+
+console.log('✅ CORS allowed origins:', allowedOrigins);
 
 // Global Rate Limiting — generous safety net across all /api/* routes
 // Tier-specific limits (auth, public, authenticated) do the real work.

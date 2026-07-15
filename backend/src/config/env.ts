@@ -22,7 +22,7 @@ const envSchema = z.object({
   EMAIL_PORT: z.coerce.number().optional().default(587),
   EMAIL_USER: z.string().optional().default('your-email@gmail.com'),
   EMAIL_PASS: z.string().optional().default('your-app-password'),
-  CLIENT_URL: z.string().default('http://localhost:5173'),
+  CLIENT_URL: z.string().optional(),
 });
 
 const parsed = envSchema.safeParse(process.env);
