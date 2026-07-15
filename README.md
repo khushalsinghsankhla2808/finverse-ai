@@ -101,6 +101,12 @@ The platform features a premium glassmorphic dark-mode UI with 3D visualizations
 - **Dependency Hardening** — Full dependency audit resolution with forced overrides for transitive vulnerabilities and integrated GitHub Actions security audit.
 
 
+### ⚙️ Settings & Account Management
+- **Profile Customization** — Edit display name with validation support.
+- **Currency Preferences** — Configure currency with flag representations that instantly synchronize across the application and backend.
+- **Password Control** — Update account password with confirmation matching and validation constraints.
+- **Cascading Account Deletion** — IRREVERSIBLE delete option that safely wipes user profile, budgets, goals, transactions, investments, notifications, and AI logs in one cascade process.
+
 ### 🎨 Premium UI/UX
 - **Glassmorphic Dark Theme** — Deep purple palette with frosted glass effects
 - **3D Globe Visualization** — Interactive Three.js finance globe on the dashboard
@@ -308,70 +314,75 @@ Navigate to **[http://localhost:5173](http://localhost:5173)** — register an a
 
 ## 📡 API Reference
 
-All API routes are prefixed with `/api`. Protected routes require a `Bearer` token in the `Authorization` header.
+All API routes are prefixed with `/api/v1`. Protected routes require a `Bearer` token in the `Authorization` header.
 
-### Authentication
+### Authentication & Account
 | Method | Endpoint | Description | Auth |
 |---|---|---|---|
-| `POST` | `/api/auth/register` | Create new user account | ❌ |
-| `POST` | `/api/auth/login` | Login and receive tokens | ❌ |
-| `POST` | `/api/auth/refresh` | Refresh access token | ❌ |
+| `POST` | `/api/v1/auth/register` | Create new user account | ❌ |
+| `POST` | `/api/v1/auth/login` | Login and receive tokens | ❌ |
+| `POST` | `/api/v1/auth/refresh` | Refresh access token | ❌ |
+| `POST` | `/api/v1/auth/logout` | Log out and invalidate session token | ✅ |
+| `GET` | `/api/v1/auth/me` | Fetch currently authenticated user profile | ✅ |
+| `PUT` | `/api/v1/auth/profile` | Update profile information (name, currency) | ✅ |
+| `PUT` | `/api/v1/auth/password` | Change account password securely | ✅ |
+| `DELETE` | `/api/v1/auth/account` | Permanently delete account and all data | ✅ |
 
 ### Transactions
 | Method | Endpoint | Description | Auth |
 |---|---|---|---|
-| `GET` | `/api/transactions` | List all transactions | ✅ |
-| `POST` | `/api/transactions` | Create a transaction | ✅ |
-| `PUT` | `/api/transactions/:id` | Update a transaction | ✅ |
-| `DELETE` | `/api/transactions/:id` | Delete a transaction | ✅ |
+| `GET` | `/api/v1/transactions` | List all transactions | ✅ |
+| `POST` | `/api/v1/transactions` | Create a transaction | ✅ |
+| `PUT` | `/api/v1/transactions/:id` | Update a transaction | ✅ |
+| `DELETE` | `/api/v1/transactions/:id` | Delete a transaction | ✅ |
 
 ### Budgets
 | Method | Endpoint | Description | Auth |
 |---|---|---|---|
-| `GET` | `/api/budgets` | List all budgets | ✅ |
-| `POST` | `/api/budgets` | Create a budget | ✅ |
-| `PUT` | `/api/budgets/:id` | Update a budget | ✅ |
-| `DELETE` | `/api/budgets/:id` | Delete a budget | ✅ |
+| `GET` | `/api/v1/budgets` | List all budgets | ✅ |
+| `POST` | `/api/v1/budgets` | Create a budget | ✅ |
+| `PUT` | `/api/v1/budgets/:id` | Update a budget | ✅ |
+| `DELETE` | `/api/v1/budgets/:id` | Delete a budget | ✅ |
 
 ### Goals
 | Method | Endpoint | Description | Auth |
 |---|---|---|---|
-| `GET` | `/api/goals` | List all savings goals | ✅ |
-| `POST` | `/api/goals` | Create a goal | ✅ |
-| `PUT` | `/api/goals/:id` | Update a goal | ✅ |
-| `DELETE` | `/api/goals/:id` | Delete a goal | ✅ |
+| `GET` | `/api/v1/goals` | List all savings goals | ✅ |
+| `POST` | `/api/v1/goals` | Create a goal | ✅ |
+| `PUT` | `/api/v1/goals/:id` | Update a goal | ✅ |
+| `DELETE` | `/api/v1/goals/:id` | Delete a goal | ✅ |
 
 ### Investments
 | Method | Endpoint | Description | Auth |
 |---|---|---|---|
-| `GET` | `/api/investments` | List all investments | ✅ |
-| `POST` | `/api/investments` | Add an investment | ✅ |
-| `PUT` | `/api/investments/:id` | Update an investment | ✅ |
-| `DELETE` | `/api/investments/:id` | Delete an investment | ✅ |
+| `GET` | `/api/v1/investments` | List all investments | ✅ |
+| `POST` | `/api/v1/investments` | Add an investment | ✅ |
+| `PUT` | `/api/v1/investments/:id` | Update an investment | ✅ |
+| `DELETE` | `/api/v1/investments/:id` | Delete an investment | ✅ |
 
 ### Analytics
 | Method | Endpoint | Description | Auth |
 |---|---|---|---|
-| `GET` | `/api/analytics/dashboard` | Dashboard KPI metrics | ✅ |
-| `GET` | `/api/analytics/spending` | Category spending breakdown | ✅ |
-| `GET` | `/api/analytics/trends` | Income vs expense trends | ✅ |
-| `GET` | `/api/analytics/monthly` | 6-month comparison | ✅ |
-| `GET` | `/api/analytics/cashflow` | 7-day cash flow | ✅ |
+| `GET` | `/api/v1/analytics/dashboard` | Dashboard KPI metrics | ✅ |
+| `GET` | `/api/v1/analytics/spending` | Category spending breakdown | ✅ |
+| `GET` | `/api/v1/analytics/trends` | Income vs expense trends | ✅ |
+| `GET` | `/api/v1/analytics/monthly` | 6-month comparison | ✅ |
+| `GET` | `/api/v1/analytics/cashflow` | 7-day cash flow | ✅ |
 
 ### AI Assistant
 | Method | Endpoint | Description | Auth |
 |---|---|---|---|
-| `POST` | `/api/ai/chat` | Send message to AI advisor | ✅ |
-| `GET` | `/api/ai/history` | Get chat session history | ✅ |
-| `DELETE` | `/api/ai/history` | Clear all chat history | ✅ |
-| `GET` | `/api/ai/insights` | Get automated AI insights | ✅ |
-| `GET` | `/api/ai/suggestions` | Get suggested prompts | ✅ |
+| `POST` | `/api/v1/ai/chat` | Send message to AI advisor | ✅ |
+| `GET` | `/api/v1/ai/history` | Get chat session history | ✅ |
+| `DELETE` | `/api/v1/ai/history` | Clear all chat history | ✅ |
+| `GET` | `/api/v1/ai/insights` | Get automated AI insights | ✅ |
+| `GET` | `/api/v1/ai/suggestions` | Get suggested prompts | ✅ |
 
 ### Reports
 | Method | Endpoint | Description | Auth |
 |---|---|---|---|
-| `POST` | `/api/reports/generate` | Generate PDF/Excel/CSV report | ✅ |
-| `GET` | `/api/reports/download/:filename` | Download a generated report | ❌ |
+| `POST` | `/api/v1/reports/generate` | Generate PDF/Excel/CSV report | ✅ |
+| `GET` | `/api/v1/reports/download/:filename` | Download a generated report | ❌ |
 
 ### Health Check
 | Method | Endpoint | Description | Auth |
