@@ -8,6 +8,27 @@ import { sendSuccess, sendError } from '../utils/response.utils';
 import { AuthenticatedRequest } from '../middleware/auth.middleware';
 import env from '../config/env';
 import redis from '../config/redis';
+import { logger } from '../middleware/logger.middleware';
+
+// ─── Startup: validate GEMINI_API_KEY immediately on module load ──────────────
+// This fires once when the server boots so Render logs will clearly show
+// whether live Gemini AI is enabled or the controller is in mock-fallback mode.
+(() => {
+  const key = env.GEMINI_API_KEY;
+  if (!key || key === 'your-gemini-api-key') {
+    logger.warn({
+      context: 'ai.controller',
+      event: 'gemini_key_missing',
+      message: '⚠️  GEMINI_API_KEY is not set or is a placeholder — AI routes will use rule-based mock fallback.',
+    });
+  } else {
+    logger.info({
+      context: 'ai.controller',
+      event: 'gemini_key_present',
+      message: `✅ GEMINI_API_KEY is configured (starts: ${key.slice(0, 6)}…) — live Gemini AI enabled.`,
+    });
+  }
+})();
 
 // Suggested prompt questions
 const AI_SUGGESTIONS = [
@@ -178,7 +199,17 @@ export const chatWithAI = async (
       'AI response compiled successfully'
     );
   } catch (error) {
-    next(error);
+    const err = error as Error;
+    // Log the real Gemini SDK error — this is what was previously swallowed as a generic 500
+    logger.error({
+      context: 'ai.controller.chatWithAI',
+      event: 'gemini_api_error',
+      errorName: err.name,
+      errorMessage: err.message,
+      userId,
+    });
+    // Return a clear 502 rather than a generic 500 — signals external API failure
+    return sendError(res, `AI service error: ${err.message}`, 502);
   }
 };
 
@@ -290,10 +321,20 @@ export const getAutoInsights = async (
 
     return sendSuccess(res, insights, 'Automated financial insights generated successfully');
   } catch (error) {
-    next(error);
+    const err = error as Error;
+    // Log the real Gemini SDK error — this is what was previously swallowed as a generic 500
+    logger.error({
+      context: 'ai.controller.getAutoInsights',
+      event: 'gemini_api_error',
+      errorName: err.name,
+      errorMessage: err.message,
+      userId,
+    });
+    // Return a clear 502 rather than a generic 500 — signals external API failure
+    return sendError(res, `AI service error: ${err.message}`, 502);
   }
 };
 
 export const getAISuggestions = async (req: Request, res: Response): Promise<Response> => {
-  return sendSuccess(res, AI_SUGGESTIONS, 'Predefined AI questions suggestions retrieved');
+  return sendSuccess(res, AI_SUGGESTIONS, 'Predefined AI questions retrieved');
 };

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import UserModel, { IUserDocument } from '../models/User.model';
 import { verifyAccessToken } from '../utils/jwt.utils';
+import { logger } from './logger.middleware';
 
 export interface AuthenticatedRequest extends Request {
   user?: IUserDocument;
@@ -35,6 +36,14 @@ export const protect = async (
     next();
   } catch (error) {
     const err = error as Error;
+    // Log the real JWT error so production logs show the exact cause
+    // (e.g. JsonWebTokenError: invalid signature → secret mismatch / rotation)
+    logger.warn({
+      context: 'auth.middleware',
+      event: 'token_verification_failed',
+      errorName: err.name,
+      errorMessage: err.message,
+    });
     if (err.name === 'TokenExpiredError') {
       return res.status(401).json({ success: false, message: 'Token expired' });
     }

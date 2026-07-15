@@ -23,6 +23,12 @@ import {
 
 const app = express();
 
+// Trust Render's proxy layer (1 hop) so that express-rate-limit and req.ip
+// correctly read the real client IP from the X-Forwarded-For header.
+// Without this, every request appears to come from the same proxy IP and
+// express-rate-limit throws ERR_ERL_UNEXPECTED_X_FORWARDED_FOR.
+app.set('trust proxy', 1);
+
 // Security Headers
 app.use(helmet());
 
