@@ -28,7 +28,7 @@ yarn-error.log*
 pnpm-debug.log*
 
 # Reports archive
-reports/
+/backend/reports/
 
 # Editor directories and files
 .vscode/
