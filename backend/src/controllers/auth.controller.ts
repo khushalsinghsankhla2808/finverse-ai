@@ -107,8 +107,18 @@ export const syncUser = async (req: Request, res: Response, next: NextFunction):
       context: 'auth.controller.syncUser',
       event: 'user_sync_failed',
       errorMessage: err.message,
+      stack: err.stack,
     });
-    return sendError(res, `Failed to sync user: ${err.message}`, 401);
+
+    // If it's a Firebase token verification/expiry error, respond with 401.
+    // Otherwise (e.g. Firebase SDK initialization error or database connection issue), respond with 500.
+    const isAuthError = err.message.includes('auth/') || 
+                        err.message.includes('token') || 
+                        err.message.includes('argument-error') || 
+                        (err as any).code?.startsWith('auth/');
+
+    const statusCode = isAuthError ? 401 : 500;
+    return sendError(res, `Failed to sync user: ${err.message}`, statusCode);
   }
 };
 

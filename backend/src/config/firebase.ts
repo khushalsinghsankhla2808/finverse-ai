@@ -18,10 +18,9 @@ const initializeFirebase = () => {
     !privateKey ||
     privateKey === 'your-firebase-private-key'
   ) {
-    console.warn(
-      '⚠️ Firebase credentials are missing or placeholders. Firebase auth middleware will fail requests.'
+    throw new Error(
+      '❌ Firebase Admin credentials (FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY) are missing or placeholders. Server stopping.'
     );
-    return null;
   }
 
   // Format private key to handle escaped newline characters
