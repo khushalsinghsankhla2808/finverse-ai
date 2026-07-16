@@ -10,8 +10,8 @@ import {
 
 import aiService from '@/services/aiService';
 import { useToast } from '@/hooks/useToast';
-import { useCurrencyStore } from '@/stores/currencyStore';
 import PageTransition from '@/components/common/PageTransition';
+import ReactMarkdown from 'react-markdown';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -26,25 +26,9 @@ interface ChatSession {
   updatedAt: string;
 }
 
-// Simple Helper to highlight Currency values (e.g. ₹5,000) in gold
-const renderHighlightedContent = (text: string, currencySymbol: string) => {
-  // Regex to match Rupee symbol followed by numbers and comma formatting
-  const parts = text.split(new RegExp(`(\\\${currencySymbol}\\d+(?:,\\d+)*(?:\\.\\d+)?)`, 'g'));
-  return parts.map((part, i) => {
-    if (part.startsWith(currencySymbol)) {
-      return (
-        <span key={i} className="text-yellow-500 font-bold font-mono">
-          {part}
-        </span>
-      );
-    }
-    return part;
-  });
-};
 
 export const AIAssistantPage: React.FC = () => {
   const { showToast } = useToast();
-  const { activeCurrency } = useCurrencyStore();
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   // States
@@ -322,7 +306,25 @@ export const AIAssistantPage: React.FC = () => {
                           ? 'bg-purple-primary border-purple-primary/40 text-white rounded-tr-none'
                           : 'bg-bg-surface/50 border-white/5 text-white/90 rounded-tl-none leading-relaxed'
                       }`}>
-                        {isUser ? msg.content : renderHighlightedContent(msg.content, activeCurrency.symbol)}
+                        {isUser ? (
+                          msg.content
+                        ) : (
+                          <ReactMarkdown
+                            components={{
+                              h1: (props) => <h1 className="text-sm font-bold text-white mt-3 mb-1" {...props} />,
+                              h2: (props) => <h2 className="text-sm font-bold text-white mt-2.5 mb-1" {...props} />,
+                              h3: (props) => <h3 className="text-xs font-bold text-white/90 mt-2 mb-1" {...props} />,
+                              p: (props) => <p className="mb-2 last:mb-0 leading-relaxed" {...props} />,
+                              ul: (props) => <ul className="list-disc pl-4 mb-2 space-y-1 text-white/80" {...props} />,
+                              ol: (props) => <ol className="list-decimal pl-4 mb-2 space-y-1 text-white/80" {...props} />,
+                              li: (props) => <li className="pl-0.5" {...props} />,
+                              strong: (props) => <strong className="font-bold text-purple-light" {...props} />,
+                              code: (props) => <code className="bg-white/5 border border-white/10 px-1 py-0.5 rounded font-mono text-[10px]" {...props} />,
+                            }}
+                          >
+                            {msg.content}
+                          </ReactMarkdown>
+                        )}
                       </div>
                     </div>
                   );
