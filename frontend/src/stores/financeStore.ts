@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { v4 as uuidv4 } from 'uuid';
 import type { Transaction, Budget, Goal, Investment, PortfolioSummary, FinanceState } from '@/types/finance.types';
+import { useAuthStore } from './authStore';
 
 import transactionService from '@/services/transactionService';
 import budgetService from '@/services/budgetService';
@@ -85,7 +86,7 @@ export const useFinanceStore = create<FinanceState>()(
 
       fetchTransactions: async () => {
         try {
-          const hasToken = !!localStorage.getItem('finverse_access_token');
+          const hasToken = useAuthStore.getState().isAuthenticated;
           if (hasToken) {
             const res = await transactionService.getAll();
             const txns = res.data.transactions.map((txn: any) => ({
@@ -106,7 +107,7 @@ export const useFinanceStore = create<FinanceState>()(
 
       addTransaction: async (t) => {
         try {
-          const hasToken = !!localStorage.getItem('finverse_access_token');
+          const hasToken = useAuthStore.getState().isAuthenticated;
           if (hasToken) {
             await transactionService.create(t);
             // Reload list from api after additions
@@ -143,7 +144,7 @@ export const useFinanceStore = create<FinanceState>()(
 
       updateTransaction: async (id, updatedFields) => {
         try {
-          const hasToken = !!localStorage.getItem('finverse_access_token');
+          const hasToken = useAuthStore.getState().isAuthenticated;
           if (hasToken) {
             await transactionService.update(id, updatedFields);
             const res = await transactionService.getAll();
@@ -180,7 +181,7 @@ export const useFinanceStore = create<FinanceState>()(
 
       deleteTransaction: async (id) => {
         try {
-          const hasToken = !!localStorage.getItem('finverse_access_token');
+          const hasToken = useAuthStore.getState().isAuthenticated;
           if (hasToken) {
             await transactionService.delete(id);
             const res = await transactionService.getAll();
@@ -216,7 +217,7 @@ export const useFinanceStore = create<FinanceState>()(
       // Budget actions
       addBudget: async (b) => {
         try {
-          const hasToken = !!localStorage.getItem('finverse_access_token');
+          const hasToken = useAuthStore.getState().isAuthenticated;
           if (hasToken) {
             await budgetService.create(b);
             const res = await budgetService.getAll();
@@ -247,7 +248,7 @@ export const useFinanceStore = create<FinanceState>()(
 
       updateBudget: async (id, updatedFields) => {
         try {
-          const hasToken = !!localStorage.getItem('finverse_access_token');
+          const hasToken = useAuthStore.getState().isAuthenticated;
           if (hasToken) {
             await budgetService.update(id, updatedFields);
             const res = await budgetService.getAll();
@@ -279,7 +280,7 @@ export const useFinanceStore = create<FinanceState>()(
 
       deleteBudget: async (id) => {
         try {
-          const hasToken = !!localStorage.getItem('finverse_access_token');
+          const hasToken = useAuthStore.getState().isAuthenticated;
           if (hasToken) {
             await budgetService.delete(id);
             const res = await budgetService.getAll();
@@ -309,7 +310,7 @@ export const useFinanceStore = create<FinanceState>()(
       // Goal actions
       addGoal: async (g) => {
         try {
-          const hasToken = !!localStorage.getItem('finverse_access_token');
+          const hasToken = useAuthStore.getState().isAuthenticated;
           if (hasToken) {
             await goalService.create(g);
             const res = await goalService.getAll();
@@ -339,7 +340,7 @@ export const useFinanceStore = create<FinanceState>()(
 
       updateGoal: async (id, updatedFields) => {
         try {
-          const hasToken = !!localStorage.getItem('finverse_access_token');
+          const hasToken = useAuthStore.getState().isAuthenticated;
           if (hasToken) {
             await goalService.update(id, updatedFields);
             const res = await goalService.getAll();
@@ -368,7 +369,7 @@ export const useFinanceStore = create<FinanceState>()(
 
       deleteGoal: async (id) => {
         try {
-          const hasToken = !!localStorage.getItem('finverse_access_token');
+          const hasToken = useAuthStore.getState().isAuthenticated;
           if (hasToken) {
             await goalService.delete(id);
             const res = await goalService.getAll();
@@ -397,7 +398,7 @@ export const useFinanceStore = create<FinanceState>()(
 
       addToGoal: async (id, amount) => {
         try {
-          const hasToken = !!localStorage.getItem('finverse_access_token');
+          const hasToken = useAuthStore.getState().isAuthenticated;
           if (hasToken) {
             await goalService.addMoney(id, amount);
             // Fetch everything updated since goal add-money logs a transaction and updates budgets
@@ -480,7 +481,7 @@ export const useFinanceStore = create<FinanceState>()(
       // Investment actions
       fetchInvestments: async () => {
         try {
-          const hasToken = !!localStorage.getItem('finverse_access_token');
+          const hasToken = useAuthStore.getState().isAuthenticated;
           if (hasToken) {
             const res = await investmentService.getAll();
             const investments = res.data.investments.map((inv: any) => ({
@@ -515,7 +516,7 @@ export const useFinanceStore = create<FinanceState>()(
 
       addInvestment: async (inv) => {
         try {
-          const hasToken = !!localStorage.getItem('finverse_access_token');
+          const hasToken = useAuthStore.getState().isAuthenticated;
           if (hasToken) {
             await investmentService.create(inv);
             const res = await investmentService.getAll();
@@ -571,7 +572,7 @@ export const useFinanceStore = create<FinanceState>()(
 
       updateInvestment: async (id, updatedFields) => {
         try {
-          const hasToken = !!localStorage.getItem('finverse_access_token');
+          const hasToken = useAuthStore.getState().isAuthenticated;
           if (hasToken) {
             await investmentService.update(id, updatedFields);
             const res = await investmentService.getAll();
@@ -626,7 +627,7 @@ export const useFinanceStore = create<FinanceState>()(
 
       deleteInvestment: async (id) => {
         try {
-          const hasToken = !!localStorage.getItem('finverse_access_token');
+          const hasToken = useAuthStore.getState().isAuthenticated;
           if (hasToken) {
             await investmentService.delete(id);
             const res = await investmentService.getAll();
