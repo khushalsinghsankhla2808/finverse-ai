@@ -1,5 +1,4 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import bcrypt from 'bcryptjs';
 
 export interface IUserDocument extends Document {
   name: string;
@@ -16,7 +15,6 @@ export interface IUserDocument extends Document {
   lastLogin: Date | null;
   createdAt: Date;
   updatedAt: Date;
-  comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
 const UserSchema = new Schema<IUserDocument>(
@@ -82,26 +80,6 @@ const UserSchema = new Schema<IUserDocument>(
     timestamps: true,
   }
 );
-
-// Pre-save hook to hash password
-UserSchema.pre<IUserDocument>('save', async function (next) {
-  if (!this.password || !this.isModified('password')) return next();
-  try {
-    const salt = await bcrypt.genSalt(12);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
-  } catch (err) {
-    next(err as Error);
-  }
-});
-
-// Compare password method
-UserSchema.methods.comparePassword = async function (
-  candidatePassword: string
-): Promise<boolean> {
-  if (!this.password) return false;
-  return bcrypt.compare(candidatePassword, this.password);
-};
 
 export const UserModel = mongoose.model<IUserDocument>('User', UserSchema);
 export default UserModel;
