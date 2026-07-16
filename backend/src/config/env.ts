@@ -13,7 +13,7 @@ const envSchema = z.object({
   CLOUDINARY_CLOUD_NAME: z.string().optional().default('your-cloud-name'),
   CLOUDINARY_API_KEY: z.string().optional().default('your-api-key'),
   CLOUDINARY_API_SECRET: z.string().optional().default('your-api-secret'),
-  GEMINI_API_KEY: z.string().optional().default('your-gemini-api-key'),
+  MISTRAL_API_KEY: z.string().optional().default('your-mistral-api-key'),
   EMAIL_HOST: z.string().optional().default('smtp.gmail.com'),
   EMAIL_PORT: z.coerce.number().optional().default(587),
   EMAIL_USER: z.string().optional().default('your-email@gmail.com'),

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { Mistral } from '@mistralai/mistralai';
 import AIHistoryModel from '../models/AIHistory.model';
 import TransactionModel from '../models/Transaction.model';
 import BudgetModel from '../models/Budget.model';
@@ -10,25 +10,20 @@ import env from '../config/env';
 import redis from '../config/redis';
 import { logger } from '../middleware/logger.middleware';
 
-// ─── Startup: validate GEMINI_API_KEY immediately on module load ──────────────
-// This fires once when the server boots so Render logs will clearly show
-// whether live Gemini AI is enabled or the controller is in mock-fallback mode.
-// Note: We only check that the key is non-empty and is not the default placeholder.
-// We do not validate or enforce any key prefix or shape (e.g. starting with "AIza" or "AQ.")
-// since Google can change the key format at any time.
+// ─── Startup: validate MISTRAL_API_KEY immediately on module load ──────────────
 (() => {
-  const key = env.GEMINI_API_KEY;
-  if (!key || key === 'your-gemini-api-key') {
+  const key = env.MISTRAL_API_KEY;
+  if (!key || key === 'your-mistral-api-key') {
     logger.warn({
       context: 'ai.controller',
-      event: 'gemini_key_missing',
-      message: '⚠️  GEMINI_API_KEY is not set or is a placeholder — AI routes will use rule-based mock fallback.',
+      event: 'mistral_key_missing',
+      message: '⚠️  MISTRAL_API_KEY is not set or is a placeholder — AI routes will use rule-based mock fallback.',
     });
   } else {
     logger.info({
       context: 'ai.controller',
-      event: 'gemini_key_present',
-      message: `✅ GEMINI_API_KEY is configured (starts: ${key.slice(0, 6)}…) — live Gemini AI enabled.`,
+      event: 'mistral_key_present',
+      message: `✅ MISTRAL_API_KEY is configured (starts: ${key.slice(0, 6)}…) — live Mistral AI enabled.`,
     });
   }
 })();
@@ -134,10 +129,9 @@ export const chatWithAI = async (
 
     let aiResponse = '';
 
-    // Check if live Gemini API key is configured.
-    // Note: Only verify non-emptiness/non-placeholder, do not validate prefix or shape.
-    const apiKey = env.GEMINI_API_KEY;
-    const isMockKey = !apiKey || apiKey === 'your-gemini-api-key';
+    // Check if live Mistral API key is configured.
+    const apiKey = env.MISTRAL_API_KEY;
+    const isMockKey = !apiKey || apiKey === 'your-mistral-api-key';
 
     if (isMockKey) {
       // Rule-based Fallback Mock AI advisor
@@ -158,14 +152,13 @@ export const chatWithAI = async (
         aiResponse = `Hello! I'm FinVerse AI, your personal finance advisor. I see you have an income of **₹${rawData.income}** and expenses of **₹${rawData.expenses}** this month. What specific aspect of your budgets, goals, or transactions can I assist you with today?`;
       }
     } else {
-      // Live Gemini call
-      const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      // Live Mistral call
+      const client = new Mistral({ apiKey });
 
       // Load last 10 messages for conversation thread context
-      const chatHistory = chatSession.messages.slice(-10).map((msg) => ({
-        role: msg.role === 'user' ? 'user' : 'model',
-        parts: [{ text: msg.content }],
+      const historyMessages = chatSession.messages.slice(-10).map((msg) => ({
+        role: msg.role === 'user' ? 'user' as const : 'assistant' as const,
+        content: msg.content,
       }));
 
       // Setup prompt containing financial context
@@ -175,13 +168,17 @@ export const chatWithAI = async (
       ${contextText}
       `;
 
-      const chat = model.startChat({
-        history: chatHistory.slice(0, -1), // feed history excluding the user's latest query
-        systemInstruction,
+      const response = await client.chat.complete({
+        model: 'mistral-large-latest',
+        messages: [
+          { role: 'system' as const, content: systemInstruction },
+          ...historyMessages,
+        ],
       });
 
-      const result = await chat.sendMessage(message);
-      aiResponse = result.response.text();
+      aiResponse = typeof response.choices?.[0]?.message?.content === 'string'
+        ? response.choices[0].message.content
+        : '';
     }
 
     // Append AI response
@@ -204,10 +201,9 @@ export const chatWithAI = async (
     );
   } catch (error) {
     const err = error as Error;
-    // Log the real Gemini SDK error — this is what was previously swallowed as a generic 500
     logger.error({
       context: 'ai.controller.chatWithAI',
-      event: 'gemini_api_error',
+      event: 'mistral_api_error',
       errorName: err.name,
       errorMessage: err.message,
       userId,
@@ -270,10 +266,9 @@ export const getAutoInsights = async (
 
     let insights: any[] = [];
 
-    // Check if live Gemini API key is configured.
-    // Note: Only verify non-emptiness/non-placeholder, do not validate prefix or shape.
-    const apiKey = env.GEMINI_API_KEY;
-    const isMockKey = !apiKey || apiKey === 'your-gemini-api-key';
+    // Check if live Mistral API key is configured.
+    const apiKey = env.MISTRAL_API_KEY;
+    const isMockKey = !apiKey || apiKey === 'your-mistral-api-key';
 
     if (isMockKey) {
       // Mock fallback insights
@@ -298,12 +293,8 @@ export const getAutoInsights = async (
         },
       ];
     } else {
-      // Call Gemini for JSON insights
-      const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({
-        model: 'gemini-1.5-flash',
-        generationConfig: { responseMimeType: 'application/json' },
-      });
+      // Call Mistral for JSON insights
+      const client = new Mistral({ apiKey });
 
       const prompt = `Based on this financial data, provide 3-5 specific, actionable insights in JSON format matching this schema:
       [{
@@ -317,8 +308,17 @@ export const getAutoInsights = async (
       ${contextText}
       `;
 
-      const result = await model.generateContent(prompt);
-      const rawText = result.response.text();
+      const response = await client.chat.complete({
+        model: 'mistral-large-latest',
+        responseFormat: { type: 'json_object' },
+        messages: [
+          { role: 'user' as const, content: prompt },
+        ],
+      });
+
+      const rawText = typeof response.choices?.[0]?.message?.content === 'string'
+        ? response.choices[0].message.content
+        : '[]';
       insights = JSON.parse(rawText);
     }
 
@@ -328,10 +328,9 @@ export const getAutoInsights = async (
     return sendSuccess(res, insights, 'Automated financial insights generated successfully');
   } catch (error) {
     const err = error as Error;
-    // Log the real Gemini SDK error — this is what was previously swallowed as a generic 500
     logger.error({
       context: 'ai.controller.getAutoInsights',
-      event: 'gemini_api_error',
+      event: 'mistral_api_error',
       errorName: err.name,
       errorMessage: err.message,
       userId,

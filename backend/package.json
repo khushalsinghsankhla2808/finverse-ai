@@ -9,7 +9,7 @@
     "start": "node dist/server.js"
   },
   "dependencies": {
-    "@google/generative-ai": "^0.11.0",
+    "@mistralai/mistralai": "^1.1.0",
     "cloudinary": "^2.2.0",
     "cors": "^2.8.5",
     "date-fns": "^3.6.0",
