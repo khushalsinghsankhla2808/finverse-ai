@@ -36,6 +36,7 @@ interface RegisterFormProps {
 export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccessRedirect, onSignInClick }) => {
   const { register: registerAuth, isLoading } = useAuth();
   const [isSuccess, setIsSuccess] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   const {
     register,
@@ -67,13 +68,15 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccessRedirect, o
 
   const onSubmit = async (data: RegisterFields) => {
     try {
+      setAuthError(null);
       await registerAuth(data.name, data.email, data.password);
       setIsSuccess(true);
       setTimeout(() => {
         onSuccessRedirect();
       }, 1000);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      setAuthError(err.message || 'Failed to create account. Email may already be in use.');
     }
   };
 
@@ -212,6 +215,13 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccessRedirect, o
             </span>
           )}
         </div>
+
+        {/* Auth Error Display */}
+        {authError && (
+          <div className="text-xs text-red-negative font-medium bg-red-negative/10 border border-red-negative/20 px-3 py-2 rounded-lg mt-1">
+            ⚠️ {authError}
+          </div>
+        )}
 
         {/* Submit button */}
         <button

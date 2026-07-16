@@ -24,6 +24,9 @@ const envSchema = z.object({
   EMAIL_PASS: z.string().optional().default('your-app-password'),
   CLIENT_URL: z.string().optional(),
   BACKEND_URL: z.string().optional(),
+  FIREBASE_PROJECT_ID: z.string().optional().default('your-firebase-project-id'),
+  FIREBASE_CLIENT_EMAIL: z.string().optional().default('your-firebase-client-email'),
+  FIREBASE_PRIVATE_KEY: z.string().optional().default('your-firebase-private-key'),
 });
 
 const parsed = envSchema.safeParse(process.env);

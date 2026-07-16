@@ -4,7 +4,8 @@ import bcrypt from 'bcryptjs';
 export interface IUserDocument extends Document {
   name: string;
   email: string;
-  password: string;
+  password?: string;
+  firebaseUid?: string | null;
   avatar: string | null;
   plan: 'free' | 'premium';
   currency: string;
@@ -34,8 +35,13 @@ const UserSchema = new Schema<IUserDocument>(
     },
     password: {
       type: String,
-      required: true,
       minlength: 8,
+    },
+    firebaseUid: {
+      type: String,
+      unique: true,
+      sparse: true,
+      default: null,
     },
     avatar: {
       type: String,
@@ -79,7 +85,7 @@ const UserSchema = new Schema<IUserDocument>(
 
 // Pre-save hook to hash password
 UserSchema.pre<IUserDocument>('save', async function (next) {
-  if (!this.isModified('password')) return next();
+  if (!this.password || !this.isModified('password')) return next();
   try {
     const salt = await bcrypt.genSalt(12);
     this.password = await bcrypt.hash(this.password, salt);
@@ -93,6 +99,7 @@ UserSchema.pre<IUserDocument>('save', async function (next) {
 UserSchema.methods.comparePassword = async function (
   candidatePassword: string
 ): Promise<boolean> {
+  if (!this.password) return false;
   return bcrypt.compare(candidatePassword, this.password);
 };
 

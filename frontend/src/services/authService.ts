@@ -1,13 +1,12 @@
 import axiosInstance from '@/lib/axios';
 
 export const authService = {
-  async register(data: any) {
-    const res = await axiosInstance.post('/auth/register', data);
-    return res.data;
-  },
-
-  async login(data: any) {
-    const res = await axiosInstance.post('/auth/login', data);
+  async syncUser(token: string) {
+    const res = await axiosInstance.post('/auth/sync', {}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return res.data;
   },
 
@@ -23,15 +22,6 @@ export const authService = {
 
   async updateProfile(data: { name?: string; currency?: string }) {
     const res = await axiosInstance.put('/auth/profile', data);
-    return res.data;
-  },
-
-  async changePassword(data: {
-    currentPassword: string;
-    newPassword: string;
-    confirmPassword: string;
-  }) {
-    const res = await axiosInstance.put('/auth/password', data);
     return res.data;
   },
 

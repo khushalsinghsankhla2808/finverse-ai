@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { updatePassword, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
+import { auth } from '@/config/firebase';
 import type { Variants } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -242,11 +244,28 @@ export const SettingsPage: React.FC = () => {
 
   const onPasswordSave = async (values: PasswordFormValues) => {
     try {
-      await authService.changePassword(values);
+      const user = auth.currentUser;
+      if (!user || !user.email) {
+        throw new Error('No authenticated user found.');
+      }
+
+      // Check if user signed in via Google (password changes are handled by Google)
+      const isGoogleUser = user.providerData.some((p) => p.providerId === 'google.com');
+      if (isGoogleUser) {
+        throw new Error('Google Sign-In accounts cannot change password here. Please manage this in your Google Account Settings.');
+      }
+
+      // Reauthenticate user
+      const credential = EmailAuthProvider.credential(user.email, values.currentPassword);
+      await reauthenticateWithCredential(user, credential);
+
+      // Update password in Firebase
+      await updatePassword(user, values.newPassword);
       showToast('Password changed successfully', 'success');
       resetPw();
     } catch (err: any) {
-      showToast(err?.response?.data?.message || 'Failed to change password', 'error');
+      console.error('Password change error:', err);
+      showToast(err.message || 'Failed to change password. Please check your current password.', 'error');
     }
   };
 

@@ -10,6 +10,7 @@ export const useAuth = () => {
       isLoading: state.isLoading,
       login: state.login,
       register: state.register,
+      loginWithGoogle: state.loginWithGoogle,
       logout: state.logout,
       setUser: state.setUser,
     }))

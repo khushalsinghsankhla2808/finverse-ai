@@ -22,9 +22,10 @@ interface LoginFormProps {
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onSuccessRedirect, onSignUpClick }) => {
-  const { login, isLoading } = useAuth();
+  const { login, loginWithGoogle, isLoading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   const {
     register,
@@ -41,13 +42,29 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccessRedirect, onSignU
 
   const onSubmit = async (data: LoginFields) => {
     try {
+      setAuthError(null);
       await login(data.email, data.password);
       setIsSuccess(true);
       setTimeout(() => {
         onSuccessRedirect();
       }, 1000);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      setAuthError(err.message || 'Failed to sign in. Please verify your email and password.');
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setAuthError(null);
+      await loginWithGoogle();
+      setIsSuccess(true);
+      setTimeout(() => {
+        onSuccessRedirect();
+      }, 1000);
+    } catch (err: any) {
+      console.error(err);
+      setAuthError(err.message || 'Google sign-in failed. Please try again.');
     }
   };
 
@@ -108,6 +125,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccessRedirect, onSignU
           />
         </div>
 
+        {/* Auth Error Display */}
+        {authError && (
+          <div className="text-xs text-red-negative font-medium bg-red-negative/10 border border-red-negative/20 px-3 py-2 rounded-lg mt-1">
+            ⚠️ {authError}
+          </div>
+        )}
+
         {/* Submit button */}
         <button
           type="submit"
@@ -147,6 +171,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccessRedirect, onSignU
       {/* Google Button */}
       <button
         type="button"
+        onClick={handleGoogleSignIn}
         disabled={isLoading || isSuccess}
         className="flex h-11 w-full items-center justify-center rounded-lg border border-white/10 bg-white/3 px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-white/8 active:scale-[0.98] cursor-pointer"
       >
