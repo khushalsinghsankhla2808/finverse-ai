@@ -13,6 +13,9 @@ import { logger } from '../middleware/logger.middleware';
 // ─── Startup: validate GEMINI_API_KEY immediately on module load ──────────────
 // This fires once when the server boots so Render logs will clearly show
 // whether live Gemini AI is enabled or the controller is in mock-fallback mode.
+// Note: We only check that the key is non-empty and is not the default placeholder.
+// We do not validate or enforce any key prefix or shape (e.g. starting with "AIza" or "AQ.")
+// since Google can change the key format at any time.
 (() => {
   const key = env.GEMINI_API_KEY;
   if (!key || key === 'your-gemini-api-key') {
@@ -131,7 +134,8 @@ export const chatWithAI = async (
 
     let aiResponse = '';
 
-    // Check if live Gemini API key is configured
+    // Check if live Gemini API key is configured.
+    // Note: Only verify non-emptiness/non-placeholder, do not validate prefix or shape.
     const apiKey = env.GEMINI_API_KEY;
     const isMockKey = !apiKey || apiKey === 'your-gemini-api-key';
 
@@ -266,6 +270,8 @@ export const getAutoInsights = async (
 
     let insights: any[] = [];
 
+    // Check if live Gemini API key is configured.
+    // Note: Only verify non-emptiness/non-placeholder, do not validate prefix or shape.
     const apiKey = env.GEMINI_API_KEY;
     const isMockKey = !apiKey || apiKey === 'your-gemini-api-key';
 
