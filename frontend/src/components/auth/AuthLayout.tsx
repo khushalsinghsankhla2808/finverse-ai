@@ -33,13 +33,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
 
         {/* Logo Section */}
         <div className="relative z-10 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-linear-to-tr from-purple-primary to-blue-primary flex items-center justify-center shadow-glow-purple">
-            <span className="font-display font-extrabold text-xl">FV</span>
-          </div>
-          <div>
-            <h1 className="font-display font-bold text-2xl tracking-wide">FinVerse</h1>
-            <p className="text-xs text-purple-light font-medium tracking-widest uppercase">AI Finance</p>
-          </div>
+          <img src="/logo.png" alt="FinVerse AI Logo" className="h-10 object-contain" />
         </div>
 
         {/* Center Tagline & Showcase */}
@@ -85,11 +79,8 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
 
         {/* Mobile Header */}
         <div className="lg:hidden flex flex-col items-center gap-2 mb-8 relative z-10">
-          <div className="w-12 h-12 rounded-2xl bg-linear-to-tr from-purple-primary to-blue-primary flex items-center justify-center shadow-glow-purple">
-            <span className="font-display font-extrabold text-2xl">FV</span>
-          </div>
-          <h1 className="font-display font-bold text-3xl tracking-wide">FinVerse</h1>
-          <p className="text-sm text-purple-light/80 font-medium">AI-Powered 3D Finance Tracker</p>
+          <img src="/logo.png" alt="FinVerse AI Logo" className="h-12 object-contain" />
+          <p className="text-xs text-purple-light/80 font-medium tracking-wide uppercase">AI-Powered 3D Finance Tracker</p>
         </div>
 
         {/* Glassmorphism Card */}

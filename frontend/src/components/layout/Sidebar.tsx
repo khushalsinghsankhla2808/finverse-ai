@@ -106,22 +106,11 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
         {/* Top Section */}
         <div>
           <div className="flex h-16 items-center justify-between px-4 border-b border-white/5">
-            <div className="flex items-center gap-3 overflow-hidden">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-linear-to-tr from-purple-primary to-blue-primary shadow-glow-purple">
-                <span className="font-display font-extrabold text-sm text-white">FV</span>
-              </div>
-              {!sidebarCollapsed && (
-                <motion.div
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  className="flex flex-col"
-                >
-                  <span className="font-display text-sm font-bold tracking-wide text-white">FinVerse</span>
-                  <span className="text-[10px] text-white/40 tracking-wider font-medium uppercase leading-tight">
-                    AI-Powered Finance
-                  </span>
-                </motion.div>
+            <div className="flex items-center gap-3 overflow-hidden h-9">
+              {sidebarCollapsed ? (
+                <img src="/logo_icon.png" alt="FinVerse Logo" className="h-7 w-7 object-contain shrink-0 ml-1" />
+              ) : (
+                <img src="/logo.png" alt="FinVerse AI Logo" className="h-8 object-contain shrink-0" />
               )}
             </div>
 
