@@ -105,19 +105,22 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
       >
         {/* Top Section */}
         <div>
-          <div className="flex h-16 items-center justify-between px-4 border-b border-white/5">
-            <div className="flex items-center gap-3 overflow-hidden h-9">
+          <div className="relative flex h-16 items-center px-4 border-b border-white/5">
+            <div className={cn(
+              "flex items-center overflow-hidden transition-all duration-300",
+              sidebarCollapsed ? "justify-center w-full" : "justify-start"
+            )}>
               {sidebarCollapsed ? (
-                <img src="/logo_icon.png" alt="FinVerse Logo" className="h-7 w-7 object-contain shrink-0 ml-1" />
+                <img src="/logo_icon.png" alt="FinVerse Logo" className="h-9 w-9 object-contain shrink-0" />
               ) : (
-                <img src="/logo.png" alt="FinVerse AI Logo" className="h-8 object-contain shrink-0" />
+                <img src="/logo.png" alt="FinVerse AI Logo" className="h-12 object-contain shrink-0" />
               )}
             </div>
 
             {/* Collapse Toggle Button (Desktop only) */}
             <button
               onClick={toggleSidebar}
-              className="hidden lg:flex h-6 w-6 items-center justify-center rounded-md border border-white/10 bg-white/5 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
+              className="hidden lg:flex absolute -right-3 top-5 z-50 h-6 w-6 items-center justify-center rounded-full border border-white/10 bg-bg-card hover:bg-white/10 hover:text-white transition-colors cursor-pointer shadow-md"
             >
               <motion.div
                 animate={{ rotate: sidebarCollapsed ? 180 : 0 }}

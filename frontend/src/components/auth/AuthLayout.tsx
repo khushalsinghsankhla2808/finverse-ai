@@ -33,7 +33,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
 
         {/* Logo Section */}
         <div className="relative z-10 flex items-center gap-3">
-          <img src="/logo.png" alt="FinVerse AI Logo" className="h-10 object-contain" />
+          <img src="/logo.png" alt="FinVerse AI Logo" className="h-20 object-contain" />
         </div>
 
         {/* Center Tagline & Showcase */}
@@ -79,7 +79,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
 
         {/* Mobile Header */}
         <div className="lg:hidden flex flex-col items-center gap-2 mb-8 relative z-10">
-          <img src="/logo.png" alt="FinVerse AI Logo" className="h-12 object-contain" />
+          <img src="/logo.png" alt="FinVerse AI Logo" className="h-16 object-contain" />
           <p className="text-xs text-purple-light/80 font-medium tracking-wide uppercase">AI-Powered 3D Finance Tracker</p>
         </div>
 
