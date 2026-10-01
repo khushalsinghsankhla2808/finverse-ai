@@ -43,19 +43,25 @@ export const AIAssistantPage: React.FC = () => {
   // Load suggestions & history on mount
   useEffect(() => {
     const initPage = async () => {
-      try {
-        const [sugRes, histRes, insRes] = await Promise.all([
-          aiService.getSuggestions(),
-          aiService.getHistory(),
-          aiService.getInsights(),
-        ]);
+      const results = await Promise.allSettled([
+        aiService.getSuggestions(),
+        aiService.getHistory(),
+        aiService.getInsights(),
+      ]);
 
-        setSuggestions(sugRes.data || []);
-        
-        const loadedSessions = (histRes.data || []).map((s: any) => ({
+      const sugResult = results[0];
+      const histResult = results[1];
+      const insResult = results[2];
+
+      if (sugResult.status === 'fulfilled') {
+        setSuggestions(sugResult.value.data || []);
+      }
+
+      if (histResult.status === 'fulfilled') {
+        const loadedSessions = (histResult.value.data || []).map((s: any) => ({
           id: s._id,
           sessionTitle: s.sessionTitle,
-          messages: s.messages.map((m: any) => ({
+          messages: (s.messages || []).map((m: any) => ({
             role: m.role,
             content: m.content,
             timestamp: m.timestamp,
@@ -68,14 +74,14 @@ export const AIAssistantPage: React.FC = () => {
           setActiveSessionId(loadedSessions[0].id);
           setMessages(loadedSessions[0].messages);
         }
+      }
 
-        setInsights(insRes.data || []);
-      } catch (err) {
-        showToast('Failed to load assistant details', 'error');
+      if (insResult.status === 'fulfilled') {
+        setInsights(insResult.value.data || []);
       }
     };
     initPage();
-  }, [showToast]);
+  }, []);
 
   // Scroll to bottom on message updates
   useEffect(() => {
