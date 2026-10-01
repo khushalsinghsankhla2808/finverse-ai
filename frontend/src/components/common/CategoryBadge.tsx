@@ -10,73 +10,73 @@ export const CategoryBadge: React.FC<CategoryBadgeProps> = ({ category, classNam
   const getBadgeStyles = (cat: string) => {
     const mappings: Record<string, { bg: string; text: string; border: string }> = {
       Housing: {
-        bg: 'bg-purple-primary/10',
-        text: 'text-purple-light',
-        border: 'border-purple-primary/20',
+        bg: 'bg-[#FF9A6B]/15',
+        text: 'text-[#FF9A6B]',
+        border: 'border-[#FF9A6B]/30',
       },
       Food: {
-        bg: 'bg-cyan-data/10',
-        text: 'text-cyan-data',
-        border: 'border-cyan-data/20',
+        bg: 'bg-[#2DD4BF]/15',
+        text: 'text-[#2DD4BF]',
+        border: 'border-[#2DD4BF]/30',
       },
       Transport: {
-        bg: 'bg-green-positive/10',
-        text: 'text-green-positive',
-        border: 'border-green-positive/20',
+        bg: 'bg-[#FF6B9D]/15',
+        text: 'text-[#FF6B9D]',
+        border: 'border-[#FF6B9D]/30',
       },
       Shopping: {
-        bg: 'bg-gold-savings/10',
-        text: 'text-gold-savings',
-        border: 'border-gold-savings/20',
+        bg: 'bg-[#FFB896]/15',
+        text: 'text-[#FFB896]',
+        border: 'border-[#FFB896]/30',
       },
       Entertainment: {
-        bg: 'bg-red-negative/10',
-        text: 'text-red-negative',
-        border: 'border-red-negative/20',
+        bg: 'bg-[#5EEAD4]/15',
+        text: 'text-[#5EEAD4]',
+        border: 'border-[#5EEAD4]/30',
       },
       Groceries: {
-        bg: 'bg-violet-500/10',
-        text: 'text-violet-400',
-        border: 'border-violet-500/20',
+        bg: 'bg-[#2DD4BF]/15',
+        text: 'text-[#2DD4BF]',
+        border: 'border-[#2DD4BF]/30',
       },
       Utilities: {
-        bg: 'bg-pink-500/10',
-        text: 'text-pink-400',
-        border: 'border-pink-500/20',
+        bg: 'bg-amber-400/15',
+        text: 'text-amber-300',
+        border: 'border-amber-400/30',
       },
       Income: {
-        bg: 'bg-emerald-500/10',
+        bg: 'bg-emerald-500/15',
         text: 'text-emerald-400',
-        border: 'border-emerald-500/20',
+        border: 'border-emerald-500/30',
       },
       Transfer: {
-        bg: 'bg-blue-600/10',
-        text: 'text-blue-400',
-        border: 'border-blue-600/20',
+        bg: 'bg-[#2DD4BF]/15',
+        text: 'text-[#2DD4BF]',
+        border: 'border-[#2DD4BF]/30',
       },
       Healthcare: {
-        bg: 'bg-teal-500/10',
-        text: 'text-teal-400',
-        border: 'border-teal-500/20',
+        bg: 'bg-[#5EEAD4]/15',
+        text: 'text-[#5EEAD4]',
+        border: 'border-[#5EEAD4]/30',
       },
       Education: {
-        bg: 'bg-indigo-500/10',
-        text: 'text-indigo-400',
-        border: 'border-indigo-500/20',
+        bg: 'bg-[#FF9A6B]/15',
+        text: 'text-[#FF9A6B]',
+        border: 'border-[#FF9A6B]/30',
       },
       Investment: {
-        bg: 'bg-amber-500/10',
-        text: 'text-amber-400',
-        border: 'border-amber-500/20',
+        bg: 'bg-[#FFB896]/15',
+        text: 'text-[#FFB896]',
+        border: 'border-[#FFB896]/30',
       },
       Other: {
-        bg: 'bg-gray-500/10',
-        text: 'text-gray-400',
-        border: 'border-gray-500/20',
+        bg: 'bg-[#7B8494]/15',
+        text: 'text-[#A3ABB8]',
+        border: 'border-[#7B8494]/30',
       },
     };
 
-    return mappings[cat] ?? { bg: 'bg-gray-500/10', text: 'text-gray-400', border: 'border-gray-500/20' };
+    return mappings[cat] ?? { bg: 'bg-[#7B8494]/15', text: 'text-[#A3ABB8]', border: 'border-[#7B8494]/30' };
   };
 
   const { bg, text, border } = getBadgeStyles(category);

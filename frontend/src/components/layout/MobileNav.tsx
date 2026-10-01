@@ -52,7 +52,7 @@ export const MobileNav: React.FC = () => {
   return (
     <>
       {/* Bottom Nav Bar (Mobile Viewports Only) */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 h-16 border-t border-white/8 bg-bg-card/90 backdrop-blur-md flex items-center justify-around px-2 pb-safe lg:hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-40 h-16 border-t border-white/8 bg-[#373D46]/90 backdrop-blur-md flex items-center justify-around px-2 pb-safe lg:hidden">
         {mainTabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = location.pathname === tab.path;
@@ -63,7 +63,7 @@ export const MobileNav: React.FC = () => {
               onClick={() => handleTabClick(tab.path)}
               className={cn(
                 'flex flex-col items-center justify-center gap-1 h-full w-14 transition-colors cursor-pointer',
-                isActive ? 'text-purple-light' : 'text-white/40 hover:text-white/70'
+                isActive ? 'text-[#FF9A6B] font-bold' : 'text-white/40 hover:text-white/70'
               )}
             >
               <Icon size={20} />
@@ -77,7 +77,7 @@ export const MobileNav: React.FC = () => {
           onClick={() => setMoreOpen(true)}
           className={cn(
             'flex flex-col items-center justify-center gap-1 h-full w-14 transition-colors cursor-pointer',
-            moreOpen ? 'text-purple-light' : 'text-white/40 hover:text-white/70'
+            moreOpen ? 'text-[#FF9A6B] font-bold' : 'text-white/40 hover:text-white/70'
           )}
         >
           <MoreHorizontal size={20} />
@@ -104,7 +104,7 @@ export const MobileNav: React.FC = () => {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 220 }}
-              className="fixed bottom-0 left-0 right-0 z-50 rounded-t-2xl border-t border-white/10 bg-bg-card p-6 pb-8 text-white flex flex-col gap-6 lg:hidden shadow-2xl"
+              className="fixed bottom-0 left-0 right-0 z-50 rounded-t-2xl border-t border-white/10 bg-[#2F343C] p-6 pb-8 text-white flex flex-col gap-6 lg:hidden shadow-2xl"
             >
               {/* Header */}
               <div className="flex items-center justify-between">
@@ -133,11 +133,11 @@ export const MobileNav: React.FC = () => {
                       className={cn(
                         'flex flex-col items-center justify-center p-3 rounded-xl border transition-all duration-200 cursor-pointer gap-2',
                         isActive
-                          ? 'border-purple-primary bg-purple-primary/10 text-white'
+                          ? 'border-[#FF9A6B] bg-[#FF9A6B]/15 text-[#FF9A6B]'
                           : 'border-white/5 bg-white/2 text-white/60 hover:bg-white/5 hover:text-white'
                       )}
                     >
-                      <Icon size={20} className={isActive ? 'text-purple-light' : ''} />
+                      <Icon size={20} className={isActive ? 'text-[#FF9A6B]' : ''} />
                       <span className="text-xs font-semibold text-center leading-tight truncate w-full">
                         {item.label}
                       </span>
@@ -150,7 +150,7 @@ export const MobileNav: React.FC = () => {
               <div className="border-t border-white/5 pt-4 mt-2">
                 <button
                   onClick={handleLogout}
-                  className="w-full h-11 flex items-center justify-center gap-2 rounded-lg border border-red-negative/20 bg-red-negative/5 hover:bg-red-negative/10 text-red-negative font-semibold text-sm transition-all duration-150 cursor-pointer"
+                  className="w-full h-11 flex items-center justify-center gap-2 rounded-lg border border-red-500/20 bg-red-500/5 hover:bg-red-500/10 text-red-400 font-semibold text-sm transition-all duration-150 cursor-pointer"
                 >
                   <LogOut size={16} />
                   <span>Logout</span>

@@ -352,12 +352,12 @@ export const SettingsPage: React.FC = () => {
           {/* Avatar */}
           <div className="flex items-center gap-5">
             <div className="relative shrink-0">
-              <div className="w-16 h-16 rounded-2xl bg-purple-primary flex items-center justify-center text-white text-xl font-bold shadow-[0_0_24px_rgba(124,58,237,0.35)]">
+              <div className="w-16 h-16 rounded-2xl bg-[#FF9A6B] flex items-center justify-center text-[#1A1A1A] text-xl font-bold shadow-[0_0_24px_rgba(255,154,107,0.35)]">
                 {initials}
               </div>
               {isPremium && (
-                <div className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-linear-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-md">
-                  <Crown size={12} className="text-white" />
+                <div className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-[#2DD4BF] flex items-center justify-center shadow-md">
+                  <Crown size={12} className="text-[#1A1A1A]" />
                 </div>
               )}
             </div>
@@ -367,7 +367,7 @@ export const SettingsPage: React.FC = () => {
               <div className="flex items-center gap-2 mt-1.5">
                 <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold leading-none ${
                   isPremium
-                    ? 'bg-linear-to-r from-amber-400 to-amber-600 text-bg-base shadow-[0_0_10px_rgba(245,158,11,0.3)]'
+                    ? 'bg-[#2DD4BF] text-[#1A1A1A] shadow-[0_0_10px_rgba(45,212,191,0.3)]'
                     : 'bg-white/10 text-white/50'
                 }`}>
                   {isPremium ? '✦ Premium' : 'Free Plan'}
@@ -543,14 +543,14 @@ export const SettingsPage: React.FC = () => {
                   onClick={() => handleCurrencyChange(c.code)}
                   className={`flex flex-col items-center gap-1 px-2 py-3 rounded-xl border transition-all duration-200 cursor-pointer ${
                     activeCurrency.code === c.code
-                      ? 'bg-purple-primary/15 border-purple-primary/50 text-white shadow-glow-purple/10'
+                      ? 'bg-[rgba(255,154,107,0.14)] border-[#FF9A6B] text-white shadow-[0_0_40px_rgba(255,154,107,0.30)]'
                       : 'bg-white/3 border-white/8 text-white/50 hover:bg-white/6 hover:text-white/80'
                   }`}
                 >
                   <span className="text-lg leading-none">{c.flag}</span>
                   <span className="text-[11px] font-bold">{c.code}</span>
                   {activeCurrency.code === c.code && (
-                    <Check size={10} className="text-purple-light" />
+                    <Check size={10} className="text-[#FF9A6B]" />
                   )}
                 </button>
               ))}

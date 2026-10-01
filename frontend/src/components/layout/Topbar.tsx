@@ -113,7 +113,7 @@ export const Topbar: React.FC<{ onOpenMobile: () => void }> = ({ onOpenMobile })
     <>
       <header
         className={cn(
-          'fixed top-0 right-0 z-40 flex h-16 items-center justify-between border-b border-white/8 bg-bg-base/80 px-6 backdrop-blur-md transition-all duration-300',
+          'fixed top-0 right-0 z-40 flex h-16 items-center justify-between border-b border-white/8 bg-[#262A31]/90 px-6 backdrop-blur-md transition-all duration-300',
           sidebarCollapsed ? 'lg:left-[72px]' : 'lg:left-[260px]',
           'left-0'
         )}
@@ -123,7 +123,7 @@ export const Topbar: React.FC<{ onOpenMobile: () => void }> = ({ onOpenMobile })
           {/* Mobile Hamburger */}
           <button
             onClick={onOpenMobile}
-            className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/3 text-white lg:hidden cursor-pointer"
+            className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-[#373D46] text-white lg:hidden cursor-pointer"
           >
             <Menu size={20} />
           </button>
@@ -142,9 +142,9 @@ export const Topbar: React.FC<{ onOpenMobile: () => void }> = ({ onOpenMobile })
         <div ref={searchRef} className="relative hidden md:block max-w-md w-full mx-4">
           <div
             className={cn(
-              'relative flex h-10 items-center rounded-lg border bg-white/3 transition-all duration-200 px-3',
+              'relative flex h-10 items-center rounded-xl border bg-[#373D46] transition-all duration-200 px-3',
               searchFocused
-                ? 'border-purple-primary ring-2 ring-purple-primary/20 w-[105%]'
+                ? 'border-[#FF9A6B] ring-2 ring-[#FF9A6B]/20 w-[105%]'
                 : 'border-white/10 w-full'
             )}
           >
@@ -156,7 +156,7 @@ export const Topbar: React.FC<{ onOpenMobile: () => void }> = ({ onOpenMobile })
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               onFocus={() => setSearchFocused(true)}
-              className="w-full bg-transparent text-sm text-white placeholder-white/30 outline-none"
+              className="w-full bg-transparent text-sm text-white placeholder-[#7B8494] outline-none"
             />
             <span className="text-[10px] font-mono font-bold bg-white/8 px-1.5 py-0.5 rounded text-white/40 border border-white/5 shrink-0 ml-2">
               ⌘K
@@ -171,7 +171,7 @@ export const Topbar: React.FC<{ onOpenMobile: () => void }> = ({ onOpenMobile })
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
                 transition={{ duration: 0.15 }}
-                className="absolute top-12 left-0 right-0 glassmorphism rounded-xl border border-white/10 p-4 max-h-[320px] overflow-y-auto z-50 shadow-glow-purple/10 flex flex-col gap-4"
+                className="absolute top-12 left-0 right-0 bg-[#2F343C] rounded-xl border border-white/10 p-4 max-h-[320px] overflow-y-auto z-50 shadow-[0_0_30px_rgba(45,212,191,0.15)] flex flex-col gap-4"
               >
                 <div>
                   <h4 className="text-[10px] font-bold uppercase tracking-wider text-white/35 mb-2">Recent Searches</h4>
@@ -199,18 +199,18 @@ export const Topbar: React.FC<{ onOpenMobile: () => void }> = ({ onOpenMobile })
                         setSearchFocused(false);
                         navigate('/transactions');
                       }}
-                      className="flex items-center gap-2 text-xs text-white/70 hover:text-white hover:bg-purple-primary/10 hover:border-purple-primary/30 border border-white/5 p-2 rounded-lg transition-all cursor-pointer"
+                      className="flex items-center gap-2 text-xs text-white/70 hover:text-white hover:bg-[#FF9A6B]/10 hover:border-[#FF9A6B]/30 border border-white/5 p-2 rounded-lg transition-all cursor-pointer"
                     >
-                      <Plus size={14} className="text-green-positive" /> Add Transaction
+                      <Plus size={14} className="text-emerald-400" /> Add Transaction
                     </button>
                     <button
                       onClick={() => {
                         setSearchFocused(false);
                         navigate('/goals');
                       }}
-                      className="flex items-center gap-2 text-xs text-white/70 hover:text-white hover:bg-purple-primary/10 hover:border-purple-primary/30 border border-white/5 p-2 rounded-lg transition-all cursor-pointer"
+                      className="flex items-center gap-2 text-xs text-white/70 hover:text-white hover:bg-[#FF9A6B]/10 hover:border-[#FF9A6B]/30 border border-white/5 p-2 rounded-lg transition-all cursor-pointer"
                     >
-                      <Target size={14} className="text-gold-savings" /> Create Goal
+                      <Target size={14} className="text-[#FF9A6B]" /> Create Goal
                     </button>
                   </div>
                 </div>
@@ -225,7 +225,7 @@ export const Topbar: React.FC<{ onOpenMobile: () => void }> = ({ onOpenMobile })
           <div ref={currencyRef} className="relative">
             <button
               onClick={() => setCurrencyOpen(!currencyOpen)}
-              className="flex items-center gap-1.5 h-10 px-3 rounded-lg border border-white/10 bg-white/3 hover:bg-white/5 hover:border-white/15 text-sm text-white font-medium cursor-pointer"
+              className="flex items-center gap-1.5 h-10 px-3 rounded-xl border border-white/10 bg-[#373D46] hover:bg-[#454C57] text-sm text-white font-medium cursor-pointer"
             >
               <span>{activeCurrency.flag}</span>
               <span>{activeCurrency.code}</span>
@@ -239,7 +239,7 @@ export const Topbar: React.FC<{ onOpenMobile: () => void }> = ({ onOpenMobile })
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute top-12 right-0 w-44 glassmorphism border border-white/10 rounded-xl p-1.5 shadow-lg shadow-black/40 z-50 flex flex-col"
+                  className="absolute top-12 right-0 w-44 bg-[#2F343C] border border-white/10 rounded-xl p-1.5 shadow-lg shadow-black/40 z-50 flex flex-col"
                 >
                   {currencies.map((curr) => (
                     <button
@@ -248,14 +248,14 @@ export const Topbar: React.FC<{ onOpenMobile: () => void }> = ({ onOpenMobile })
                         setActiveCurrency(curr.code);
                         setCurrencyOpen(false);
                       }}
-                      className="flex items-center justify-between px-3 py-2 text-sm text-white/70 hover:text-white hover:bg-purple-primary/10 rounded-lg transition-colors cursor-pointer"
+                      className="flex items-center justify-between px-3 py-2 text-sm text-white/70 hover:text-white hover:bg-[#FF9A6B]/10 rounded-lg transition-colors cursor-pointer"
                     >
                       <div className="flex items-center gap-2">
                         <span>{curr.flag}</span>
                         <span className="font-semibold">{curr.code}</span>
                       </div>
                       {activeCurrency.code === curr.code && (
-                        <Check size={14} className="text-purple-primary" />
+                        <Check size={14} className="text-[#FF9A6B]" />
                       )}
                     </button>
                   ))}
@@ -268,19 +268,19 @@ export const Topbar: React.FC<{ onOpenMobile: () => void }> = ({ onOpenMobile })
           <button
             onClick={() => setNotificationsOpen(!notificationsOpen)}
             className={cn(
-              'relative flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-white/3 hover:bg-white/5 text-white/70 hover:text-white cursor-pointer transition-all',
+              'relative flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-[#373D46] hover:bg-[#454C57] text-white/70 hover:text-white cursor-pointer transition-all',
               shakeBell && 'animate-bell-shake'
             )}
           >
             <Bell size={18} />
-            <span className="absolute top-1.5 right-1.5 flex h-2 w-2 rounded-full bg-red-negative shadow-glow-red" />
+            <span className="absolute top-1.5 right-1.5 flex h-2 w-2 rounded-full bg-[#FF9A6B] shadow-[0_0_10px_rgba(255,154,107,0.5)]" />
           </button>
 
           {/* User Profile Avatar */}
           <div ref={profileRef} className="relative">
             <button
               onClick={() => setProfileOpen(!profileOpen)}
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-purple-primary text-white text-xs font-bold border border-purple-light/20 hover:border-purple-light/50 transition-all cursor-pointer shadow-glow-purple/10"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-[#FF9A6B] text-[#1A1A1A] text-xs font-bold border border-[#FF9A6B]/30 hover:border-[#FF9A6B] transition-all cursor-pointer shadow-[0_0_12px_rgba(255,154,107,0.3)]"
             >
               {user?.name ? user.name.slice(0, 2).toUpperCase() : 'US'}
             </button>
@@ -292,7 +292,7 @@ export const Topbar: React.FC<{ onOpenMobile: () => void }> = ({ onOpenMobile })
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute top-12 right-0 w-52 glassmorphism border border-white/10 rounded-xl p-2 shadow-lg shadow-black/40 z-50 flex flex-col gap-1"
+                  className="absolute top-12 right-0 w-52 bg-[#2F343C] border border-white/10 rounded-xl p-2 shadow-lg shadow-black/40 z-50 flex flex-col gap-1"
                 >
                   <div className="px-3 py-2 border-b border-white/5 flex flex-col mb-1 select-none">
                     <span className="text-sm font-semibold text-white truncate">{user?.name || 'User Profile'}</span>
@@ -321,7 +321,7 @@ export const Topbar: React.FC<{ onOpenMobile: () => void }> = ({ onOpenMobile })
                   <div className="border-t border-white/5 mt-1 pt-1">
                     <button
                       onClick={handleLogout}
-                      className="flex items-center gap-2.5 px-3 py-2 w-full text-sm text-red-negative/80 hover:text-red-negative hover:bg-red-negative/10 rounded-lg transition-colors cursor-pointer"
+                      className="flex items-center gap-2.5 px-3 py-2 w-full text-sm text-red-400 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
                     >
                       <LogOut size={16} /> Logout
                     </button>

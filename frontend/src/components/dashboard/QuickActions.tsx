@@ -29,11 +29,11 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ onAddTransaction, cl
   const navigate = useNavigate();
 
   const actions: ActionItem[] = [
-    { icon: Plus, label: 'Add Transaction', colorClass: 'green-positive', hexColor: '#10B981', path: '/transactions' },
-    { icon: ArrowRight, label: 'Transfer Money', colorClass: 'blue-primary', hexColor: '#2563EB', path: '/transactions' },
-    { icon: Wallet, label: 'Set Budget', colorClass: 'purple-primary', hexColor: '#7C3AED', path: '/budgets' },
-    { icon: Target, label: 'Create Goal', colorClass: 'gold-savings', hexColor: '#F59E0B', path: '/goals' },
-    { icon: Bot, label: 'AI Assistant', colorClass: 'cyan-data', hexColor: '#06B6D4', path: '/ai-assistant' },
+    { icon: Plus, label: 'Add Transaction', colorClass: 'green-positive', hexColor: '#22C55E', path: '/transactions' },
+    { icon: ArrowRight, label: 'Transfer Money', colorClass: 'teal-500', hexColor: '#2DD4BF', path: '/transactions' },
+    { icon: Wallet, label: 'Set Budget', colorClass: 'peach-500', hexColor: '#FF9A6B', path: '/budgets' },
+    { icon: Target, label: 'Create Goal', colorClass: 'peach-300', hexColor: '#FFB896', path: '/goals' },
+    { icon: Bot, label: 'AI Assistant', colorClass: 'pink-400', hexColor: '#FF6B9D', path: '/ai-assistant' },
   ];
 
   const handleActionClick = (action: ActionItem) => {

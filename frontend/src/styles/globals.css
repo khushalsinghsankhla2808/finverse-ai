@@ -10,49 +10,57 @@
 @import "./animations.css";
 
 :root {
-  /* BACKGROUNDS */
-  --bg-base: #050810;
-  --bg-card: #0A0F1E;
-  --bg-surface: #0D1530;
-  --bg-overlay: #111827;
+  /* CHARCOAL GREYS */
+  --grey-950: #1B1E23;
+  --grey-800: #262A31;
+  --grey-700: #2F343C;
+  --grey-600: #373D46;
+  --grey-500: #454C57;
+  --grey-400: #7B8494;
+  --grey-300: #A3ABB8;
+  --grey-100: #F3F4F6;
 
-  /* BRAND COLORS */
-  --purple-primary: #7C3AED;
-  --purple-primary-rgba: rgba(124, 58, 237, 0.1);
-  --purple-primary-border: rgba(124, 58, 237, 0.2);
-  --purple-primary-glow: rgba(124, 58, 237, 0.15);
+  /* PEACH ACCENT */
+  --peach-100: #FFE8DE;
+  --peach-300: #FFB896;
+  --peach-500: #FF9A6B;
+  --peach-600: #F27F4D;
 
-  --purple-light: #A855F7;
-  --blue-primary: #2563EB;
-  --blue-light: #60A5FA;
-  --cyan-data: #06B6D4;
+  /* TEAL ACCENT */
+  --teal-300: #5EEAD4;
+  --teal-500: #2DD4BF;
+  --teal-700: #0F766E;
 
-  --green-positive: #10B981;
-  --green-positive-rgba: rgba(16, 185, 129, 0.1);
-  --green-positive-border: rgba(16, 185, 129, 0.2);
-  --green-positive-glow: rgba(16, 185, 129, 0.15);
+  /* PINK GRADIENT END */
+  --pink-400: #FF6B9D;
 
-  --red-negative: #F43F5E;
-  --red-negative-rgba: rgba(244, 63, 94, 0.1);
-  --red-negative-border: rgba(244, 63, 94, 0.2);
-  --red-negative-glow: rgba(244, 63, 94, 0.15);
+  /* MEANING COLORS */
+  --success: #22C55E;
+  --danger: #EF4444;
+  --warning: #FACC15;
 
-  --gold-savings: #F59E0B;
-  --gold-savings-rgba: rgba(245, 158, 11, 0.1);
-  --gold-savings-border: rgba(245, 158, 11, 0.2);
-  --gold-savings-glow: rgba(245, 158, 11, 0.15);
+  /* ALIASES */
+  --bg-base: #262A31;
+  --bg-card: #2F343C;
+  --bg-surface: #373D46;
+  --bg-overlay: #1B1E23;
 
-  --gold-light: #FCD34D;
+  --purple-primary: #FF9A6B;
+  --purple-light: #FFB896;
+  --blue-primary: #2DD4BF;
+  --blue-light: #5EEAD4;
 
-  /* GLOW SHADOWS */
-  --glow-purple: 0 0 40px rgba(124, 58, 237, 0.4);
-  --glow-cyan: 0 0 30px rgba(6, 182, 212, 0.3);
-  --glow-green: 0 0 20px rgba(16, 185, 129, 0.35);
-  --glow-red: 0 0 20px rgba(244, 63, 94, 0.35);
-  --glow-gold: 0 0 20px rgba(245, 158, 11, 0.35);
+  /* GRADIENTS */
+  --gradient-main: linear-gradient(135deg, #FF9A6B, #FF6B9D);
+  --gradient-hero: linear-gradient(135deg, #262A31, #1B1E23);
+
+  /* GLOWS & TINTS */
+  --glow-peach: 0 0 40px rgba(255, 154, 107, 0.30);
+  --glow-teal: 0 0 30px rgba(45, 212, 191, 0.25);
+  --peach-tint: rgba(255, 154, 107, 0.14);
 
   /* GLASSMORPHISM */
-  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-bg: rgba(47, 52, 60, 0.65);
   --glass-border: rgba(255, 255, 255, 0.08);
   --glass-blur: blur(20px) saturate(180%);
 
@@ -63,26 +71,43 @@
 }
 
 @theme {
-  --color-bg-base: var(--bg-base);
-  --color-bg-card: var(--bg-card);
-  --color-bg-surface: var(--bg-surface);
-  --color-bg-overlay: var(--bg-overlay);
+  --color-grey-950: #1B1E23;
+  --color-grey-800: #262A31;
+  --color-grey-700: #2F343C;
+  --color-grey-600: #373D46;
+  --color-grey-500: #454C57;
+  --color-grey-400: #7B8494;
+  --color-grey-300: #A3ABB8;
+  --color-grey-100: #F3F4F6;
 
-  --color-purple-primary: var(--purple-primary);
-  --color-purple-light: var(--purple-light);
-  --color-blue-primary: var(--blue-primary);
-  --color-blue-light: var(--blue-light);
-  --color-cyan-data: var(--cyan-data);
-  --color-green-positive: var(--green-positive);
-  --color-red-negative: var(--red-negative);
-  --color-gold-savings: var(--gold-savings);
-  --color-gold-light: var(--gold-light);
+  --color-peach-100: #FFE8DE;
+  --color-peach-300: #FFB896;
+  --color-peach-500: #FF9A6B;
+  --color-peach-600: #F27F4D;
 
-  --shadow-glow-purple: var(--glow-purple);
-  --shadow-glow-cyan: var(--glow-cyan);
-  --shadow-glow-green: var(--glow-green);
-  --shadow-glow-red: var(--glow-red);
-  --shadow-glow-gold: var(--glow-gold);
+  --color-teal-300: #5EEAD4;
+  --color-teal-500: #2DD4BF;
+  --color-teal-700: #0F766E;
+
+  --color-pink-400: #FF6B9D;
+
+  --color-success: #22C55E;
+  --color-danger: #EF4444;
+  --color-warning: #FACC15;
+
+  --color-bg-base: #262A31;
+  --color-bg-card: #2F343C;
+  --color-bg-surface: #373D46;
+  --color-bg-overlay: #1B1E23;
+
+  --color-purple-primary: #FF9A6B;
+  --color-purple-light: #FFB896;
+  --color-blue-primary: #2DD4BF;
+  --color-blue-light: #5EEAD4;
+
+  --shadow-glow-peach: 0 0 40px rgba(255, 154, 107, 0.30);
+  --shadow-glow-teal: 0 0 30px rgba(45, 212, 191, 0.25);
+  --shadow-glow-purple: 0 0 40px rgba(255, 154, 107, 0.30);
 
   --font-display: var(--font-display);
   --font-body: var(--font-body);
@@ -91,8 +116,8 @@
 
 /* Custom base resets */
 html, body {
-  background-color: var(--bg-base);
-  color: #F3F4F6; /* text-gray-100 */
+  background-color: #262A31; /* grey-800 */
+  color: #F3F4F6; /* grey-100 */
   font-family: var(--font-body);
   min-height: 100vh;
   margin: 0;
@@ -100,29 +125,46 @@ html, body {
   overflow-x: hidden;
 }
 
-/* Custom Scrollbar for premium dark theme */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-base);
+  background: #262A31;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--glass-border);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--purple-primary);
+  background: #FF9A6B;
 }
 
 /* Glassmorphism card class */
 .glassmorphism {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
+  background: rgba(47, 52, 60, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+.gradient-btn {
+  background: linear-gradient(135deg, #FF9A6B, #FF6B9D);
+  color: #1A1A1A;
+  box-shadow: 0 0 40px rgba(255, 154, 107, 0.30);
+}
+
+.gradient-btn:hover {
+  background: linear-gradient(135deg, #FFB896, #FF6B9D);
+  box-shadow: 0 0 45px rgba(255, 154, 107, 0.45);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #FF9A6B, #FF6B9D);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }

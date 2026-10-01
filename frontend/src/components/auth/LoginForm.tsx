@@ -93,7 +93,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccessRedirect, onSignU
         <div className="flex flex-col gap-1.5">
           <div className="flex justify-between items-center">
             <label className="text-xs font-semibold uppercase tracking-wider text-white/50">Password</label>
-            <a href="#forgot" className="text-xs font-medium text-purple-light hover:text-purple-primary transition-colors">
+            <a href="#forgot" className="text-xs font-medium text-[#FF9A6B] hover:text-[#FFB896] transition-colors">
               Forgot password?
             </a>
           </div>
@@ -105,7 +105,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccessRedirect, onSignU
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="text-white/40 hover:text-white/70 transition-colors focus:outline-none"
+                className="text-white/40 hover:text-white/70 transition-colors focus:outline-none cursor-pointer"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
@@ -127,7 +127,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccessRedirect, onSignU
 
         {/* Auth Error Display */}
         {authError && (
-          <div className="text-xs text-red-negative font-medium bg-red-negative/10 border border-red-negative/20 px-3 py-2 rounded-lg mt-1">
+          <div className="text-xs text-red-400 font-medium bg-red-500/10 border border-red-500/20 px-3 py-2 rounded-lg mt-1">
             ⚠️ {authError}
           </div>
         )}
@@ -136,7 +136,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccessRedirect, onSignU
         <button
           type="submit"
           disabled={isLoading || isSuccess}
-          className="relative mt-2 flex h-11 w-full items-center justify-center rounded-lg bg-linear-to-r from-purple-primary to-purple-light px-4 py-2 text-sm font-semibold text-white shadow-glow-purple transition-all duration-300 hover:brightness-110 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 cursor-pointer overflow-hidden"
+          className="relative mt-2 flex h-11 w-full items-center justify-center rounded-xl bg-linear-to-r from-[#FF9A6B] to-[#FF6B9D] px-4 py-2 text-sm font-bold text-[#1A1A1A] shadow-[0_0_40px_rgba(255,154,107,0.30)] transition-all duration-300 hover:brightness-110 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 cursor-pointer overflow-hidden"
         >
           {isSuccess ? (
             <motion.div
@@ -144,12 +144,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccessRedirect, onSignU
               animate={{ scale: 1, opacity: 1 }}
               className="flex items-center gap-2"
             >
-              <Check size={18} className="text-green-positive" />
+              <Check size={18} className="text-[#1A1A1A]" />
               <span>Success! Redirecting...</span>
             </motion.div>
           ) : isLoading ? (
             <div className="flex items-center gap-2">
-              <Loader2 size={18} className="animate-spin" />
+              <Loader2 size={18} className="animate-spin text-[#1A1A1A]" />
               <span>Signing in...</span>
             </div>
           ) : (
@@ -163,7 +163,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccessRedirect, onSignU
         <div className="absolute inset-0 flex items-center">
           <div className="w-full border-t border-white/10" />
         </div>
-        <span className="relative bg-bg-card px-3 text-xs text-white/40 uppercase tracking-wider">
+        <span className="relative bg-[#2F343C] px-3 text-xs text-white/40 uppercase tracking-wider">
           or continue with
         </span>
       </div>
@@ -173,7 +173,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccessRedirect, onSignU
         type="button"
         onClick={handleGoogleSignIn}
         disabled={isLoading || isSuccess}
-        className="flex h-11 w-full items-center justify-center rounded-lg border border-white/10 bg-white/3 px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-white/8 active:scale-[0.98] cursor-pointer"
+        className="flex h-11 w-full items-center justify-center rounded-xl border border-white/10 bg-[#373D46] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-[#454C57] active:scale-[0.98] cursor-pointer"
       >
         <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" viewBox="0 0 488 512">
           <path
@@ -190,7 +190,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccessRedirect, onSignU
         <button
           type="button"
           onClick={onSignUpClick}
-          className="font-semibold text-purple-light hover:text-purple-primary transition-colors cursor-pointer"
+          className="font-semibold text-[#FF9A6B] hover:text-[#FFB896] transition-colors cursor-pointer"
         >
           Sign Up
         </button>

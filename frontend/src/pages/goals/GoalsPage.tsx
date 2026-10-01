@@ -52,12 +52,12 @@ type GoalFormValues = z.infer<typeof goalCreateSchema>;
 
 // Preset colors and emojis
 const PRESET_COLORS = [
-  "#10B981",
-  "#7C3AED",
-  "#06B6D4",
-  "#F59E0B",
-  "#EF4444",
-  "#EC4899",
+  "#FF9A6B",
+  "#2DD4BF",
+  "#FF6B9D",
+  "#FFB896",
+  "#5EEAD4",
+  "#FACC15",
 ];
 
 const PRESET_EMOJIS = [
@@ -89,12 +89,12 @@ const CATEGORY_OPTIONS = [
 const GoalConfetti: React.FC = () => {
   const confettiParticles = useMemo(() => {
     const colors = [
-      "#F59E0B",
-      "#10B981",
-      "#06B6D4",
-      "#7C3AED",
-      "#EF4444",
-      "#EC4899",
+      "#FF9A6B",
+      "#2DD4BF",
+      "#FF6B9D",
+      "#FFB896",
+      "#5EEAD4",
+      "#FACC15",
     ];
     return Array.from({ length: 25 }).map((_, i) => ({
       id: i,

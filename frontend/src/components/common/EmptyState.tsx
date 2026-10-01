@@ -19,11 +19,11 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 }) => {
   return (
     <div className="w-full flex items-center justify-center py-12 px-4">
-      <div className="border border-dashed border-white/10 bg-white/2 rounded-2xl flex flex-col items-center justify-center text-center p-8 max-w-sm w-full shadow-lg relative overflow-hidden group hover:border-purple-primary/30 transition-colors duration-300">
+      <div className="border border-dashed border-white/10 bg-white/2 rounded-2xl flex flex-col items-center justify-center text-center p-8 max-w-sm w-full shadow-lg relative overflow-hidden group hover:border-[#FF9A6B]/40 transition-colors duration-300">
         {/* Subtle decorative glow */}
-        <div className="absolute inset-0 bg-radial from-purple-primary/5 via-transparent to-transparent pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity duration-300" />
+        <div className="absolute inset-0 bg-radial from-[#FF9A6B]/5 via-transparent to-transparent pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity duration-300" />
         
-        <div className="w-16 h-16 rounded-2xl bg-white/4 border border-white/8 flex items-center justify-center text-white/30 mb-5 group-hover:text-purple-light group-hover:border-purple-primary/20 transition-all duration-300 shadow-inner">
+        <div className="w-16 h-16 rounded-2xl bg-white/4 border border-white/8 flex items-center justify-center text-white/30 mb-5 group-hover:text-[#FF9A6B] group-hover:border-[#FF9A6B]/30 transition-all duration-300 shadow-inner">
           <Icon size={32} className="stroke-[1.5]" />
         </div>
 

@@ -12,8 +12,8 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen w-full bg-bg-base flex items-center justify-center flex-col gap-4">
-        <Loader2 className="animate-spin text-purple-light" size={40} />
+      <div className="min-h-screen w-full bg-[#262A31] flex items-center justify-center flex-col gap-4">
+        <Loader2 className="animate-spin text-[#FF9A6B]" size={40} />
         <span className="text-sm text-white/50 tracking-wider font-semibold uppercase animate-pulse">Loading FinVerse...</span>
       </div>
     );

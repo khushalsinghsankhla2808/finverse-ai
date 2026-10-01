@@ -95,7 +95,7 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
         animate={mobileOpen ? { x: 0, width: 260 } : { x: 0 }}
         variants={sidebarVariants}
         className={cn(
-          'fixed top-0 bottom-0 left-0 z-50 flex flex-col justify-between border-r border-white/8 bg-bg-card text-white/70 transition-transform duration-300 ease-in-out',
+          'fixed top-0 bottom-0 left-0 z-50 flex flex-col justify-between border-r border-white/8 bg-[#373D46] text-white/70 transition-transform duration-300 ease-in-out',
           // Mobile state overrides
           mobileOpen
             ? 'translate-x-0'
@@ -120,7 +120,7 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
             {/* Collapse Toggle Button (Desktop only) */}
             <button
               onClick={toggleSidebar}
-              className="hidden lg:flex absolute -right-3 top-5 z-50 h-6 w-6 items-center justify-center rounded-full border border-white/10 bg-bg-card hover:bg-white/10 hover:text-white transition-colors cursor-pointer shadow-md"
+              className="hidden lg:flex absolute -right-3 top-5 z-50 h-6 w-6 items-center justify-center rounded-full border border-white/10 bg-[#373D46] text-white/80 hover:bg-white/10 hover:text-white transition-colors cursor-pointer shadow-md"
             >
               <motion.div
                 animate={{ rotate: sidebarCollapsed ? 180 : 0 }}
@@ -144,15 +144,15 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
                   className={cn(
                     'group relative flex h-10 w-full items-center rounded-lg px-3 transition-all duration-150 cursor-pointer overflow-hidden',
                     isActive
-                      ? 'bg-purple-primary/15 text-white border-l-3 border-purple-primary shadow-[inset_4px_0_12px_rgba(124,58,237,0.1)]'
-                      : 'hover:bg-purple-primary/8 hover:text-white/90 text-white/60'
+                      ? 'bg-[rgba(255,154,107,0.14)] text-[#FF9A6B] font-semibold border-l-3 border-[#FF9A6B] shadow-[inset_4px_0_12px_rgba(255,154,107,0.1)]'
+                      : 'hover:bg-white/5 hover:text-white/90 text-white/60'
                   )}
                 >
                   {/* Icon */}
                   <div
                     className={cn(
                       'flex items-center justify-center shrink-0 transition-all duration-150',
-                      isActive ? 'text-purple-primary scale-110' : 'group-hover:brightness-130',
+                      isActive ? 'text-[#FF9A6B] scale-110' : 'group-hover:brightness-130',
                       sidebarCollapsed ? 'w-full' : 'mr-3'
                     )}
                   >
@@ -170,7 +170,7 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
                         {item.label}
                       </span>
                       {item.label === 'Transactions' && currentMonthTxnCount > 0 && (
-                        <span className="ml-2 px-1.5 py-0.5 text-[9px] font-bold bg-purple-primary text-white rounded-full leading-none shrink-0 shadow-glow-purple/20">
+                        <span className="ml-2 px-1.5 py-0.5 text-[9px] font-bold bg-[#FF9A6B] text-[#1A1A1A] rounded-full leading-none shrink-0 shadow-sm">
                           {currentMonthTxnCount}
                         </span>
                       )}
@@ -179,7 +179,7 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
 
                   {/* Tooltip on Collapsed */}
                   {sidebarCollapsed && (
-                    <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-bg-overlay border border-white/10 text-xs font-medium text-white rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 shadow-glow-purple/10 whitespace-nowrap">
+                    <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-[#1B1E23] border border-white/10 text-xs font-medium text-white rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap">
                       {item.label}
                     </div>
                   )}
@@ -198,14 +198,14 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
               className={cn(
                 'group relative flex h-10 w-full items-center rounded-lg px-3 transition-all duration-150 cursor-pointer',
                 location.pathname === '/settings'
-                  ? 'bg-purple-primary/15 text-white border-l-3 border-purple-primary'
-                  : 'hover:bg-purple-primary/8 hover:text-white/90 text-white/60'
+                  ? 'bg-[rgba(255,154,107,0.14)] text-[#FF9A6B] font-semibold border-l-3 border-[#FF9A6B]'
+                  : 'hover:bg-white/5 hover:text-white/90 text-white/60'
               )}
             >
               <div
                 className={cn(
                   'flex items-center justify-center shrink-0 transition-all duration-150',
-                  location.pathname === '/settings' ? 'text-purple-primary scale-110' : 'group-hover:brightness-130',
+                  location.pathname === '/settings' ? 'text-[#FF9A6B] scale-110' : 'group-hover:brightness-130',
                   sidebarCollapsed ? 'w-full' : 'mr-3'
                 )}
               >
@@ -217,7 +217,7 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
                 </span>
               )}
               {sidebarCollapsed && (
-                <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-bg-overlay border border-white/10 text-xs font-medium text-white rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 shadow-glow-purple/10 whitespace-nowrap">
+                <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-[#1B1E23] border border-white/10 text-xs font-medium text-white rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap">
                   Settings
                 </div>
               )}
@@ -226,7 +226,7 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
             {/* Logout button */}
             <button
               onClick={handleLogout}
-              className="group relative flex h-10 w-full items-center rounded-lg px-3 hover:bg-red-negative/10 text-white/60 hover:text-red-negative transition-all duration-150 cursor-pointer"
+              className="group relative flex h-10 w-full items-center rounded-lg px-3 hover:bg-red-500/10 text-white/60 hover:text-red-400 transition-all duration-150 cursor-pointer"
             >
               <div
                 className={cn(
@@ -240,7 +240,7 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
                 <span className="text-sm font-medium tracking-wide">Logout</span>
               )}
               {sidebarCollapsed && (
-                <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-bg-overlay border border-white/10 text-xs font-medium text-white rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 shadow-glow-red/10 whitespace-nowrap">
+                <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-[#1B1E23] border border-white/10 text-xs font-medium text-white rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap">
                   Logout
                 </div>
               )}
@@ -250,7 +250,7 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
           {/* User Profile Section */}
           <div className="border-t border-white/5 p-4 flex items-center justify-between overflow-hidden">
             <div className="flex items-center gap-3 overflow-hidden">
-              <div className="h-9 w-9 shrink-0 flex items-center justify-center rounded-full bg-purple-primary text-white text-xs font-bold shadow-[0_0_12px_rgba(124,58,237,0.3)]">
+              <div className="h-9 w-9 shrink-0 flex items-center justify-center rounded-full bg-[#FF9A6B] text-[#1A1A1A] text-xs font-bold shadow-[0_0_12px_rgba(255,154,107,0.3)]">
                 {user?.name ? user.name.slice(0, 2).toUpperCase() : 'US'}
               </div>
               {!sidebarCollapsed && (
@@ -263,12 +263,12 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
                     {user?.name || 'User Profile'}
                   </span>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] px-1.5 py-0.5 rounded-full font-bold bg-linear-to-r from-gold-savings to-gold-light text-bg-base leading-none shadow-[0_0_10px_rgba(245,158,11,0.2)]">
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-full font-bold bg-[#2DD4BF] text-[#1A1A1A] leading-none shadow-[0_0_10px_rgba(45,212,191,0.2)]">
                       Premium
                     </span>
                     <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-negative opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-red-negative"></span>
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
                     </span>
                   </div>
                 </motion.div>

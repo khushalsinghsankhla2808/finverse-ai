@@ -20,9 +20,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <input
             type={type}
             className={cn(
-              "flex h-11 w-full rounded-lg border border-white/10 bg-bg-surface/50 px-3 py-2 text-sm text-white placeholder-white/30 transition-all duration-200 outline-none",
-              "focus:border-purple-primary focus:ring-2 focus:ring-purple-primary/20",
-              error && "border-red-negative focus:border-red-negative focus:ring-red-negative/20",
+              "flex h-11 w-full rounded-xl border border-white/10 bg-[#373D46] px-3.5 py-2 text-sm text-[#F3F4F6] placeholder-[#7B8494] transition-all duration-200 outline-none",
+              "focus:border-[#FF9A6B] focus:ring-2 focus:ring-[#FF9A6B]/20",
+              error && "border-red-500 focus:border-red-500 focus:ring-red-500/20",
               leftIcon && "pl-10",
               rightIcon && "pr-10",
               className

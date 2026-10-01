@@ -27,14 +27,14 @@ export const Button: React.FC<ButtonProps> = ({
   type = 'button',
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-200 cursor-pointer select-none focus:outline-hidden disabled:opacity-50 disabled:pointer-events-none';
+  const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-200 cursor-pointer select-none focus:outline-hidden disabled:opacity-50 disabled:pointer-events-none';
   
   const variants = {
-    primary: 'bg-linear-to-r from-purple-primary to-purple-light text-white shadow-glow-purple/20 hover:brightness-110 border border-transparent',
-    secondary: 'bg-white/5 hover:bg-white/8 hover:border-white/15 text-white border border-white/10',
-    danger: 'bg-linear-to-r from-red-negative to-rose-500 text-white shadow-glow-red/10 hover:brightness-110 border border-transparent',
+    primary: 'bg-linear-to-r from-[#FF9A6B] to-[#FF6B9D] text-[#1A1A1A] font-bold shadow-[0_0_40px_rgba(255,154,107,0.30)] hover:brightness-110 border border-transparent',
+    secondary: 'bg-[#373D46] hover:bg-[#454C57] text-white border border-white/10',
+    danger: 'bg-linear-to-r from-red-500 to-rose-600 text-white shadow-lg hover:brightness-110 border border-transparent',
     ghost: 'bg-transparent hover:bg-white/5 text-white border border-transparent',
-    outline: 'bg-transparent border border-purple-primary text-purple-light hover:bg-purple-primary/10',
+    outline: 'bg-transparent border border-[#FF9A6B] text-[#FF9A6B] hover:bg-[#FF9A6B]/10',
   };
 
   const sizes = {

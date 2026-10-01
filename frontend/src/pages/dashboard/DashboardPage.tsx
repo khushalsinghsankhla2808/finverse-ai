@@ -313,7 +313,7 @@ export const DashboardPage: React.FC = () => {
             </p>
           </div>
           <div className="text-right hidden sm:block">
-            <span className="text-[10px] uppercase font-bold text-purple-light tracking-wider bg-purple-primary/10 px-3 py-1.5 rounded-full border border-purple-primary/20">
+            <span className="text-[10px] uppercase font-bold text-[#FF9A6B] tracking-wider bg-[#FF9A6B]/10 px-3 py-1.5 rounded-full border border-[#FF9A6B]/20">
               Active currency: {activeCurrency.name}
             </span>
           </div>
@@ -400,7 +400,7 @@ export const DashboardPage: React.FC = () => {
             {/* Row 2: Net Worth, 3D Globe, Quick Actions */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
               {/* Net Worth (33%) */}
-              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-auto lg:h-[380px] hover:shadow-glow-purple/2 transition-all duration-300">
+              <div className="bg-[rgba(47,52,60,0.65)] backdrop-blur-xl rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-auto lg:h-[380px] hover:shadow-[0_0_40px_rgba(255,154,107,0.20)] transition-all duration-300">
                 <div>
                   <span className="text-[11px] font-bold uppercase tracking-wider text-white/40 leading-none">
                     Equity Valuations
@@ -415,7 +415,7 @@ export const DashboardPage: React.FC = () => {
                       <AnimatedNumber value={stats.netWorth} prefix={activeCurrency.symbol} decimals={0} />
                     </span>
                     {stats.balanceChange !== undefined && (
-                      <span className={stats.balanceChange >= 0 ? 'text-green-positive text-sm font-semibold' : 'text-red-negative text-sm font-semibold'}>
+                      <span className={stats.balanceChange >= 0 ? 'text-emerald-400 text-sm font-semibold' : 'text-red-400 text-sm font-semibold'}>
                         {stats.balanceChange >= 0 ? '+' : ''}{stats.balanceChange.toFixed(1)}%
                       </span>
                     )}
@@ -426,11 +426,11 @@ export const DashboardPage: React.FC = () => {
                 <div className="border border-white/5 bg-white/2 p-3 rounded-xl flex justify-between items-center text-xs">
                   <div>
                     <span className="text-white/40 block text-[9px] uppercase font-bold">This Month Income</span>
-                    <span className="text-green-positive font-mono font-semibold">{formatINR(stats.income)}</span>
+                    <span className="text-emerald-400 font-mono font-semibold">{formatINR(stats.income)}</span>
                   </div>
                   <div className="text-right">
                     <span className="text-white/40 block text-[9px] uppercase font-bold">This Month Expenses</span>
-                    <span className="text-red-negative font-mono font-semibold">{formatINR(stats.expenses)}</span>
+                    <span className="text-red-400 font-mono font-semibold">{formatINR(stats.expenses)}</span>
                   </div>
                 </div>
 
@@ -441,7 +441,7 @@ export const DashboardPage: React.FC = () => {
               </div>
 
               {/* 3D Finance Globe (33%) */}
-              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-auto lg:h-[380px] hover:shadow-glow-purple/5 transition-all duration-300">
+              <div className="bg-[rgba(47,52,60,0.65)] backdrop-blur-xl rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-auto lg:h-[380px] hover:shadow-[0_0_30px_rgba(45,212,191,0.20)] transition-all duration-300">
                 <div className="flex justify-between items-center border-b border-white/5 pb-2">
                   <div>
                     <span className="text-[11px] font-bold uppercase tracking-wider text-white/40 leading-none">
@@ -449,7 +449,7 @@ export const DashboardPage: React.FC = () => {
                     </span>
                     <h3 className="text-sm font-bold font-display text-white mt-0.5">3D Financial Globe</h3>
                   </div>
-                  <span className="text-[10px] text-cyan-data font-semibold flex items-center gap-1 bg-cyan-data/10 border border-cyan-data/20 px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] text-[#2DD4BF] font-semibold flex items-center gap-1 bg-[#2DD4BF]/10 border border-[#2DD4BF]/20 px-2 py-0.5 rounded-full">
                     Interactive
                   </span>
                 </div>
@@ -466,14 +466,14 @@ export const DashboardPage: React.FC = () => {
               {/* Quick Actions (33%) */}
               <QuickActions
                 onAddTransaction={() => setIsAddModalOpen(true)}
-                className="glassmorphism rounded-2xl border border-white/8 lg:col-span-4 h-auto lg:h-[380px] hover:shadow-glow-purple/2 transition-all duration-300"
+                className="bg-[rgba(47,52,60,0.65)] backdrop-blur-xl rounded-2xl border border-white/8 lg:col-span-4 h-auto lg:h-[380px] hover:shadow-[0_0_40px_rgba(255,154,107,0.20)] transition-all duration-300"
               />
             </div>
 
             {/* Row 3: Recharts Charts & Recent Transactions */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
               {/* Recharts Pie (33%) */}
-              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-auto lg:h-[360px]">
+              <div className="bg-[rgba(47,52,60,0.65)] backdrop-blur-xl rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-auto lg:h-[360px]">
                 <div>
                   <span className="text-[11px] font-bold uppercase tracking-wider text-white/40">
                     Expense Breakdown
@@ -522,7 +522,7 @@ export const DashboardPage: React.FC = () => {
               </div>
 
               {/* Cash Flow Analysis (33%) */}
-              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-auto lg:h-[360px]">
+              <div className="bg-[rgba(47,52,60,0.65)] backdrop-blur-xl rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-auto lg:h-[360px]">
                 <div>
                   <span className="text-[11px] font-bold uppercase tracking-wider text-white/40">
                     Rolling Cash Flow
@@ -534,10 +534,10 @@ export const DashboardPage: React.FC = () => {
                   <ResponsiveContainer width="100%" height={200}>
                     <BarChart data={barChartData} margin={{ top: 5, right: 0, left: -25, bottom: 0 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-                      <XAxis dataKey="name" tick={{ fill: '#6B7280', fontSize: 9 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.06)' }} />
-                      <YAxis tick={{ fill: '#6B7280', fontSize: 9 }} tickLine={false} axisLine={false} tickFormatter={formatINRCompact} />
-                      <Bar dataKey="income" fill="#10B981" radius={[2, 2, 0, 0]} opacity={0.7} />
-                      <Bar dataKey="expense" fill="#F43F5E" radius={[2, 2, 0, 0]} opacity={0.7} />
+                      <XAxis dataKey="name" tick={{ fill: '#7B8494', fontSize: 9 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.06)' }} />
+                      <YAxis tick={{ fill: '#7B8494', fontSize: 9 }} tickLine={false} axisLine={false} tickFormatter={formatINRCompact} />
+                      <Bar dataKey="income" fill="#22C55E" radius={[2, 2, 0, 0]} opacity={0.85} />
+                      <Bar dataKey="expense" fill="#EF4444" radius={[2, 2, 0, 0]} opacity={0.85} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -550,7 +550,7 @@ export const DashboardPage: React.FC = () => {
               </div>
 
               {/* Recent Transactions List (33%) */}
-              <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-auto lg:h-[360px]">
+              <div className="bg-[rgba(47,52,60,0.65)] backdrop-blur-xl rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-auto lg:h-[360px]">
                 <div className="flex justify-between items-center border-b border-white/5 pb-2 mb-2">
                   <div>
                     <span className="text-[11px] font-bold uppercase tracking-wider text-white/40">
@@ -560,7 +560,7 @@ export const DashboardPage: React.FC = () => {
                   </div>
                   <Link
                     to="/transactions"
-                    className="text-xs font-semibold text-purple-light hover:text-purple-primary flex items-center transition-colors"
+                    className="text-xs font-semibold text-[#FF9A6B] hover:text-[#FFB896] flex items-center transition-colors"
                   >
                     View All <ChevronRight size={14} />
                   </Link>
@@ -606,7 +606,7 @@ export const DashboardPage: React.FC = () => {
 
                           <span
                             className={`text-sm font-bold font-mono ${
-                              isExpense ? 'text-red-negative' : isTransfer ? 'text-blue-primary' : 'text-green-positive'
+                              isExpense ? 'text-red-400' : isTransfer ? 'text-[#2DD4BF]' : 'text-emerald-400'
                             }`}
                           >
                             {isExpense ? '-' : isTransfer ? '' : '+'}{formatINR(Math.abs(txn.amount))}
@@ -639,10 +639,10 @@ export const DashboardPage: React.FC = () => {
                   {(['income', 'expense', 'transfer'] as const).map((type) => {
                     const typeColor =
                       type === 'income'
-                        ? 'bg-green-positive'
+                        ? 'bg-emerald-500'
                         : type === 'expense'
-                        ? 'bg-red-negative'
-                        : 'bg-blue-600';
+                        ? 'bg-red-500'
+                        : 'bg-[#2DD4BF] text-[#1A1A1A]';
 
                     return (
                       <button
@@ -659,15 +659,15 @@ export const DashboardPage: React.FC = () => {
                   })}
                 </div>
 
-                <div className="flex flex-col items-center py-4 border-b border-white/10 focus-within:border-purple-primary transition-colors">
+                <div className="flex flex-col items-center py-4 border-b border-white/10 focus-within:border-[#FF9A6B] transition-colors">
                   <div className="flex items-center justify-center w-full">
                     <span
                       className={`text-4xl font-display font-bold mr-2 ${
                         formType === 'income'
-                          ? 'text-green-positive'
+                          ? 'text-emerald-400'
                           : formType === 'transfer'
-                          ? 'text-blue-primary'
-                          : 'text-red-negative'
+                          ? 'text-[#2DD4BF]'
+                          : 'text-red-400'
                       }`}
                     >
                       ₹
@@ -682,7 +682,7 @@ export const DashboardPage: React.FC = () => {
                     />
                   </div>
                   {errors.amount && (
-                    <span className="text-[11px] text-red-negative mt-2 font-medium">
+                    <span className="text-[11px] text-red-400 mt-2 font-medium">
                       {errors.amount.message}
                     </span>
                   )}
@@ -702,7 +702,7 @@ export const DashboardPage: React.FC = () => {
                           onClick={() => setValue('category', cat.id)}
                           className={`flex flex-col items-center justify-center p-2 rounded-xl border text-[10px] gap-0.5 cursor-pointer transition-all ${
                             isSelected
-                              ? 'bg-purple-primary/10 border-purple-primary text-white shadow-glow-purple/5'
+                              ? 'bg-[#FF9A6B]/15 border-[#FF9A6B] text-white shadow-[0_0_15px_rgba(255,154,107,0.2)]'
                               : 'bg-white/2 border-white/5 text-white/60 hover:border-white/15 hover:text-white'
                           }`}
                         >
@@ -713,7 +713,7 @@ export const DashboardPage: React.FC = () => {
                     })}
                   </div>
                   {errors.category && (
-                    <span className="text-[11px] text-red-negative font-medium block">
+                    <span className="text-[11px] text-red-400 font-medium block">
                       {errors.category.message}
                     </span>
                   )}

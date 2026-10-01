@@ -39,15 +39,15 @@ const budgetCreateSchema = z.object({
 type BudgetFormValues = z.infer<typeof budgetCreateSchema>;
 
 const CATEGORIES_MAPPINGS = [
-  { category: 'Housing', emoji: '🏠', color: '#7C3AED' },
-  { category: 'Food', emoji: '🍔', color: '#06B6D4' },
+  { category: 'Housing', emoji: '🏠', color: '#FF9A6B' },
+  { category: 'Food', emoji: '🍔', color: '#2DD4BF' },
   { category: 'Transport', emoji: '🚗', color: '#10B981' },
   { category: 'Shopping', emoji: '🛍️', color: '#F59E0B' },
   { category: 'Entertainment', emoji: '🎬', color: '#F43F5E' },
-  { category: 'Groceries', emoji: '🛒', color: '#8B5CF6' },
+  { category: 'Groceries', emoji: '🛒', color: '#5EEAD4' },
   { category: 'Utilities', emoji: '⚡', color: '#EC4899' },
   { category: 'Healthcare', emoji: '🏥', color: '#14B8A6' },
-  { category: 'Education', emoji: '📚', color: '#8B5CF6' },
+  { category: 'Education', emoji: '📚', color: '#FF9A6B' },
   { category: 'Investment', emoji: '📈', color: '#F59E0B' },
   { category: 'Other', emoji: '💰', color: '#6B7280' },
 ];

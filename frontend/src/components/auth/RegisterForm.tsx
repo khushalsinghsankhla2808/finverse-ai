@@ -197,11 +197,11 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccessRedirect, o
             label={
               <span>
                 I agree to the{' '}
-                <a href="#terms" className="text-purple-light hover:underline">
+                <a href="#terms" className="text-[#FF9A6B] hover:underline">
                   Terms of Service
                 </a>{' '}
                 and{' '}
-                <a href="#privacy" className="text-purple-light hover:underline">
+                <a href="#privacy" className="text-[#FF9A6B] hover:underline">
                   Privacy Policy
                 </a>
               </span>
@@ -210,7 +210,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccessRedirect, o
             {...register('agreeTerms')}
           />
           {errors.agreeTerms && (
-            <span className="text-xs text-red-negative ml-6 mt-0.5">
+            <span className="text-xs text-red-400 ml-6 mt-0.5">
               {errors.agreeTerms.message}
             </span>
           )}
@@ -218,7 +218,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccessRedirect, o
 
         {/* Auth Error Display */}
         {authError && (
-          <div className="text-xs text-red-negative font-medium bg-red-negative/10 border border-red-negative/20 px-3 py-2 rounded-lg mt-1">
+          <div className="text-xs text-red-400 font-medium bg-red-500/10 border border-red-500/20 px-3 py-2 rounded-lg mt-1">
             ⚠️ {authError}
           </div>
         )}
@@ -227,7 +227,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccessRedirect, o
         <button
           type="submit"
           disabled={isLoading || isSuccess}
-          className="relative mt-2 flex h-11 w-full items-center justify-center rounded-lg bg-linear-to-r from-purple-primary to-purple-light px-4 py-2 text-sm font-semibold text-white shadow-glow-purple transition-all duration-300 hover:brightness-110 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 cursor-pointer overflow-hidden"
+          className="relative mt-2 flex h-11 w-full items-center justify-center rounded-xl bg-linear-to-r from-[#FF9A6B] to-[#FF6B9D] px-4 py-2 text-sm font-bold text-[#1A1A1A] shadow-[0_0_40px_rgba(255,154,107,0.30)] transition-all duration-300 hover:brightness-110 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 cursor-pointer overflow-hidden"
         >
           {isSuccess ? (
             <motion.div
@@ -235,12 +235,12 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccessRedirect, o
               animate={{ scale: 1, opacity: 1 }}
               className="flex items-center gap-2"
             >
-              <Check size={18} className="text-green-positive" />
+              <Check size={18} className="text-[#1A1A1A]" />
               <span>Account Created! Redirecting...</span>
             </motion.div>
           ) : isLoading ? (
             <div className="flex items-center gap-2">
-              <Loader2 size={18} className="animate-spin" />
+              <Loader2 size={18} className="animate-spin text-[#1A1A1A]" />
               <span>Creating account...</span>
             </div>
           ) : (
@@ -255,7 +255,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccessRedirect, o
         <button
           type="button"
           onClick={onSignInClick}
-          className="font-semibold text-purple-light hover:text-purple-primary transition-colors cursor-pointer"
+          className="font-semibold text-[#FF9A6B] hover:text-[#FFB896] transition-colors cursor-pointer"
         >
           Sign In
         </button>

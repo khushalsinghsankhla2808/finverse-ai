@@ -6,6 +6,9 @@ import {
   Bot,
   User,
   Brain,
+  Lightbulb,
+  AlertTriangle,
+  Trophy,
 } from 'lucide-react';
 
 import aiService from '@/services/aiService';
@@ -25,7 +28,6 @@ interface ChatSession {
   messages: Message[];
   updatedAt: string;
 }
-
 
 export const AIAssistantPage: React.FC = () => {
   const { showToast } = useToast();
@@ -136,7 +138,7 @@ export const AIAssistantPage: React.FC = () => {
       };
 
       setMessages((prev) => [...prev, aiMsg]);
-      
+
       // Update session references
       if (!activeSessionId) {
         setActiveSessionId(res.data.sessionId);
@@ -174,7 +176,7 @@ export const AIAssistantPage: React.FC = () => {
       <div className="space-y-6 h-[calc(100vh-140px)] flex flex-col">
         {/* Header */}
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-purple-primary/10 border border-purple-primary/20 text-purple-primary rounded-xl">
+          <div className="p-2.5 bg-[#FF9A6B]/15 border border-[#FF9A6B]/30 text-[#FF9A6B] rounded-xl">
             <Bot size={22} />
           </div>
           <div>
@@ -188,12 +190,12 @@ export const AIAssistantPage: React.FC = () => {
           {/* Left Panel: Chats List & Insights */}
           <div className="lg:col-span-1 flex flex-col gap-4 min-h-0">
             {/* Chats Session manager */}
-            <div className="glassmorphism bg-bg-surface/30 p-4 border border-white/8 rounded-2xl flex flex-col min-h-0 flex-1">
+            <div className="bg-[#2F343C] p-4 border border-white/8 rounded-2xl flex flex-col min-h-0 flex-1">
               <div className="flex justify-between items-center gap-2 mb-3">
                 <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">Conversations</span>
                 <button
                   onClick={handleClearHistory}
-                  className="p-1 text-white/30 hover:text-red-negative transition-all cursor-pointer"
+                  className="p-1 text-white/30 hover:text-red-400 transition-all cursor-pointer"
                   title="Clear all sessions"
                 >
                   <Trash2 size={12} />
@@ -202,7 +204,7 @@ export const AIAssistantPage: React.FC = () => {
 
               <button
                 onClick={handleCreateNewChat}
-                className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl border border-dashed border-white/10 hover:border-purple-primary bg-white/2 hover:bg-white/5 text-xs text-white/80 font-semibold cursor-pointer mb-3 transition-all"
+                className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl border border-dashed border-white/10 hover:border-[#FF9A6B] bg-white/2 hover:bg-white/5 text-xs text-white/80 font-semibold cursor-pointer mb-3 transition-all"
               >
                 <Plus size={14} /> New Chat
               </button>
@@ -219,7 +221,7 @@ export const AIAssistantPage: React.FC = () => {
                         onClick={() => handleSelectSession(s.id)}
                         className={`w-full text-left p-2.5 rounded-xl text-xs font-medium truncate cursor-pointer transition-all border ${
                           isActive
-                            ? 'bg-purple-primary/10 border-purple-primary/30 text-white'
+                            ? 'bg-[#FF9A6B]/15 border-[#FF9A6B]/40 text-[#FF9A6B]'
                             : 'bg-white/2 border-white/5 text-white/60 hover:bg-white/4'
                         }`}
                       >
@@ -232,7 +234,7 @@ export const AIAssistantPage: React.FC = () => {
             </div>
 
             {/* Smart Insights summary */}
-            <div className="glassmorphism bg-bg-surface/30 p-4 border border-white/8 rounded-2xl flex flex-col min-h-0 flex-1 max-h-[220px]">
+            <div className="bg-[#2F343C] p-4 border border-white/8 rounded-2xl flex flex-col min-h-0 flex-1 max-h-[220px]">
               <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider mb-2 block">AI Spending Insights</span>
               <div className="flex-1 overflow-y-auto space-y-2 pr-1 text-[11px]">
                 {insights.length === 0 ? (
@@ -241,11 +243,11 @@ export const AIAssistantPage: React.FC = () => {
                   insights.map((ins, i) => (
                     <div
                       key={i}
-                      className="p-2 bg-white/2 hover:bg-white/4 rounded-xl border border-white/5 flex items-start gap-2.5"
+                      className="p-2.5 bg-white/3 hover:bg-white/6 rounded-xl border border-white/5 flex items-start gap-2.5"
                     >
-                      <span className="mt-0.5">
-                        {ins.type === 'warning' ? '⚠️' : ins.type === 'achievement' ? '🏆' : '💡'}
-                      </span>
+                      <div className="mt-0.5 shrink-0 text-[#2DD4BF]">
+                        {ins.type === 'warning' ? <AlertTriangle size={15} className="text-amber-400" /> : ins.type === 'achievement' ? <Trophy size={15} className="text-emerald-400" /> : <Lightbulb size={15} className="text-[#2DD4BF]" />}
+                      </div>
                       <div>
                         <h4 className="font-bold text-white/90">{ins.title}</h4>
                         <p className="text-white/60 mt-0.5 leading-tight">{ins.description}</p>
@@ -258,7 +260,7 @@ export const AIAssistantPage: React.FC = () => {
           </div>
 
           {/* Right Panel: Chat Thread Window */}
-          <div className="lg:col-span-3 glassmorphism bg-bg-surface/30 border border-white/8 rounded-2xl flex flex-col min-h-0 justify-between">
+          <div className="lg:col-span-3 bg-[#2F343C] border border-white/8 rounded-2xl flex flex-col min-h-0 justify-between">
             {/* Suggested prompts bar (only if new session) */}
             {messages.length === 0 && (
               <div className="p-4 border-b border-white/5">
@@ -268,7 +270,7 @@ export const AIAssistantPage: React.FC = () => {
                     <button
                       key={sug}
                       onClick={() => handleSendMessage(sug)}
-                      className="px-3 py-1.5 rounded-full bg-white/3 border border-white/5 hover:border-purple-primary text-[10px] text-white/70 font-semibold hover:text-white cursor-pointer transition-all"
+                      className="px-3 py-1.5 rounded-full bg-white/3 border border-white/5 hover:border-[#FF9A6B] text-[10px] text-white/70 font-semibold hover:text-[#FF9A6B] cursor-pointer transition-all"
                     >
                       {sug}
                     </button>
@@ -281,7 +283,7 @@ export const AIAssistantPage: React.FC = () => {
             <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
               {messages.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-center space-y-4 max-w-sm mx-auto select-none opacity-40">
-                  <Brain size={48} className="text-purple-primary" />
+                  <Brain size={48} className="text-[#FF9A6B]" />
                   <div>
                     <h3 className="font-bold text-white text-sm">FinVerse Financial Assistant</h3>
                     <p className="text-xs text-white/60 mt-1 leading-normal">
@@ -301,16 +303,16 @@ export const AIAssistantPage: React.FC = () => {
                     >
                       <div className={`p-2 rounded-xl shrink-0 w-8 h-8 flex items-center justify-center text-xs border ${
                         isUser
-                          ? 'bg-purple-primary/10 border-purple-primary/20 text-purple-primary'
-                          : 'bg-white/5 border-white/10 text-white/85'
+                          ? 'bg-[#FF9A6B]/15 border-[#FF9A6B]/30 text-[#FF9A6B]'
+                          : 'bg-[#373D46] border-white/10 text-white/85'
                       }`}>
                         {isUser ? <User size={14} /> : <Bot size={14} />}
                       </div>
 
                       <div className={`rounded-2xl px-4 py-2.5 text-xs border shadow-xs ${
                         isUser
-                          ? 'bg-purple-primary border-purple-primary/40 text-white rounded-tr-none'
-                          : 'bg-bg-surface/50 border-white/5 text-white/90 rounded-tl-none leading-relaxed'
+                          ? 'bg-linear-to-r from-[#FF9A6B] to-[#FF6B9D] border-[#FF9A6B]/40 text-[#1A1A1A] font-medium rounded-tr-none'
+                          : 'bg-[#2F343C] border-white/8 text-white/90 rounded-tl-none leading-relaxed'
                       }`}>
                         {isUser ? (
                           msg.content
@@ -324,7 +326,7 @@ export const AIAssistantPage: React.FC = () => {
                               ul: (props) => <ul className="list-disc pl-4 mb-2 space-y-1 text-white/80" {...props} />,
                               ol: (props) => <ol className="list-decimal pl-4 mb-2 space-y-1 text-white/80" {...props} />,
                               li: (props) => <li className="pl-0.5" {...props} />,
-                              strong: (props) => <strong className="font-bold text-purple-light" {...props} />,
+                              strong: (props) => <strong className="font-bold text-[#2DD4BF]" {...props} />,
                               code: (props) => <code className="bg-white/5 border border-white/10 px-1 py-0.5 rounded font-mono text-[10px]" {...props} />,
                             }}
                           >
@@ -340,13 +342,13 @@ export const AIAssistantPage: React.FC = () => {
               {/* Loader */}
               {isLoading && (
                 <div className="flex gap-3 mr-auto max-w-[85%]">
-                  <div className="p-2 rounded-xl shrink-0 w-8 h-8 flex items-center justify-center text-xs border bg-white/5 border-white/10 text-white/85">
+                  <div className="p-2 rounded-xl shrink-0 w-8 h-8 flex items-center justify-center text-xs border bg-[#373D46] border-white/10 text-white/85">
                     <Bot size={14} />
                   </div>
-                  <div className="rounded-2xl px-4 py-2.5 text-xs border bg-bg-surface/50 border-white/5 text-white/50 rounded-tl-none flex items-center gap-1.5 select-none">
-                    <span className="w-1.5 h-1.5 bg-purple-primary rounded-full animate-bounce" />
-                    <span className="w-1.5 h-1.5 bg-purple-primary rounded-full animate-bounce [animation-delay:0.2s]" />
-                    <span className="w-1.5 h-1.5 bg-purple-primary rounded-full animate-bounce [animation-delay:0.4s]" />
+                  <div className="rounded-2xl px-4 py-2.5 text-xs border bg-[#2F343C] border-white/8 text-white/50 rounded-tl-none flex items-center gap-1.5 select-none">
+                    <span className="w-1.5 h-1.5 bg-[#FF9A6B] rounded-full animate-bounce" />
+                    <span className="w-1.5 h-1.5 bg-[#FF9A6B] rounded-full animate-bounce [animation-delay:0.2s]" />
+                    <span className="w-1.5 h-1.5 bg-[#FF9A6B] rounded-full animate-bounce [animation-delay:0.4s]" />
                   </div>
                 </div>
               )}
@@ -354,13 +356,13 @@ export const AIAssistantPage: React.FC = () => {
             </div>
 
             {/* Input form */}
-            <div className="p-4 border-t border-white/5 bg-bg-surface/20">
+            <div className="p-4 border-t border-white/5 bg-[#262A31]">
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
                   handleSendMessage(inputValue);
                 }}
-                className="flex items-center gap-2 bg-white/3 border border-white/8 rounded-xl px-4 py-2 focus-within:border-purple-primary transition-all"
+                className="flex items-center gap-2 bg-[#373D46] border border-white/8 rounded-xl px-4 py-2 focus-within:border-[#FF9A6B] transition-all"
               >
                 <input
                   type="text"
@@ -368,14 +370,14 @@ export const AIAssistantPage: React.FC = () => {
                   value={inputValue}
                   disabled={isLoading}
                   onChange={(e) => setInputValue(e.target.value)}
-                  className="flex-1 bg-transparent text-xs text-white placeholder:text-white/20 focus:outline-hidden focus:ring-0 focus:border-transparent py-1 disabled:opacity-50"
+                  className="flex-1 bg-transparent text-xs text-white placeholder:text-[#7B8494] focus:outline-hidden focus:ring-0 focus:border-transparent py-1 disabled:opacity-50"
                 />
                 <button
                   type="submit"
                   disabled={!inputValue.trim() || isLoading}
-                  className="p-1.5 rounded-lg bg-purple-primary text-white hover:bg-purple-primary/95 transition-all cursor-pointer disabled:opacity-40 disabled:hover:bg-purple-primary disabled:cursor-not-allowed shrink-0"
+                  className="p-2 rounded-lg bg-[#FF9A6B] text-[#1A1A1A] font-bold hover:bg-[#FFB896] transition-all cursor-pointer disabled:opacity-40 disabled:hover:bg-[#FF9A6B] disabled:cursor-not-allowed shrink-0"
                 >
-                  <Send size={12} />
+                  <Send size={13} />
                 </button>
               </form>
             </div>

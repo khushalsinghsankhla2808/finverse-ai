@@ -26,7 +26,7 @@ const FloatingText: React.FC<FloatingTextProps> = ({ text, position, speed = 1 }
       ref={ref}
       position={position}
       fontSize={0.35}
-      color="#A855F7" // var(--purple-light)
+      color="#FF9A6B" // peach-500 floating currency symbols
       anchorX="center"
       anchorY="middle"
     >
@@ -41,11 +41,11 @@ export const FinanceGlobe: React.FC = () => {
       <Canvas
         camera={{ position: [0, 0, 4.5], fov: 60 }}
         style={{ background: 'transparent', width: '100%', height: '100%' }}
-        frameloop="always" // Rotate animation depends on always render loop
+        frameloop="always"
       >
-        <ambientLight color="#7C3AED" intensity={0.7} />
-        <pointLight color="#06B6D4" intensity={2.0} position={[5, 3, 5]} />
-        <pointLight color="#7C3AED" intensity={1.5} position={[-5, -3, -5]} />
+        <ambientLight color="#2DD4BF" intensity={0.7} />
+        <pointLight color="#2DD4BF" intensity={2.0} position={[5, 3, 5]} />
+        <pointLight color="#FF9A6B" intensity={1.5} position={[-5, -3, -5]} />
         
         <OrbitControls
           enablePan={false}
@@ -59,36 +59,36 @@ export const FinanceGlobe: React.FC = () => {
           <mesh>
             <sphereGeometry args={[1.7, 64, 64]} />
             <meshStandardMaterial
-              color="#0D1530" // var(--bg-surface)
+              color="#2F343C" // grey-700
               roughness={0.7}
               metalness={0.3}
             />
           </mesh>
 
-          {/* Wireframe overlay */}
+          {/* Wireframe overlay in teal #2DD4BF */}
           <mesh>
             <sphereGeometry args={[1.72, 32, 32]} />
             <meshBasicMaterial
-              color="#7C3AED" // var(--purple-primary)
+              color="#2DD4BF"
               wireframe={true}
               transparent={true}
-              opacity={0.15}
+              opacity={0.25}
             />
           </mesh>
 
-          {/* Floating symbols */}
-          <FloatingText text="$" position={[2.0, 0.4, 0]} speed={1.3} />
-          <FloatingText text="€" position={[-1.7, -0.8, 1.0]} speed={1.0} />
-          <FloatingText text="₿" position={[0.4, 1.4, -1.3]} speed={1.6} />
+          {/* Floating symbols in peach #FF9A6B */}
+          <FloatingText text="₹" position={[2.0, 0.4, 0]} speed={1.3} />
+          <FloatingText text="$" position={[-1.7, -0.8, 1.0]} speed={1.0} />
+          <FloatingText text="€" position={[0.4, 1.4, -1.3]} speed={1.6} />
         </group>
 
-        {/* Purple glow ring below the globe */}
+        {/* Teal glow ring below the globe */}
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.9, 0]}>
           <ringGeometry args={[1.0, 1.6, 64]} />
           <meshBasicMaterial
-            color="#7C3AED"
+            color="#2DD4BF"
             transparent={true}
-            opacity={0.2}
+            opacity={0.3}
             side={THREE.DoubleSide}
           />
         </mesh>
