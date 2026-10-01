@@ -44,35 +44,39 @@ The platform features a premium glassmorphic dark-mode UI with 3D visualizations
 
 ## 🖼️ Screenshots
 
+## 📸 Screenshots
+
+A quick tour of FinVerse AI, from sign-in to AI-powered insights.
+
 <table>
   <tr>
     <td align="center" width="50%">
-      <img src="screenshots/login.png" alt="Sign in screen" width="100%" />
-      <br /><sub><b>Sign In</b> — glassmorphic auth screen with email/password + Google</sub>
+      <img src="https://github.com/user-attachments/assets/8d308354-b1ca-4d44-a915-fcdb1f0a6c04" alt="FinVerse AI sign-in screen" width="100%" />
+      <br /><sub><b>Sign In</b> — glassmorphic auth screen with email/password and Google login</sub>
     </td>
     <td align="center" width="50%">
-      <img src="screenshots/register.png" alt="Create account screen" width="100%" />
-      <br /><sub><b>Create Account</b> — registration with terms acceptance</sub>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" width="50%">
-      <img src="screenshots/dashboard.png" alt="Dashboard financial overview" width="100%" />
-      <br /><sub><b>Dashboard</b> — KPI cards, 3D financial globe, quick actions, and cash flow</sub>
-    </td>
-    <td align="center" width="50%">
-      <img src="screenshots/ai-assistant.png" alt="FinVerse AI Assistant chat" width="100%" />
-      <br /><sub><b>AI Assistant</b> — Gemini-powered chat with auto-generated spending insights</sub>
+      <img src="https://github.com/user-attachments/assets/3ac190d1-240a-493d-a9c1-baa419f76cf7" alt="FinVerse AI create account screen" width="100%" />
+      <br /><sub><b>Create Account</b> — registration with password confirmation and terms acceptance</sub>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
-      <img src="screenshots/settings-profile.png" alt="Settings profile screen" width="100%" />
-      <br /><sub><b>Settings</b> — profile management and account security</sub>
+      <img src="https://github.com/user-attachments/assets/e6200d71-a6ec-4a49-ad61-7398e9078e1c" alt="FinVerse AI dashboard financial overview" width="100%" />
+      <br /><sub><b>Dashboard</b> — KPI cards, net worth projection, interactive 3D financial globe, quick actions, expense breakdown and 7-day cash flow</sub>
     </td>
     <td align="center" width="50%">
-      <img src="screenshots/settings-currency.png" alt="Currency preferences" width="100%" />
-      <br /><sub><b>Preferences</b> — multi-currency support (INR, USD, EUR, GBP, JPY, BTC)</sub>
+      <img src="https://github.com/user-attachments/assets/586e319d-3379-46ff-bcdb-5c1e1011020b" alt="FinVerse AI Assistant chat" width="100%" />
+      <br /><sub><b>AI Assistant</b> — Gemini-powered chat with saved conversations and auto-generated spending insights</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="https://github.com/user-attachments/assets/11ac5a4a-a918-40c3-bfde-29ceddae90da" alt="FinVerse AI settings profile screen" width="100%" />
+      <br /><sub><b>Settings</b> — profile management plus password and session security</sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="https://github.com/user-attachments/assets/10aeaf69-58d5-43ae-aca0-83bee750f75d" alt="FinVerse AI currency preferences" width="100%" />
+      <br /><sub><b>Preferences</b> — multi-currency support (INR, USD, EUR, GBP, JPY, BTC), synced to your account</sub>
     </td>
   </tr>
 </table>
