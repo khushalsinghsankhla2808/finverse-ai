@@ -224,7 +224,7 @@ export const AnalyticsPage: React.FC = () => {
             <ResponsiveContainer width="100%" height={288}>
               {spendingTrendData.length === 0 ? (
                 <div className="flex items-center justify-center h-full w-full absolute inset-0 z-10">
-                  <p className="text-sm text-white/30">No data yet — add transactions to see your analytics</p>
+                  <p className="text-sm text-white/30">No data yet - add transactions to see your analytics</p>
                 </div>
               ) : null}
               <BarChart data={spendingTrendData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
@@ -253,7 +253,7 @@ export const AnalyticsPage: React.FC = () => {
                 <ResponsiveContainer width="100%" height={220}>
                   {expenseBreakdownData.data.length === 0 ? (
                     <div className="flex items-center justify-center h-full w-full absolute inset-0 z-10">
-                      <p className="text-sm text-white/30">No data yet — add transactions to see your analytics</p>
+                      <p className="text-sm text-white/30">No data yet - add transactions to see your analytics</p>
                     </div>
                   ) : null}
                   <PieChart>
@@ -329,7 +329,7 @@ export const AnalyticsPage: React.FC = () => {
               <ResponsiveContainer width="100%" height={300}>
                 {cashFlowData.length === 0 ? (
                   <div className="flex items-center justify-center h-full w-full absolute inset-0 z-10">
-                    <p className="text-sm text-white/30">No data yet — add transactions to see your analytics</p>
+                    <p className="text-sm text-white/30">No data yet - add transactions to see your analytics</p>
                   </div>
                 ) : null}
                 <AreaChart data={cashFlowData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>

@@ -5,7 +5,7 @@
 <h1 align="center">FinVerse AI</h1>
 
 <p align="center">
-  <strong>Your AI-Powered Personal Finance Command Center</strong>
+  <strong>Personal Finance Platform for Indian Investors</strong>
 </p>
 
 <p align="center">

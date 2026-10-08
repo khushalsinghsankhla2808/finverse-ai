@@ -50,9 +50,9 @@
   --blue-primary: #2DD4BF;
   --blue-light: #5EEAD4;
 
-  /* GRADIENTS */
-  --gradient-main: linear-gradient(135deg, #FF9A6B, #FF6B9D);
-  --gradient-hero: linear-gradient(135deg, #262A31, #1B1E23);
+  /* FLAT ACCENT COLORS */
+  --gradient-main: #FF9A6B;
+  --gradient-hero: #262A31;
 
   /* GLOWS & TINTS */
   --glow-peach: 0 0 40px rgba(255, 154, 107, 0.30);
@@ -125,6 +125,16 @@ html, body {
   overflow-x: hidden;
 }
 
+/* Reduced Motion Override (Rule 4) */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -137,7 +147,7 @@ html, body {
 
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.1);
-  border-radius: 9999px;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -153,18 +163,15 @@ html, body {
 }
 
 .gradient-btn {
-  background: linear-gradient(135deg, #FF9A6B, #FF6B9D);
+  background: #FF9A6B;
   color: #1A1A1A;
-  box-shadow: 0 0 40px rgba(255, 154, 107, 0.30);
+  box-shadow: 0 0 20px rgba(255, 154, 107, 0.20);
 }
 
 .gradient-btn:hover {
-  background: linear-gradient(135deg, #FFB896, #FF6B9D);
-  box-shadow: 0 0 45px rgba(255, 154, 107, 0.45);
+  background: #FFB896;
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #FF9A6B, #FF6B9D);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #FF9A6B;
 }

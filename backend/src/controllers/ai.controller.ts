@@ -26,13 +26,13 @@ const getCleanMistralKey = (): string => {
     logger.warn({
       context: 'ai.controller',
       event: 'mistral_key_missing',
-      message: '⚠️ MISTRAL_API_KEY is missing/placeholder — AI advisor will run in high-performance rule-based advisor mode.',
+      message: 'MISTRAL_API_KEY is missing/placeholder: AI advisor will run in high-performance rule-based advisor mode.',
     });
   } else {
     logger.info({
       context: 'ai.controller',
       event: 'mistral_key_present',
-      message: `✅ MISTRAL_API_KEY configured (starts: ${key.slice(0, 6)}…) — live AI enabled with automatic fallback.`,
+      message: `MISTRAL_API_KEY configured (starts: ${key.slice(0, 6)}…): live AI enabled with automatic fallback.`,
     });
   }
 })();
@@ -218,9 +218,9 @@ const generateSmartRuleAdvisor = (message: string, raw: RawFinancialData): strin
 
   // 5. General / Financial Plan / Default Response
   const netProfit = raw.income - raw.expenses;
-  const healthStatus = raw.rate >= 30 ? 'Excellent 🌟' : raw.rate >= 15 ? 'Healthy 👍' : 'Needs Optimization ⚠️';
+  const healthStatus = raw.rate >= 30 ? 'Excellent' : raw.rate >= 15 ? 'Healthy' : 'Needs Optimization';
 
-  return `### FinVerse Financial Summary 📈\n\nHere is your financial overview for the past 30 days:\n\n- **Total Income:** ₹${raw.income.toLocaleString('en-IN')}\n- **Total Expenses:** ₹${raw.expenses.toLocaleString('en-IN')}\n- **Net Cashflow:** ₹${netProfit.toLocaleString('en-IN')}\n- **Savings Rate:** ${raw.rate.toFixed(1)}% (${healthStatus})\n- **Top Expense:** ${raw.topCategory !== 'None' ? `${raw.topCategory} (₹${raw.topCategorySpent.toLocaleString('en-IN')})` : 'None logged'}\n\n**50/30/20 Rule Plan:**\n- **Needs (50%):** ₹${(raw.income * 0.5).toLocaleString('en-IN')}\n- **Wants (30%):** ₹${(raw.income * 0.3).toLocaleString('en-IN')}\n- **Savings/Investments (20%):** ₹${(raw.income * 0.2).toLocaleString('en-IN')}\n\nWhat specific area would you like to optimize today—budgets, spending, or savings goals?`;
+  return `### FinVerse Financial Summary\n\nHere is your financial overview for the past 30 days:\n\n- **Total Income:** ₹${raw.income.toLocaleString('en-IN')}\n- **Total Expenses:** ₹${raw.expenses.toLocaleString('en-IN')}\n- **Net Cashflow:** ₹${netProfit.toLocaleString('en-IN')}\n- **Savings Rate:** ${raw.rate.toFixed(1)}% (${healthStatus})\n- **Top Expense:** ${raw.topCategory !== 'None' ? `${raw.topCategory} (₹${raw.topCategorySpent.toLocaleString('en-IN')})` : 'None logged'}\n\n**50/30/20 Rule Plan:**\n- **Needs (50%):** ₹${(raw.income * 0.5).toLocaleString('en-IN')}\n- **Wants (30%):** ₹${(raw.income * 0.3).toLocaleString('en-IN')}\n- **Savings/Investments (20%):** ₹${(raw.income * 0.2).toLocaleString('en-IN')}\n\nWhat specific area would you like to optimize today: budgets, spending, or savings goals?`;
 };
 
 // ─── Rule-Based Insights Generator ──────────────────────────────────────────
@@ -283,7 +283,7 @@ const generateSmartRuleInsights = (raw: RawFinancialData): any[] => {
     insights.push(
       {
         title: 'Start Tracking Expenses',
-        description: 'Log your daily transactions to unlock automated spending analysis and personalized budget caps.',
+        description: 'Log your daily transactions to enable automated spending analysis and personalized budget caps.',
         type: 'tip',
         impact: 'medium',
       },
@@ -380,7 +380,7 @@ export const chatWithAI = async (
         logger.warn({
           context: 'ai.controller.chatWithAI',
           event: 'mistral_api_fallback',
-          message: `Mistral API call failed (${err?.message || err}). Falling back seamlessly to smart rule advisor.`,
+          message: `Mistral API call failed (${err?.message || err}). Falling back automatically to smart rule advisor.`,
         });
       }
     }

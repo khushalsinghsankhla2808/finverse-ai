@@ -40,36 +40,6 @@
   }
 }
 
-@keyframes gradient-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-@keyframes spin-ring {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-}
-
 .animate-shimmer {
   background: linear-gradient(
     90deg,
@@ -87,11 +57,6 @@
 
 .animate-bell-shake {
   animation: bell-shake 500ms ease-in-out;
-}
-
-.animate-gradient-shift {
-  background-size: 400% 400%;
-  animation: gradient-shift 15s ease infinite;
 }
 
 .animate-spin-ring {

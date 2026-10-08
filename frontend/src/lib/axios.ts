@@ -30,7 +30,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     // Session expired or unauthorized, redirect to login
     if (error.response?.status === 401) {
-      console.error('🔴 401 Unauthorized Intercepted:', {
+      console.error('401 Unauthorized Intercepted:', {
         url: error.config?.url,
         method: error.config?.method,
         responseData: error.response?.data,

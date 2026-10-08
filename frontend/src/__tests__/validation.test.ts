@@ -36,7 +36,7 @@ export const validateMaxDecimals = (num: number, maxDecimals: number = 2): boole
 // --- Unit Tests ---
 
 describe('Validation', () => {
-  describe('TEST GROUP 6 — Input Validation edge cases', () => {
+  describe('TEST GROUP 6 - Input Validation edge cases', () => {
     it('Empty string fails required field validation', () => {
       expect(validateRequired('')).toBe(false);
       expect(validateRequired('   ')).toBe(false);

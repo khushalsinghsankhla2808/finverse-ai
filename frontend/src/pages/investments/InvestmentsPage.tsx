@@ -36,12 +36,12 @@ const ASSET_LABELS: Record<string, string> = {
 };
 
 const ASSET_EMOJIS: Record<string, string> = {
-  stocks: "📈",
-  mutual_funds: "🏦",
-  gold: "🥇",
-  crypto: "₿",
-  fixed_deposit: "🏛️",
-  other: "💼",
+  stocks: "STK",
+  mutual_funds: "MF",
+  gold: "GLD",
+  crypto: "BTC",
+  fixed_deposit: "FD",
+  other: "OTH",
 };
 
 // Validation Schema

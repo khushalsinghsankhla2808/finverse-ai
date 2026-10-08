@@ -14,6 +14,8 @@ import { useNavigate as useNavigateHelper } from 'react-router-dom';
 // Lazy load all pages
 const LoginPage = lazy(() => import('@/pages/auth/LoginPage'));
 const RegisterPage = lazy(() => import('@/pages/auth/RegisterPage'));
+const PrivacyPage = lazy(() => import('@/pages/privacy/PrivacyPage'));
+const TermsPage = lazy(() => import('@/pages/terms/TermsPage'));
 const DashboardPage = lazy(() => import('@/pages/dashboard/DashboardPage'));
 const TransactionsPage = lazy(() => import('@/pages/transactions/TransactionsPage'));
 const AnalyticsPage = lazy(() => import('@/pages/analytics/AnalyticsPage'));
@@ -33,7 +35,7 @@ const RootRedirect: React.FC = () => {
 // Shimmer Loader for lazy-loaded pages inside AppLayout
 const PageSuspenseFallback: React.FC = () => (
   <div className="flex h-[60vh] w-full items-center justify-center">
-    <Loader2 className="animate-spin text-purple-light" size={32} />
+    <Loader2 className="animate-spin text-[#FF9A6B]" size={32} />
   </div>
 );
 
@@ -48,19 +50,19 @@ export const PlaceholderPage: React.FC<PlaceholderProps> = ({ title, icon: Icon 
   return (
     <PageTransition>
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
-        <div className="glassmorphism max-w-md w-full p-8 border border-white/8 rounded-2xl flex flex-col items-center gap-6 shadow-glow-purple/5">
-          <div className="h-16 w-16 rounded-2xl bg-purple-primary/10 border border-purple-primary/20 flex items-center justify-center text-purple-light shadow-glow-purple/10">
+        <div className="glassmorphism max-w-md w-full p-8 border border-white/8 rounded-xl flex flex-col items-center gap-6">
+          <div className="h-16 w-16 rounded-xl bg-[#FF9A6B]/10 border border-[#FF9A6B]/20 flex items-center justify-center text-[#FF9A6B]">
             {React.createElement(Icon as any, { size: 30 })}
           </div>
           <div className="flex flex-col gap-2">
             <h1 className="text-xl font-bold font-display text-white">{title}</h1>
             <p className="text-xs text-white/50 leading-relaxed">
-              This module is coming in Phase 2. We are currently building premium features and AI integrations.
+              This module is coming in Phase 2. We are currently building additional features.
             </p>
           </div>
           <button
             onClick={() => navigate('/dashboard')}
-            className="flex items-center gap-2 px-5 py-2.5 bg-purple-primary hover:bg-purple-light text-white text-sm font-semibold rounded-lg shadow-glow-purple transition-all duration-200 cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+            className="flex items-center gap-2 px-5 py-2.5 bg-[#FF9A6B] hover:bg-[#FFB896] text-[#1A1A1A] text-sm font-semibold rounded-lg transition-all duration-200 cursor-pointer"
           >
             <ArrowLeft size={16} /> Back to Dashboard
           </button>
@@ -74,20 +76,20 @@ export const PlaceholderPage: React.FC<PlaceholderProps> = ({ title, icon: Icon 
 const NotFoundPage: React.FC = () => {
   const navigate = useNavigateHelper();
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-bg-base text-center px-4 text-white">
-      <div className="glassmorphism max-w-md w-full p-8 border border-white/8 rounded-2xl flex flex-col items-center gap-6 shadow-glow-red/5">
-        <span className="font-display font-extrabold text-7xl text-transparent bg-clip-text bg-linear-to-r from-red-negative via-purple-light to-purple-primary">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[#262A31] text-center px-4 text-white">
+      <div className="glassmorphism max-w-md w-full p-8 border border-white/8 rounded-xl flex flex-col items-center gap-6">
+        <span className="font-display font-extrabold text-7xl text-[#FF9A6B]">
           404
         </span>
         <div className="flex flex-col gap-2">
-          <h2 className="text-lg font-bold font-display">Lost in the FinVerse</h2>
+          <h2 className="text-lg font-bold font-display">Page Not Found</h2>
           <p className="text-xs text-white/40 leading-relaxed">
-            The page you are looking for does not exist or has been shifted across dimensions.
+            The page you are looking for does not exist.
           </p>
         </div>
         <button
           onClick={() => navigate('/dashboard')}
-          className="flex items-center gap-2 px-5 py-2.5 bg-linear-to-r from-purple-primary to-purple-light text-white text-sm font-semibold rounded-lg shadow-glow-purple transition-all duration-200 cursor-pointer"
+          className="flex items-center gap-2 px-5 py-2.5 bg-[#FF9A6B] hover:bg-[#FFB896] text-[#1A1A1A] text-sm font-semibold rounded-lg transition-all duration-200 cursor-pointer"
         >
           <Home size={16} /> Return Home
         </button>
@@ -114,6 +116,22 @@ export const router = createBrowserRouter([
     element: (
       <Suspense fallback={<PageSuspenseFallback />}>
         <RegisterPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: '/privacy',
+    element: (
+      <Suspense fallback={<PageSuspenseFallback />}>
+        <PrivacyPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: '/terms',
+    element: (
+      <Suspense fallback={<PageSuspenseFallback />}>
+        <TermsPage />
       </Suspense>
     ),
   },

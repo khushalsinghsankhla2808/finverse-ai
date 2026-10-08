@@ -175,14 +175,19 @@ export const AIAssistantPage: React.FC = () => {
     <PageTransition>
       <div className="space-y-6 h-[calc(100vh-140px)] flex flex-col">
         {/* Header */}
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-[#FF9A6B]/15 border border-[#FF9A6B]/30 text-[#FF9A6B] rounded-xl">
-            <Bot size={22} />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 bg-[#FF9A6B]/15 border border-[#FF9A6B]/30 text-[#FF9A6B] rounded-xl">
+              <Bot size={22} />
+            </div>
+            <div>
+              <h1 className="text-2xl font-display font-bold text-white tracking-tight">FinVerse AI Assistant</h1>
+              <p className="text-xs text-white/50 font-medium">Financial assistant powered by Google Gemini</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-2xl font-display font-bold text-white tracking-tight">FinVerse AI Assistant</h1>
-            <p className="text-xs text-white/50 font-medium">Your personal generative financial consultant</p>
-          </div>
+          <span className="text-[10px] font-semibold text-amber-300 bg-amber-400/10 border border-amber-400/20 px-3 py-1 rounded-md">
+            AI-generated output. Not financial advice.
+          </span>
         </div>
 
         {/* Workspace Panels */}
@@ -234,8 +239,11 @@ export const AIAssistantPage: React.FC = () => {
             </div>
 
             {/* Smart Insights summary */}
-            <div className="bg-[#2F343C] p-4 border border-white/8 rounded-2xl flex flex-col min-h-0 flex-1 max-h-[220px]">
-              <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider mb-2 block">AI Spending Insights</span>
+            <div className="bg-[#2F343C] p-4 border border-white/8 rounded-2xl flex flex-col min-h-0 flex-1 max-h-[240px]">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">AI Spending Insights</span>
+                <span className="text-[9px] text-white/40">AI-generated</span>
+              </div>
               <div className="flex-1 overflow-y-auto space-y-2 pr-1 text-[11px]">
                 {insights.length === 0 ? (
                   <span className="text-white/30 block text-center py-3">Generating insights...</span>
@@ -264,13 +272,13 @@ export const AIAssistantPage: React.FC = () => {
             {/* Suggested prompts bar (only if new session) */}
             {messages.length === 0 && (
               <div className="p-4 border-b border-white/5">
-                <span className="text-[9px] font-bold text-white/40 uppercase tracking-wider block mb-2">Predefined AI Queries Suggestions</span>
+                <span className="text-[9px] font-bold text-white/40 uppercase tracking-wider block mb-2">Suggested Queries</span>
                 <div className="flex flex-wrap gap-2">
                   {suggestions.slice(0, 4).map((sug) => (
                     <button
                       key={sug}
                       onClick={() => handleSendMessage(sug)}
-                      className="px-3 py-1.5 rounded-full bg-white/3 border border-white/5 hover:border-[#FF9A6B] text-[10px] text-white/70 font-semibold hover:text-[#FF9A6B] cursor-pointer transition-all"
+                      className="px-3 py-1.5 rounded-md bg-white/3 border border-white/5 hover:border-[#FF9A6B] text-[10px] text-white/70 font-semibold hover:text-[#FF9A6B] cursor-pointer transition-all"
                     >
                       {sug}
                     </button>
@@ -287,7 +295,7 @@ export const AIAssistantPage: React.FC = () => {
                   <div>
                     <h3 className="font-bold text-white text-sm">FinVerse Financial Assistant</h3>
                     <p className="text-xs text-white/60 mt-1 leading-normal">
-                      Ask me about monthly spending trends, budget limits, or investment returns projection. Try submitting questions below.
+                      Ask about monthly spending trends, budget limits, or investment projections. AI-generated output for informational purposes only.
                     </p>
                   </div>
                 </div>
@@ -311,27 +319,32 @@ export const AIAssistantPage: React.FC = () => {
 
                       <div className={`rounded-2xl px-4 py-2.5 text-xs border shadow-xs ${
                         isUser
-                          ? 'bg-linear-to-r from-[#FF9A6B] to-[#FF6B9D] border-[#FF9A6B]/40 text-[#1A1A1A] font-medium rounded-tr-none'
+                          ? 'bg-[#FF9A6B] border-[#FF9A6B] text-[#1A1A1A] font-medium rounded-tr-none'
                           : 'bg-[#2F343C] border-white/8 text-white/90 rounded-tl-none leading-relaxed'
                       }`}>
                         {isUser ? (
                           msg.content
                         ) : (
-                          <ReactMarkdown
-                            components={{
-                              h1: (props) => <h1 className="text-sm font-bold text-white mt-3 mb-1" {...props} />,
-                              h2: (props) => <h2 className="text-sm font-bold text-white mt-2.5 mb-1" {...props} />,
-                              h3: (props) => <h3 className="text-xs font-bold text-white/90 mt-2 mb-1" {...props} />,
-                              p: (props) => <p className="mb-2 last:mb-0 leading-relaxed" {...props} />,
-                              ul: (props) => <ul className="list-disc pl-4 mb-2 space-y-1 text-white/80" {...props} />,
-                              ol: (props) => <ol className="list-decimal pl-4 mb-2 space-y-1 text-white/80" {...props} />,
-                              li: (props) => <li className="pl-0.5" {...props} />,
-                              strong: (props) => <strong className="font-bold text-[#2DD4BF]" {...props} />,
-                              code: (props) => <code className="bg-white/5 border border-white/10 px-1 py-0.5 rounded font-mono text-[10px]" {...props} />,
-                            }}
-                          >
-                            {msg.content}
-                          </ReactMarkdown>
+                          <div>
+                            <ReactMarkdown
+                              components={{
+                                h1: (props) => <h1 className="text-sm font-bold text-white mt-3 mb-1" {...props} />,
+                                h2: (props) => <h2 className="text-sm font-bold text-white mt-2.5 mb-1" {...props} />,
+                                h3: (props) => <h3 className="text-xs font-bold text-white/90 mt-2 mb-1" {...props} />,
+                                p: (props) => <p className="mb-2 last:mb-0 leading-relaxed" {...props} />,
+                                ul: (props) => <ul className="list-disc pl-4 mb-2 space-y-1 text-white/80" {...props} />,
+                                ol: (props) => <ol className="list-decimal pl-4 mb-2 space-y-1 text-white/80" {...props} />,
+                                li: (props) => <li className="pl-0.5" {...props} />,
+                                strong: (props) => <strong className="font-bold text-[#2DD4BF]" {...props} />,
+                                code: (props) => <code className="bg-white/5 border border-white/10 px-1 py-0.5 rounded font-mono text-[10px]" {...props} />,
+                              }}
+                            >
+                              {msg.content}
+                            </ReactMarkdown>
+                            <span className="block mt-2 text-[9px] text-white/40 italic border-t border-white/5 pt-1">
+                              AI-generated response. Not financial advice.
+                            </span>
+                          </div>
                         )}
                       </div>
                     </div>

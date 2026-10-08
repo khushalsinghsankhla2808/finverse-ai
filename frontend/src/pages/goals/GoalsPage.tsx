@@ -61,18 +61,18 @@ const PRESET_COLORS = [
 ];
 
 const PRESET_EMOJIS = [
-  "🛡️",
-  "✈️",
-  "💻",
-  "🏍️",
-  "🏠",
-  "🎓",
-  "💍",
-  "🚗",
-  "💵",
-  "🎄",
-  "🎁",
-  "📈",
+  "SAFE",
+  "TRVL",
+  "TECH",
+  "AUTO",
+  "HOME",
+  "EDUC",
+  "EVNT",
+  "SAVE",
+  "EMRG",
+  "GIFT",
+  "INVST",
+  "OTHR",
 ];
 
 const CATEGORY_OPTIONS = [
@@ -787,7 +787,7 @@ export const GoalsPage: React.FC = () => {
                           type="button"
                           onClick={() => setGoalValue("color", col)}
                           style={{ backgroundColor: col }}
-                          className={`w-8 h-8 rounded-full border cursor-pointer flex items-center justify-center transition-all ${
+                          className={`w-8 h-8 rounded-md border cursor-pointer flex items-center justify-center transition-all ${
                             isSelected
                               ? "ring-2 ring-purple-light scale-110 border-white"
                               : "border-transparent hover:scale-105"
@@ -815,7 +815,7 @@ export const GoalsPage: React.FC = () => {
                           key={emoji}
                           type="button"
                           onClick={() => setGoalValue("icon", emoji)}
-                          className={`w-10 h-10 rounded-xl border text-xl flex items-center justify-center transition-all cursor-pointer ${
+                          className={`w-10 h-10 rounded-md border text-xs font-bold flex items-center justify-center transition-all cursor-pointer ${
                             isSelected
                               ? "bg-purple-primary/10 border-purple-primary shadow-inner scale-110"
                               : "bg-white/2 border-white/5 hover:border-white/15"

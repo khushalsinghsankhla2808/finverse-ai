@@ -62,17 +62,17 @@ const quickTxnSchema = z.object({
 type QuickTxnValues = z.infer<typeof quickTxnSchema>;
 
 const CATEGORY_OPTIONS = [
-  { id: 'Housing', label: 'Housing', emoji: '🏠' },
-  { id: 'Food', label: 'Food', emoji: '🍔' },
-  { id: 'Transport', label: 'Transport', emoji: '🚗' },
-  { id: 'Shopping', label: 'Shopping', emoji: '🛍️' },
-  { id: 'Entertainment', label: 'Entertainment', emoji: '🎬' },
-  { id: 'Groceries', label: 'Groceries', emoji: '🛒' },
-  { id: 'Utilities', label: 'Utilities', emoji: '⚡' },
-  { id: 'Healthcare', label: 'Healthcare', emoji: '🏥' },
-  { id: 'Education', label: 'Education', emoji: '📚' },
-  { id: 'Investment', label: 'Investment', emoji: '📈' },
-  { id: 'Other', label: 'Other', emoji: '💰' },
+  { id: 'Housing', label: 'Housing' },
+  { id: 'Food', label: 'Food' },
+  { id: 'Transport', label: 'Transport' },
+  { id: 'Shopping', label: 'Shopping' },
+  { id: 'Entertainment', label: 'Entertainment' },
+  { id: 'Groceries', label: 'Groceries' },
+  { id: 'Utilities', label: 'Utilities' },
+  { id: 'Healthcare', label: 'Healthcare' },
+  { id: 'Education', label: 'Education' },
+  { id: 'Investment', label: 'Investment' },
+  { id: 'Other', label: 'Other' },
 ];
 
 const GlobeFallback = () => (
@@ -313,7 +313,7 @@ export const DashboardPage: React.FC = () => {
             </p>
           </div>
           <div className="text-right hidden sm:block">
-            <span className="text-[10px] uppercase font-bold text-[#FF9A6B] tracking-wider bg-[#FF9A6B]/10 px-3 py-1.5 rounded-full border border-[#FF9A6B]/20">
+            <span className="text-[10px] uppercase font-bold text-[#FF9A6B] tracking-wider bg-[#FF9A6B]/10 px-3 py-1.5 rounded-md border border-[#FF9A6B]/20">
               Active currency: {activeCurrency.name}
             </span>
           </div>
@@ -449,7 +449,7 @@ export const DashboardPage: React.FC = () => {
                     </span>
                     <h3 className="text-sm font-bold font-display text-white mt-0.5">3D Financial Globe</h3>
                   </div>
-                  <span className="text-[10px] text-[#2DD4BF] font-semibold flex items-center gap-1 bg-[#2DD4BF]/10 border border-[#2DD4BF]/20 px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] text-[#2DD4BF] font-semibold flex items-center gap-1 bg-[#2DD4BF]/10 border border-[#2DD4BF]/20 px-2 py-0.5 rounded-md">
                     Interactive
                   </span>
                 </div>
@@ -706,8 +706,7 @@ export const DashboardPage: React.FC = () => {
                               : 'bg-white/2 border-white/5 text-white/60 hover:border-white/15 hover:text-white'
                           }`}
                         >
-                          <span className="text-base">{cat.emoji}</span>
-                          <span className="font-semibold truncate max-w-full">{cat.label}</span>
+                          <span className="font-semibold text-xs truncate max-w-full">{cat.label}</span>
                         </button>
                       );
                     })}

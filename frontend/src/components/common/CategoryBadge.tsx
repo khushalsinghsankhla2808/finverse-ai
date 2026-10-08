@@ -84,7 +84,7 @@ export const CategoryBadge: React.FC<CategoryBadgeProps> = ({ category, classNam
   return (
     <span
       className={cn(
-        'inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider border select-none',
+        'inline-flex items-center px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider border select-none',
         bg,
         text,
         border,

@@ -227,7 +227,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccessRedirect, o
         <button
           type="submit"
           disabled={isLoading || isSuccess}
-          className="relative mt-2 flex h-11 w-full items-center justify-center rounded-xl bg-linear-to-r from-[#FF9A6B] to-[#FF6B9D] px-4 py-2 text-sm font-bold text-[#1A1A1A] shadow-[0_0_40px_rgba(255,154,107,0.30)] transition-all duration-300 hover:brightness-110 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 cursor-pointer overflow-hidden"
+          className="relative mt-2 flex h-11 w-full items-center justify-center rounded-lg bg-[#FF9A6B] hover:bg-[#FFB896] px-4 py-2 text-sm font-bold text-[#1A1A1A] transition-all duration-200 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 cursor-pointer overflow-hidden"
         >
           {isSuccess ? (
             <motion.div

@@ -127,8 +127,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccessRedirect, onSignU
 
         {/* Auth Error Display */}
         {authError && (
-          <div className="text-xs text-red-400 font-medium bg-red-500/10 border border-red-500/20 px-3 py-2 rounded-lg mt-1">
-            ⚠️ {authError}
+          <div className="text-xs text-red-400 font-medium bg-red-500/10 border border-red-500/20 px-3 py-2 rounded-lg mt-1 flex items-center gap-2">
+            <span>{authError}</span>
           </div>
         )}
 
@@ -136,7 +136,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccessRedirect, onSignU
         <button
           type="submit"
           disabled={isLoading || isSuccess}
-          className="relative mt-2 flex h-11 w-full items-center justify-center rounded-xl bg-linear-to-r from-[#FF9A6B] to-[#FF6B9D] px-4 py-2 text-sm font-bold text-[#1A1A1A] shadow-[0_0_40px_rgba(255,154,107,0.30)] transition-all duration-300 hover:brightness-110 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 cursor-pointer overflow-hidden"
+          className="relative mt-2 flex h-11 w-full items-center justify-center rounded-lg bg-[#FF9A6B] hover:bg-[#FFB896] px-4 py-2 text-sm font-bold text-[#1A1A1A] transition-all duration-200 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 cursor-pointer overflow-hidden"
         >
           {isSuccess ? (
             <motion.div
@@ -173,7 +173,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccessRedirect, onSignU
         type="button"
         onClick={handleGoogleSignIn}
         disabled={isLoading || isSuccess}
-        className="flex h-11 w-full items-center justify-center rounded-xl border border-white/10 bg-[#373D46] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-[#454C57] active:scale-[0.98] cursor-pointer"
+        className="flex h-11 w-full items-center justify-center rounded-lg border border-white/10 bg-[#373D46] px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-[#454C57] active:scale-[0.98] cursor-pointer"
       >
         <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" viewBox="0 0 488 512">
           <path

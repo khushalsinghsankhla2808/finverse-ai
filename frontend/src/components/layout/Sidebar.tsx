@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, NavLink } from 'react-router-dom';
+import { Logo } from '@/components/common/Logo';
 import { motion } from 'framer-motion';
 import {
   LayoutDashboard,
@@ -110,17 +111,13 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
               "flex items-center overflow-hidden transition-all duration-300",
               sidebarCollapsed ? "justify-center w-full" : "justify-start"
             )}>
-              {sidebarCollapsed ? (
-                <img src="/logo_icon.png" alt="FinVerse Logo" className="h-9 w-9 object-contain shrink-0" />
-              ) : (
-                <img src="/logo.png" alt="FinVerse AI Logo" className="h-12 object-contain shrink-0" />
-              )}
+              <Logo showWordmark={!sidebarCollapsed} />
             </div>
 
             {/* Collapse Toggle Button (Desktop only) */}
             <button
               onClick={toggleSidebar}
-              className="hidden lg:flex absolute -right-3 top-5 z-50 h-6 w-6 items-center justify-center rounded-full border border-white/10 bg-[#373D46] text-white/80 hover:bg-white/10 hover:text-white transition-colors cursor-pointer shadow-md"
+              className="hidden lg:flex absolute -right-3 top-5 z-50 h-6 w-6 items-center justify-center rounded-md border border-white/10 bg-[#373D46] text-white/80 hover:bg-white/10 hover:text-white transition-colors cursor-pointer shadow-md"
             >
               <motion.div
                 animate={{ rotate: sidebarCollapsed ? 180 : 0 }}
@@ -248,9 +245,9 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
           </div>
 
           {/* User Profile Section */}
-          <div className="border-t border-white/5 p-4 flex items-center justify-between overflow-hidden">
+          <div className="border-t border-white/5 p-4 flex flex-col gap-3">
             <div className="flex items-center gap-3 overflow-hidden">
-              <div className="h-9 w-9 shrink-0 flex items-center justify-center rounded-full bg-[#FF9A6B] text-[#1A1A1A] text-xs font-bold shadow-[0_0_12px_rgba(255,154,107,0.3)]">
+              <div className="h-9 w-9 shrink-0 flex items-center justify-center rounded-md bg-[#FF9A6B] text-[#1A1A1A] text-xs font-bold">
                 {user?.name ? user.name.slice(0, 2).toUpperCase() : 'US'}
               </div>
               {!sidebarCollapsed && (
@@ -263,17 +260,20 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
                     {user?.name || 'User Profile'}
                   </span>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] px-1.5 py-0.5 rounded-full font-bold bg-[#2DD4BF] text-[#1A1A1A] leading-none shadow-[0_0_10px_rgba(45,212,191,0.2)]">
-                      Premium
-                    </span>
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-md font-bold bg-[#2DD4BF] text-[#1A1A1A] leading-none">
+                      Active
                     </span>
                   </div>
                 </motion.div>
               )}
             </div>
+            {!sidebarCollapsed && (
+              <div className="flex items-center gap-3 text-[10px] text-white/40 pt-1 border-t border-white/5">
+                <NavLink to="/privacy" className="hover:text-white transition-colors">Privacy Policy</NavLink>
+                <span>•</span>
+                <NavLink to="/terms" className="hover:text-white transition-colors">Terms</NavLink>
+              </div>
+            )}
           </div>
         </div>
       </motion.aside>

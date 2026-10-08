@@ -280,7 +280,7 @@ export const Topbar: React.FC<{ onOpenMobile: () => void }> = ({ onOpenMobile })
           <div ref={profileRef} className="relative">
             <button
               onClick={() => setProfileOpen(!profileOpen)}
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-[#FF9A6B] text-[#1A1A1A] text-xs font-bold border border-[#FF9A6B]/30 hover:border-[#FF9A6B] transition-all cursor-pointer shadow-[0_0_12px_rgba(255,154,107,0.3)]"
+              className="flex h-9 w-9 items-center justify-center rounded-md bg-[#FF9A6B] text-[#1A1A1A] text-xs font-bold border border-[#FF9A6B]/30 hover:border-[#FF9A6B] transition-all cursor-pointer"
             >
               {user?.name ? user.name.slice(0, 2).toUpperCase() : 'US'}
             </button>

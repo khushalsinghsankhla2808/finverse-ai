@@ -338,7 +338,7 @@ export const ReportsPage: React.FC = () => {
                         key={cat}
                         type="button"
                         onClick={() => handleToggleCategory(cat)}
-                        className={`px-2.5 py-1 rounded-full text-[9px] font-bold cursor-pointer transition-all border ${
+                        className={`px-2.5 py-1 rounded-md text-[9px] font-bold cursor-pointer transition-all border ${
                           isSelected
                             ? 'bg-purple-primary/10 border-purple-primary/50 text-white shadow-glow-purple/2'
                             : 'bg-white/2 border-white/5 text-white/55 hover:border-white/12'
@@ -383,7 +383,7 @@ export const ReportsPage: React.FC = () => {
                   {history.map((rep) => (
                     <tr key={rep.id} className="border-b border-white/3 font-medium text-white/70">
                       <td className="py-3 px-3 flex items-center gap-2 max-w-150px">
-                        <span>{rep.format === 'pdf' ? '🔴' : rep.format === 'excel' ? '🟢' : '🔵'}</span>
+                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/5 border border-white/10 uppercase">{rep.format}</span>
                         <span className="font-semibold text-white truncate" title={rep.name}>
                           {rep.name}
                         </span>

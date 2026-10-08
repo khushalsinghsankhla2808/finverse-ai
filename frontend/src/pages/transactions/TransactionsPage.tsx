@@ -48,17 +48,17 @@ type TransactionFormValues = z.infer<typeof transactionSchema>;
 
 // Category options
 const CATEGORY_OPTIONS = [
-  { id: 'Housing', label: 'Housing', emoji: '🏠' },
-  { id: 'Food', label: 'Food', emoji: '🍔' },
-  { id: 'Transport', label: 'Transport', emoji: '🚗' },
-  { id: 'Shopping', label: 'Shopping', emoji: '🛍️' },
-  { id: 'Entertainment', label: 'Entertainment', emoji: '🎬' },
-  { id: 'Groceries', label: 'Groceries', emoji: '🛒' },
-  { id: 'Utilities', label: 'Utilities', emoji: '⚡' },
-  { id: 'Healthcare', label: 'Healthcare', emoji: '🏥' },
-  { id: 'Education', label: 'Education', emoji: '📚' },
-  { id: 'Investment', label: 'Investment', emoji: '📈' },
-  { id: 'Other', label: 'Other', emoji: '💰' },
+  { id: 'Housing', label: 'Housing' },
+  { id: 'Food', label: 'Food' },
+  { id: 'Transport', label: 'Transport' },
+  { id: 'Shopping', label: 'Shopping' },
+  { id: 'Entertainment', label: 'Entertainment' },
+  { id: 'Groceries', label: 'Groceries' },
+  { id: 'Utilities', label: 'Utilities' },
+  { id: 'Healthcare', label: 'Healthcare' },
+  { id: 'Education', label: 'Education' },
+  { id: 'Investment', label: 'Investment' },
+  { id: 'Other', label: 'Other' },
 ];
 
 export const TransactionsPage: React.FC = () => {
@@ -331,7 +331,7 @@ export const TransactionsPage: React.FC = () => {
 
   // Categories helper list to quickly render active icons
   const getCategoryEmoji = (cat: string) => {
-    return CATEGORY_OPTIONS.find((c) => c.id === cat)?.emoji || '💰';
+    return cat ? cat.slice(0, 2).toUpperCase() : 'TX';
   };
 
   return (
@@ -579,7 +579,7 @@ export const TransactionsPage: React.FC = () => {
                             <div className="flex items-center gap-3">
                               <div
                                 style={{ backgroundColor: `${categoryColor}15`, color: categoryColor }}
-                                className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs border border-white/5 select-none shrink-0"
+                                className="w-8 h-8 rounded-md flex items-center justify-center font-bold text-xs border border-white/5 select-none shrink-0"
                               >
                                 {initialLetter}
                               </div>
@@ -655,9 +655,9 @@ export const TransactionsPage: React.FC = () => {
                         />
                         <div
                           style={{ backgroundColor: `${categoryColor}15`, color: categoryColor }}
-                          className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs select-none shrink-0"
+                          className="w-9 h-9 rounded-md flex items-center justify-center font-bold text-xs select-none shrink-0"
                         >
-                          {getCategoryEmoji(txn.category)}
+                          {txn.category ? txn.category.slice(0, 2).toUpperCase() : 'TX'}
                         </div>
                         <div className="flex flex-col min-w-0">
                           <span className="font-semibold text-sm text-white truncate">
@@ -872,8 +872,7 @@ export const TransactionsPage: React.FC = () => {
                               : 'bg-white/2 border-white/5 text-white/60 hover:border-white/15 hover:text-white'
                           }`}
                         >
-                          <span className="text-lg leading-none">{cat.emoji}</span>
-                          <span className="font-semibold text-[10px] truncate max-w-full">
+                          <span className="font-semibold text-xs truncate max-w-full">
                             {cat.label}
                           </span>
                         </button>
@@ -1091,8 +1090,7 @@ export const TransactionsPage: React.FC = () => {
                               : 'bg-white/2 border-white/5 text-white/60 hover:border-white/15 hover:text-white'
                           }`}
                         >
-                          <span className="text-lg leading-none">{cat.emoji}</span>
-                          <span className="font-semibold text-[10px] truncate max-w-full">
+                          <span className="font-semibold text-xs truncate max-w-full">
                             {cat.label}
                           </span>
                         </button>

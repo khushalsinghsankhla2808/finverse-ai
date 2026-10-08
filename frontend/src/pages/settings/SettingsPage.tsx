@@ -277,7 +277,7 @@ export const SettingsPage: React.FC = () => {
       await authService.updateProfile({ currency: code });
       showToast(`Currency set to ${code}`, 'success');
     } catch {
-      // non-fatal — store is already updated client-side
+      // non-fatal: store is already updated client-side
     }
   };
 
@@ -302,9 +302,9 @@ export const SettingsPage: React.FC = () => {
       const url = res?.data?.downloadUrl;
       if (url) {
         window.open(url, '_blank');
-        showToast('Report generated — download started', 'success');
+        showToast('Report generated: download started', 'success');
       } else {
-        showToast('Report queued — check Reports page', 'success');
+        showToast('Report queued: check Reports page', 'success');
       }
     } catch (err: any) {
       showToast(err?.response?.data?.message || 'Export failed', 'error');

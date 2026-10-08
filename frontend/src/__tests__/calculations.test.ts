@@ -58,7 +58,7 @@ export const getDaysRemaining = (deadline: Date | string): number => {
 // --- Unit Tests ---
 
 describe('Calculations', () => {
-  describe('TEST GROUP 1 — Budget Utilization', () => {
+  describe('TEST GROUP 1 - Budget Utilization', () => {
     it('utilization of 500 spent against 1000 limit = 50%', () => {
       expect(calculateBudgetUtilization(500, 1000)).toBe(50);
     });
@@ -72,7 +72,7 @@ describe('Calculations', () => {
     });
   });
 
-  describe('TEST GROUP 2 — Goal Progress', () => {
+  describe('TEST GROUP 2 - Goal Progress', () => {
     it('currentAmount 750 / targetAmount 1000 = 75% progress', () => {
       expect(calculateGoalProgress(750, 1000)).toBe(75);
     });
@@ -90,7 +90,7 @@ describe('Calculations', () => {
     });
   });
 
-  describe('TEST GROUP 3 — Investment Gain/Loss', () => {
+  describe('TEST GROUP 3 - Investment Gain/Loss', () => {
     it('purchasePrice 100, currentPrice 150, quantity 10', () => {
       const result = calculateInvestmentGainLoss(100, 150, 10);
       expect(result.gainLoss).toBe(500);
@@ -107,7 +107,7 @@ describe('Calculations', () => {
     });
   });
 
-  describe('TEST GROUP 4 — Dashboard Stats', () => {
+  describe('TEST GROUP 4 - Dashboard Stats', () => {
     it('totalBalance = totalIncome - totalExpenses', () => {
       const result = calculateDashboardStats(5000, 2000, 4000);
       expect(result.totalBalance).toBe(3000);
@@ -130,7 +130,7 @@ describe('Calculations', () => {
     });
   });
 
-  describe('TEST GROUP 5 — Date Helpers', () => {
+  describe('TEST GROUP 5 - Date Helpers', () => {
     it('isThisMonth correctly identifies current month transactions', () => {
       expect(isThisMonth(new Date())).toBe(true);
       

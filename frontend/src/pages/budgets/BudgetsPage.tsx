@@ -39,17 +39,17 @@ const budgetCreateSchema = z.object({
 type BudgetFormValues = z.infer<typeof budgetCreateSchema>;
 
 const CATEGORIES_MAPPINGS = [
-  { category: 'Housing', emoji: '🏠', color: '#FF9A6B' },
-  { category: 'Food', emoji: '🍔', color: '#2DD4BF' },
-  { category: 'Transport', emoji: '🚗', color: '#10B981' },
-  { category: 'Shopping', emoji: '🛍️', color: '#F59E0B' },
-  { category: 'Entertainment', emoji: '🎬', color: '#F43F5E' },
-  { category: 'Groceries', emoji: '🛒', color: '#5EEAD4' },
-  { category: 'Utilities', emoji: '⚡', color: '#EC4899' },
-  { category: 'Healthcare', emoji: '🏥', color: '#14B8A6' },
-  { category: 'Education', emoji: '📚', color: '#FF9A6B' },
-  { category: 'Investment', emoji: '📈', color: '#F59E0B' },
-  { category: 'Other', emoji: '💰', color: '#6B7280' },
+  { category: 'Housing', color: '#FF9A6B' },
+  { category: 'Food', color: '#2DD4BF' },
+  { category: 'Transport', color: '#10B981' },
+  { category: 'Shopping', color: '#F59E0B' },
+  { category: 'Entertainment', color: '#F43F5E' },
+  { category: 'Groceries', color: '#5EEAD4' },
+  { category: 'Utilities', color: '#EC4899' },
+  { category: 'Healthcare', color: '#14B8A6' },
+  { category: 'Education', color: '#FF9A6B' },
+  { category: 'Investment', color: '#F59E0B' },
+  { category: 'Other', color: '#6B7280' },
 ];
 
 export const BudgetsPage: React.FC = () => {
@@ -102,7 +102,7 @@ export const BudgetsPage: React.FC = () => {
 
   // Submit create budget
   const onCreateSubmit = async (values: BudgetFormValues) => {
-    const matchingIcon = CATEGORIES_MAPPINGS.find((c) => c.category === values.category)?.emoji || '💰';
+    const matchingIcon = values.category ? values.category.slice(0, 2).toUpperCase() : 'BU';
     const matchingColor = CATEGORIES_MAPPINGS.find((c) => c.category === values.category)?.color || '#6B7280';
 
     try {
@@ -404,8 +404,8 @@ export const BudgetsPage: React.FC = () => {
                             : 'bg-white/2 border-white/5 text-white/60 hover:border-white/15 hover:text-white disabled:opacity-30 disabled:pointer-events-none'
                         }`}
                       >
-                        <span className="text-xl leading-none">{cat.emoji}</span>
-                        <span className="font-semibold text-[10px] truncate max-w-full">
+
+                        <span className="font-semibold text-xs truncate max-w-full">
                           {cat.category}
                         </span>
                         {isBudgeted && (
