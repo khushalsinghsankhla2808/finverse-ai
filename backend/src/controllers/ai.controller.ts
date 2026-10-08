@@ -77,7 +77,7 @@ const getFinancialContextText = async (userId: string) => {
   startOf30DaysAgo.setDate(startOf30DaysAgo.getDate() - 30);
 
   const [txns, budgets, goals] = await Promise.all([
-    TransactionModel.find({ userId, date: { $gte: startOf30DaysAgo } }).sort({ date: -1 }).limit(50),
+    TransactionModel.find({ userId, date: { $gte: startOf30DaysAgo } }).sort({ date: -1 }),
     BudgetModel.find({ userId }),
     GoalModel.find({ userId, isCompleted: false }),
   ]);

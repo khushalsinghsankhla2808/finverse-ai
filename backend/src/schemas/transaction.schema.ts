@@ -15,8 +15,12 @@ export const transactionSchema = z.object({
   }),
   amount: z
     .number({ required_error: 'Amount is required' })
+    .finite('Amount must be a finite number')
     .positive('Amount must be positive')
-    .max(1_000_000_000, 'Amount must not exceed 1,000,000,000'),
+    .max(1_000_000_000, 'Amount must not exceed 1,000,000,000')
+    .refine((val) => Math.round(val * 100) === val * 100, {
+      message: 'Amount cannot have more than 2 decimal places',
+    }),
   category: z
     .string()
     .min(1, 'Category is required')

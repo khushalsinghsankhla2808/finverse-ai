@@ -9,13 +9,32 @@ import budgetService from '@/services/budgetService';
 import goalService from '@/services/goalService';
 import investmentService from '@/services/investmentService';
 
-// Helper to recalculate budget spent from transactions
+// Helper to recalculate budget spent from transactions within current period (IST)
 const recalculateSpent = (transactions: Transaction[], budgets: Budget[]): Budget[] => {
+  const now = new Date();
+  const istOffsetMs = 330 * 60 * 1000;
+  const istNow = new Date(now.getTime() + istOffsetMs);
+  const istYear = istNow.getUTCFullYear();
+  const istMonth = istNow.getUTCMonth();
+
+  const startOfMonth = new Date(Date.UTC(istYear, istMonth, 1, 0, 0, 0) - istOffsetMs);
+  const endOfMonth = new Date(Date.UTC(istYear, istMonth + 1, 0, 23, 59, 59, 999) - istOffsetMs);
+
   return budgets.map((b) => {
     const spent = transactions
-      .filter((t) => t.category === b.category && t.type === 'expense')
+      .filter((t) => {
+        if (t.category !== b.category || t.type !== 'expense') return false;
+        const d = new Date(t.date);
+        if (b.period === 'monthly' || !b.period) {
+          return d >= startOfMonth && d <= endOfMonth;
+        }
+        const dayOfWeek = istNow.getUTCDay();
+        const startOfWeek = new Date(Date.UTC(istYear, istMonth, istNow.getUTCDate() - dayOfWeek, 0, 0, 0) - istOffsetMs);
+        const endOfWeek = new Date(startOfWeek.getTime() + 7 * 24 * 60 * 60 * 1000 - 1);
+        return d >= startOfWeek && d <= endOfWeek;
+      })
       .reduce((sum, t) => sum + Math.abs(t.amount), 0);
-    return { ...b, spent };
+    return { ...b, spent: Math.round(spent * 100) / 100 };
   });
 };
 
