@@ -17,13 +17,13 @@ import { useCurrencyStore } from "@/stores/currencyStore";
 import { useToast } from "@/hooks/useToast";
 import type { Goal } from "@/types/finance.types";
 import { formatINR, formatDate } from "@/lib/utils";
+import { renderCategoryIcon } from "@/lib/categoryIcons";
 import PageTransition from "@/components/common/PageTransition";
 import Modal from "@/components/common/Modal";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
 import Button from "@/components/common/Button";
 import EmptyState from "@/components/common/EmptyState";
 
-// Validation schemas
 const goalCreateSchema = z.object({
   name: z
     .string()
@@ -39,7 +39,7 @@ const goalCreateSchema = z.object({
     .min(0, "Saved amount cannot be negative"),
   deadline: z.string().min(1, "Deadline date is required"),
   color: z.string().min(1, "Color is required"),
-  icon: z.string().min(1, "Icon emoji is required"),
+  icon: z.string().min(1, "Icon tag is required"),
 });
 
 const addMoneySchema = z.object({
@@ -50,17 +50,16 @@ const addMoneySchema = z.object({
 
 type GoalFormValues = z.infer<typeof goalCreateSchema>;
 
-// Preset colors and emojis
 const PRESET_COLORS = [
-  "#FF9A6B",
-  "#2DD4BF",
-  "#FF6B9D",
-  "#FFB896",
-  "#5EEAD4",
-  "#FACC15",
+  "#0466c8",
+  "#0353a4",
+  "#023e7d",
+  "#002855",
+  "#33415c",
+  "#5c677d",
 ];
 
-const PRESET_EMOJIS = [
+const PRESET_TAGS = [
   "SAFE",
   "TRVL",
   "TECH",
@@ -85,16 +84,14 @@ const CATEGORY_OPTIONS = [
   "Other",
 ];
 
-// Confetti Effect for Completed Goals
 const GoalConfetti: React.FC = () => {
   const confettiParticles = useMemo(() => {
     const colors = [
-      "#FF9A6B",
-      "#2DD4BF",
-      "#FF6B9D",
-      "#FFB896",
-      "#5EEAD4",
-      "#FACC15",
+      "var(--smart-blue)",
+      "var(--sapphire)",
+      "var(--regal-navy)",
+      "var(--twilight-indigo)",
+      "var(--blue-slate)",
     ];
     return Array.from({ length: 25 }).map((_, i) => ({
       id: i,
@@ -138,13 +135,11 @@ export const GoalsPage: React.FC = () => {
   const { showToast } = useToast();
   const { activeCurrency } = useCurrencyStore();
 
-  // Dialog and edit state
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editingGoal, setEditingGoal] = useState<Goal | null>(null);
   const [deletingGoalId, setDeletingGoalId] = useState<string | null>(null);
   const [addingMoneyGoal, setAddingMoneyGoal] = useState<Goal | null>(null);
 
-  // Forms
   const {
     register: registerGoal,
     handleSubmit: handleGoalSubmit,
@@ -161,7 +156,7 @@ export const GoalsPage: React.FC = () => {
       currentAmount: 0,
       deadline: "",
       color: PRESET_COLORS[0],
-      icon: PRESET_EMOJIS[0],
+      icon: PRESET_TAGS[0],
     },
   });
 
@@ -177,7 +172,6 @@ export const GoalsPage: React.FC = () => {
     resolver: zodResolver(addMoneySchema),
   });
 
-  // Summary Metrics calculations
   const summary = useMemo(() => {
     const active = goals.length;
     const target = goals.reduce((sum, g) => sum + g.targetAmount, 0);
@@ -185,7 +179,6 @@ export const GoalsPage: React.FC = () => {
     return { active, target, saved };
   }, [goals]);
 
-  // Days left calculation helper
   const getDaysRemaining = (deadlineStr: string) => {
     const diffTime = new Date(deadlineStr).getTime() - new Date().getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -196,27 +189,24 @@ export const GoalsPage: React.FC = () => {
     if (days < 0)
       return {
         text: "Overdue",
-        style: "bg-red-negative/10 border-red-negative/20 text-red-negative",
+        style: "bg-red-500/10 border-red-500/20 amount-loss",
       };
     if (days < 30)
       return {
         text: `${days} days left`,
-        style:
-          "bg-red-negative/10 border-red-negative/20 text-red-negative animate-pulse",
+        style: "bg-red-500/10 border-red-500/20 amount-loss",
       };
     if (days <= 90)
       return {
         text: `${days} days left`,
-        style: "bg-gold-savings/10 border-gold-savings/20 text-gold-savings",
+        style: "bg-amber-500/10 border-amber-500/20 text-warning",
       };
     return {
       text: `${days} days left`,
-      style:
-        "bg-green-positive/10 border-green-positive/20 text-green-positive",
+      style: "bg-emerald-500/10 border-emerald-500/20 amount-gain",
     };
   };
 
-  // Submit create goal
   const onCreateSubmit = async (values: GoalFormValues) => {
     try {
       addGoal({
@@ -237,7 +227,6 @@ export const GoalsPage: React.FC = () => {
     }
   };
 
-  // Submit edit goal
   const onEditSubmit = async (values: GoalFormValues) => {
     if (!editingGoal) return;
 
@@ -259,7 +248,6 @@ export const GoalsPage: React.FC = () => {
     }
   };
 
-  // Submit add money
   const onAddMoneySubmit = async (values: { amount: number }) => {
     if (!addingMoneyGoal) return;
 
@@ -308,14 +296,14 @@ export const GoalsPage: React.FC = () => {
 
   return (
     <PageTransition>
-      <div className="space-y-6">
+      <div className="space-y-6 text-ink">
         {/* Header Row */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3xl font-display font-bold text-white tracking-tight">
+            <h1 className="text-3xl font-sans font-bold tracking-tight">
               Savings Goals
             </h1>
-            <p className="text-xs text-white/50 font-medium">
+            <p className="text-xs text-ink-muted font-medium">
               Set, target, and monitor wealth objectives
             </p>
           </div>
@@ -340,44 +328,44 @@ export const GoalsPage: React.FC = () => {
           <>
             {/* Summary Row */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-purple/2">
+              <div className="card">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">
+                  <span className="text-xs font-semibold text-ink-subtle uppercase tracking-wider">
                     Active Goals
                   </span>
-                  <div className="w-8 h-8 rounded-lg bg-purple-primary/10 border border-purple-primary/20 flex items-center justify-center text-purple-light">
+                  <div className="w-8 h-8 rounded-[var(--radius-control)] bg-surface-sunken border border-line flex items-center justify-center text-primary">
                     <Target size={16} />
                   </div>
                 </div>
-                <h2 className="text-2xl font-bold text-white font-mono mt-3">
+                <h2 className="text-2xl font-bold text-ink font-mono mt-3">
                   {summary.active}
                 </h2>
               </div>
 
-              <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-blue/2">
+              <div className="card">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">
+                  <span className="text-xs font-semibold text-ink-subtle uppercase tracking-wider">
                     Total Saved
                   </span>
-                  <div className="w-8 h-8 rounded-lg bg-blue-primary/10 border border-blue-primary/20 flex items-center justify-center text-blue-primary">
+                  <div className="w-8 h-8 rounded-[var(--radius-control)] bg-surface-sunken border border-line flex items-center justify-center text-primary">
                     <TrendingUp size={16} />
                   </div>
                 </div>
-                <h2 className="text-2xl font-bold text-white font-mono mt-3">
+                <h2 className="text-2xl font-bold text-ink font-mono mt-3">
                   {summary.saved}
                 </h2>
               </div>
 
-              <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-green/2">
+              <div className="card">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">
+                  <span className="text-xs font-semibold text-ink-subtle uppercase tracking-wider">
                     Total Target
                   </span>
-                  <div className="w-8 h-8 rounded-lg bg-green-positive/10 border border-green-positive/20 flex items-center justify-center text-green-positive">
+                  <div className="w-8 h-8 rounded-[var(--radius-control)] bg-surface-sunken border border-line flex items-center justify-center amount-gain">
                     <Trophy size={16} />
                   </div>
                 </div>
-                <h2 className="text-2xl font-bold text-white font-mono mt-3">
+                <h2 className="text-2xl font-bold text-ink font-mono mt-3">
                   {summary.target}
                 </h2>
               </div>
@@ -386,47 +374,42 @@ export const GoalsPage: React.FC = () => {
             {/* Goals cards grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {goals.map((g) => {
-                const percentage = Math.min(100,
+                const percentage = Math.min(
+                  100,
                   g.targetAmount > 0
                     ? (g.currentAmount / g.targetAmount) * 100
-                    : 0);
+                    : 0
+                );
                 const isCompleted = percentage >= 100;
                 const remaining = g.targetAmount - g.currentAmount;
 
                 const daysLeft = getDaysRemaining(g.deadline);
                 const daysBadge = getDaysBadge(daysLeft);
 
-                // Circular progress calculations
                 const radius = 45;
                 const circumference = 2 * Math.PI * radius;
                 const strokeOffset =
                   circumference * (1 - Math.min(100, percentage) / 100);
 
-                // Card borders
-                const cardStyles = isCompleted
-                  ? "border-gold-savings shadow-glow-gold/10"
-                  : "border-white/8 hover:shadow-glow-purple/2";
-
                 return (
                   <motion.div
                     key={g.id}
                     layout
-                    className={`glassmorphism bg-bg-surface/40 rounded-[20px] p-6 border flex flex-col justify-between hover:scale-[1.01] transition-all duration-300 relative ${cardStyles}`}
+                    className="card flex flex-col justify-between relative"
                   >
-                    {/* Render Confetti on achiever state */}
                     {isCompleted && <GoalConfetti />}
 
                     {/* Top Section */}
                     <div className="flex justify-between items-start gap-4">
                       <div className="flex items-center gap-3 min-w-0">
-                        <span className="text-2xl shrink-0 w-11 h-11 rounded-2xl bg-white/4 border border-white/8 flex items-center justify-center select-none">
-                          {g.icon}
-                        </span>
+                        <div className="w-10 h-10 rounded-[var(--radius-control)] bg-surface-sunken border border-line flex items-center justify-center text-primary">
+                          {renderCategoryIcon(g.category)}
+                        </div>
                         <div className="min-w-0">
-                          <h3 className="font-display font-extrabold text-sm text-white truncate">
+                          <h3 className="font-sans font-bold text-sm text-ink truncate">
                             {g.name}
                           </h3>
-                          <span className="text-[10px] uppercase font-bold tracking-wider text-white/40">
+                          <span className="text-[10px] uppercase font-bold tracking-wider text-ink-subtle">
                             {g.category}
                           </span>
                         </div>
@@ -435,13 +418,13 @@ export const GoalsPage: React.FC = () => {
                       <div className="flex items-center gap-1.5 shrink-0 z-20">
                         <button
                           onClick={() => triggerEdit(g)}
-                          className="p-1 rounded-lg text-white/30 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
+                          className="p-1 rounded-[var(--radius-control)] text-ink-subtle hover:text-ink hover:bg-surface-sunken transition-all cursor-pointer"
                         >
                           <Edit2 size={13} />
                         </button>
                         <button
                           onClick={() => setDeletingGoalId(g.id)}
-                          className="p-1 rounded-lg text-white/30 hover:text-red-negative hover:bg-red-negative/5 transition-all cursor-pointer"
+                          className="p-1 rounded-[var(--radius-control)] text-ink-subtle hover:text-loss hover:bg-red-500/10 transition-all cursor-pointer"
                         >
                           <Trash2 size={13} />
                         </button>
@@ -450,27 +433,23 @@ export const GoalsPage: React.FC = () => {
 
                     {/* Ring & Data content */}
                     <div className="flex items-center justify-between gap-6 my-6">
-                      {/* Left Column values */}
                       <div className="space-y-3 min-w-0">
                         <div className="flex flex-col">
-                          <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider leading-none">
+                          <span className="text-[10px] text-ink-subtle uppercase font-bold tracking-wider leading-none">
                             Saved amount
                           </span>
-                          <span
-                            className="text-xl font-bold font-mono mt-1.5 leading-none"
-                            style={{ color: g.color }}
-                          >
+                          <span className="text-xl font-bold font-mono mt-1.5 leading-none text-primary">
                             {formatINR(g.currentAmount)}
                           </span>
-                          <span className="text-xs text-white/40 mt-1 leading-none">
+                          <span className="text-xs text-ink-subtle mt-1 leading-none">
                             of {formatINR(g.targetAmount)}
                           </span>
                         </div>
 
-                        <p className="text-xs text-white/50">
+                        <p className="text-xs text-ink-muted">
                           {isCompleted ? (
-                            <span className="text-gold-savings font-bold">
-                              🎉 Goal Achieved!
+                            <span className="amount-gain font-bold">
+                              Goal Achieved!
                             </span>
                           ) : (
                             <span>{formatINR(remaining)} to go</span>
@@ -488,7 +467,7 @@ export const GoalsPage: React.FC = () => {
                             cx="50"
                             cy="50"
                             r={radius}
-                            className="stroke-white/5"
+                            className="stroke-line"
                             strokeWidth="7"
                             fill="transparent"
                           />
@@ -496,18 +475,18 @@ export const GoalsPage: React.FC = () => {
                             cx="50"
                             cy="50"
                             r={radius}
-                            stroke={isCompleted ? "#F59E0B" : g.color}
+                            stroke="var(--primary)"
                             strokeWidth="7"
                             fill="transparent"
                             strokeLinecap="round"
                             strokeDasharray={circumference}
                             initial={{ strokeDashoffset: circumference }}
                             animate={{ strokeDashoffset: strokeOffset }}
-                            transition={{ duration: 1.0, ease: "easeOut" }}
+                            transition={{ duration: 0.5, ease: "easeOut" }}
                           />
                         </svg>
                         <div className="absolute inset-0 flex flex-col items-center justify-center leading-none">
-                          <span className="text-base font-bold font-mono text-white">
+                          <span className="text-base font-bold font-mono text-ink">
                             {percentage.toFixed(0)}%
                           </span>
                         </div>
@@ -515,14 +494,14 @@ export const GoalsPage: React.FC = () => {
                     </div>
 
                     {/* Bottom stats row */}
-                    <div className="border-t border-white/5 pt-4 space-y-4">
+                    <div className="border-t border-line pt-4 space-y-4">
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1.5 text-white/50 text-xs">
+                        <div className="flex items-center gap-1.5 text-ink-subtle text-xs">
                           <Calendar size={13} className="shrink-0" />
                           <span>Target: {formatDate(g.deadline)}</span>
                         </div>
                         <span
-                          className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${daysBadge.style}`}
+                          className={`text-[10px] font-bold px-2 py-0.5 rounded-[var(--radius-control)] border ${daysBadge.style}`}
                         >
                           {daysBadge.text}
                         </span>
@@ -531,11 +510,7 @@ export const GoalsPage: React.FC = () => {
                       {!isCompleted && (
                         <button
                           onClick={() => setAddingMoneyGoal(g)}
-                          className="w-full py-2 border border-dashed rounded-xl text-xs font-bold transition-all hover:bg-white/4 cursor-pointer"
-                          style={{
-                            borderColor: `${g.color}35`,
-                            color: g.color,
-                          }}
+                          className="w-full py-2 border border-dashed border-line rounded-[var(--radius-control)] text-xs font-bold text-primary transition-all hover:bg-surface-sunken cursor-pointer"
                         >
                           + Save Money
                         </button>
@@ -572,36 +547,34 @@ export const GoalsPage: React.FC = () => {
               onSubmit={handleMoneySubmit(onAddMoneySubmit)}
               className="space-y-6"
             >
-              {/* Progress Summary info */}
-              <div className="bg-white/3 border border-white/5 rounded-xl p-4 flex items-center justify-between">
+              <div className="bg-surface-sunken border border-line rounded-[var(--radius-control)] p-4 flex items-center justify-between">
                 <div className="flex flex-col">
-                  <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider">
+                  <span className="text-[10px] text-ink-subtle uppercase font-bold tracking-wider">
                     Current savings
                   </span>
-                  <span className="text-base font-bold font-mono text-white mt-1">
+                  <span className="text-base font-bold font-mono text-ink mt-1">
                     {formatINR(addingMoneyGoal.currentAmount)}
                   </span>
                 </div>
                 <div className="flex flex-col text-right">
-                  <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider">
+                  <span className="text-[10px] text-ink-subtle uppercase font-bold tracking-wider">
                     Remaining target
                   </span>
-                  <span className="text-base font-bold font-mono text-purple-light mt-1">
+                  <span className="text-base font-bold font-mono text-primary mt-1">
                     {formatINR(
                       addingMoneyGoal.targetAmount -
-                        addingMoneyGoal.currentAmount,
+                        addingMoneyGoal.currentAmount
                     )}
                   </span>
                 </div>
               </div>
 
-              {/* Amount input */}
-              <div className="flex flex-col items-center py-4 border-b border-white/10 focus-within:border-purple-primary transition-colors">
-                <span className="text-xs text-white/45 uppercase font-bold tracking-wider mb-2">
+              <div className="flex flex-col items-center py-4 border-b border-line">
+                <span className="text-xs text-ink-subtle uppercase font-bold tracking-wider mb-2">
                   Contribution Amount
                 </span>
                 <div className="flex items-center justify-center w-full">
-                  <span className="text-3xl font-display font-bold mr-2 text-purple-light">
+                  <span className="text-3xl font-sans font-bold mr-2 text-primary">
                     ₹
                   </span>
                   <input
@@ -610,11 +583,11 @@ export const GoalsPage: React.FC = () => {
                     placeholder="0"
                     autoFocus
                     {...registerMoney("amount", { valueAsNumber: true })}
-                    className="bg-transparent text-center font-mono font-bold text-4xl text-white placeholder:text-white/15 focus:outline-hidden min-w-0 max-w-[200px]"
+                    className="bg-transparent text-center font-mono font-bold text-4xl text-ink placeholder:text-ink-subtle focus:outline-hidden min-w-0 max-w-[200px]"
                   />
                 </div>
                 {moneyErrors.amount && (
-                  <span className="text-[11px] text-red-negative mt-2 font-medium">
+                  <span className="text-[11px] amount-loss mt-2 font-medium">
                     {moneyErrors.amount.message}
                   </span>
                 )}
@@ -656,7 +629,7 @@ export const GoalsPage: React.FC = () => {
         >
           <form
             onSubmit={handleGoalSubmit(
-              editingGoal ? onEditSubmit : onCreateSubmit,
+              editingGoal ? onEditSubmit : onCreateSubmit
             )}
             className="space-y-6"
           >
@@ -664,70 +637,67 @@ export const GoalsPage: React.FC = () => {
               {/* Left Column */}
               <div className="space-y-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
-                    Goal Name <span className="text-red-negative">*</span>
+                  <label className="text-xs font-bold text-ink-subtle uppercase tracking-wider">
+                    Goal Name *
                   </label>
                   <input
                     type="text"
                     placeholder="e.g. Dream Bike, Emergency Fund"
                     {...registerGoal("name")}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
+                    className="input"
                   />
                   {goalErrors.name && (
-                    <span className="text-[11px] text-red-negative font-medium">
+                    <span className="text-[11px] amount-loss font-medium">
                       {goalErrors.name.message}
                     </span>
                   )}
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
-                    Category <span className="text-red-negative">*</span>
+                  <label className="text-xs font-bold text-ink-subtle uppercase tracking-wider">
+                    Category *
                   </label>
                   <select
                     {...registerGoal("category")}
-                    className="w-full bg-bg-surface border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all"
+                    className="input"
                   >
                     {CATEGORY_OPTIONS.map((c) => (
                       <option
                         key={c}
                         value={c}
-                        className="bg-bg-surface text-white"
+                        className="bg-surface text-ink"
                       >
                         {c}
                       </option>
                     ))}
                   </select>
                   {goalErrors.category && (
-                    <span className="text-[11px] text-red-negative font-medium">
+                    <span className="text-[11px] amount-loss font-medium">
                       {goalErrors.category.message}
                     </span>
                   )}
                 </div>
 
-                {/* Target Amount */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
-                    Target Amount (INR){" "}
-                    <span className="text-red-negative">*</span>
+                  <label className="text-xs font-bold text-ink-subtle uppercase tracking-wider">
+                    Target Amount (INR) *
                   </label>
                   <input
                     type="number"
                     placeholder="e.g. 100000"
                     {...registerGoal("targetAmount", { valueAsNumber: true })}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20 font-mono"
+                    className="input font-mono"
                   />
                   {goalErrors.targetAmount && (
-                    <span className="text-[11px] text-red-negative font-medium">
+                    <span className="text-[11px] amount-loss font-medium">
                       {goalErrors.targetAmount.message}
                     </span>
                   )}
                 </div>
 
-                {/* Initial amount saved - show only when creating */}
                 {!editingGoal && (
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
+                    <label className="text-xs font-bold text-ink-subtle uppercase tracking-wider">
                       Already Saved Amount (INR)
                     </label>
                     <input
@@ -736,10 +706,10 @@ export const GoalsPage: React.FC = () => {
                       {...registerGoal("currentAmount", {
                         valueAsNumber: true,
                       })}
-                      className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20 font-mono"
+                      className="input font-mono"
                     />
                     {goalErrors.currentAmount && (
-                      <span className="text-[11px] text-red-negative font-medium">
+                      <span className="text-[11px] amount-loss font-medium">
                         {goalErrors.currentAmount.message}
                       </span>
                     )}
@@ -749,24 +719,23 @@ export const GoalsPage: React.FC = () => {
 
               {/* Right Column */}
               <div className="space-y-4">
-                {/* Deadline */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
-                    Target Date <span className="text-red-negative">*</span>
+                  <label className="text-xs font-bold text-ink-subtle uppercase tracking-wider">
+                    Target Date *
                   </label>
                   <div className="relative">
                     <Calendar
-                      className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-subtle"
                       size={16}
                     />
                     <input
                       type="date"
                       {...registerGoal("deadline")}
-                      className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:outline-hidden transition-all"
+                      className="input pl-10"
                     />
                   </div>
                   {goalErrors.deadline && (
-                    <span className="text-[11px] text-red-negative font-medium">
+                    <span className="text-[11px] amount-loss font-medium">
                       {goalErrors.deadline.message}
                     </span>
                   )}
@@ -774,9 +743,8 @@ export const GoalsPage: React.FC = () => {
 
                 {/* Color presets selection */}
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-white/50 uppercase tracking-wider block">
-                    Choose Theme Color{" "}
-                    <span className="text-red-negative">*</span>
+                  <label className="text-xs font-bold text-ink-subtle uppercase tracking-wider block">
+                    Choose Theme Color *
                   </label>
                   <div className="flex gap-3">
                     {PRESET_COLORS.map((col) => {
@@ -787,10 +755,10 @@ export const GoalsPage: React.FC = () => {
                           type="button"
                           onClick={() => setGoalValue("color", col)}
                           style={{ backgroundColor: col }}
-                          className={`w-8 h-8 rounded-md border cursor-pointer flex items-center justify-center transition-all ${
+                          className={`w-8 h-8 rounded-[var(--radius-control)] border cursor-pointer flex items-center justify-center transition-all ${
                             isSelected
-                              ? "ring-2 ring-purple-light scale-110 border-white"
-                              : "border-transparent hover:scale-105"
+                              ? "ring-2 ring-primary border-white"
+                              : "border-transparent"
                           }`}
                         >
                           {isSelected && (
@@ -802,26 +770,26 @@ export const GoalsPage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Emojis selector */}
+                {/* Icon tag selector */}
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-white/50 uppercase tracking-wider block">
-                    Goal Icon <span className="text-red-negative">*</span>
+                  <label className="text-xs font-bold text-ink-subtle uppercase tracking-wider block">
+                    Goal Icon Tag *
                   </label>
                   <div className="grid grid-cols-6 gap-2">
-                    {PRESET_EMOJIS.map((emoji) => {
-                      const isSelected = formIcon === emoji;
+                    {PRESET_TAGS.map((tag) => {
+                      const isSelected = formIcon === tag;
                       return (
                         <button
-                          key={emoji}
+                          key={tag}
                           type="button"
-                          onClick={() => setGoalValue("icon", emoji)}
-                          className={`w-10 h-10 rounded-md border text-xs font-bold flex items-center justify-center transition-all cursor-pointer ${
+                          onClick={() => setGoalValue("icon", tag)}
+                          className={`w-10 h-10 rounded-[var(--radius-control)] border text-xs font-bold flex items-center justify-center transition-all cursor-pointer ${
                             isSelected
-                              ? "bg-purple-primary/10 border-purple-primary shadow-inner scale-110"
-                              : "bg-white/2 border-white/5 hover:border-white/15"
+                              ? "bg-primary text-on-primary border-primary"
+                              : "bg-surface border-line text-ink-muted hover:border-ink-subtle"
                           }`}
                         >
-                          {emoji}
+                          {tag}
                         </button>
                       );
                     })}
@@ -830,8 +798,7 @@ export const GoalsPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Modal actions footer */}
-            <div className="flex justify-end gap-3 border-t border-white/5 pt-4">
+            <div className="flex justify-end gap-3 border-t border-line pt-4">
               <Button
                 variant="ghost"
                 onClick={() => {

@@ -58,7 +58,7 @@ export class ErrorBoundary extends Component<Props, State> {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: '#0F0A1C',
+            background: '#001233',
             fontFamily: 'Inter, system-ui, sans-serif',
             padding: '2rem',
           }}
@@ -120,7 +120,7 @@ export class ErrorBoundary extends Component<Props, State> {
                   padding: '0.625rem 1.5rem',
                   borderRadius: '0.5rem',
                   border: 'none',
-                  background: '#7C3AED',
+                  background: '#0466c8',
                   color: '#FFFFFF',
                   fontSize: '0.9rem',
                   fontWeight: 500,

@@ -41,19 +41,19 @@ export const formatDate = (dateStr: string): string => {
 // Get category color
 export const getCategoryColor = (category: string): string => {
   const colors: Record<string, string> = {
-    Housing: '#FF9A6B',
-    Food: '#2DD4BF',
-    Transport: '#FF6B9D',
-    Shopping: '#FFB896',
-    Entertainment: '#5EEAD4',
-    Groceries: '#2DD4BF',
-    Utilities: '#FACC15',
+    Housing: '#0466c8',
+    Food: '#0353a4',
+    Transport: '#023e7d',
+    Shopping: '#002855',
+    Entertainment: '#33415c',
+    Groceries: '#0353a4',
+    Utilities: '#5c677d',
     Income: '#22C55E',
-    Transfer: '#2DD4BF',
-    Healthcare: '#5EEAD4',
-    Education: '#FF9A6B',
-    Investment: '#FFB896',
-    Other: '#7B8494',
+    Transfer: '#0353a4',
+    Healthcare: '#33415c',
+    Education: '#0466c8',
+    Investment: '#002855',
+    Other: '#7d8597',
   };
-  return colors[category] ?? '#7B8494';
+  return colors[category] ?? '#7d8597';
 };

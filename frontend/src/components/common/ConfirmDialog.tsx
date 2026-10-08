@@ -55,11 +55,11 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} size="sm" footer={footer}>
       <div className="flex flex-col items-center gap-4 text-center py-2">
-        <div className="w-12 h-12 rounded-full bg-red-negative/10 flex items-center justify-center border border-red-negative/20 text-red-negative shadow-glow-red/5">
+        <div className="w-12 h-12 rounded-[var(--radius-control)] bg-red-500/10 flex items-center justify-center border border-red-500/20 text-loss">
           <AlertTriangle size={24} />
         </div>
         <div className="flex flex-col gap-1.5">
-          <p className="text-sm text-white/70 leading-relaxed px-2">
+          <p className="text-sm text-ink-muted leading-relaxed px-2">
             {message}
           </p>
         </div>

@@ -10,13 +10,11 @@ import {
   ArrowDownRight,
   Target,
   ChevronRight,
-  ShoppingBag,
-  Bus,
-  Coffee,
-  Coins,
   UploadCloud,
+  Bot,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
 import {
   PieChart,
   Pie,
@@ -32,7 +30,8 @@ import {
 import { useFinanceStore } from '@/stores/financeStore';
 import { useToast } from '@/hooks/useToast';
 import { useCurrencyStore } from '@/stores/currencyStore';
-import { formatINR, formatINRCompact, getCategoryColor, formatDate } from '@/lib/utils';
+import { formatINR, formatINRCompact, formatDate } from '@/lib/utils';
+import { renderCategoryIcon } from '@/lib/categoryIcons';
 
 import KPICard from '@/components/dashboard/KPICard';
 import KPICardSkeleton from '@/components/dashboard/KPICardSkeleton';
@@ -43,10 +42,8 @@ import PageTransition from '@/components/common/PageTransition';
 import AnimatedNumber from '@/components/common/AnimatedNumber';
 import Modal from '@/components/common/Modal';
 import Button from '@/components/common/Button';
-import EmptyState from '@/components/common/EmptyState';    
+import EmptyState from '@/components/common/EmptyState';
 
-
-// Add validation schema for Quick Action modal
 const quickTxnSchema = z.object({
   type: z.enum(['income', 'expense', 'transfer']),
   amount: z
@@ -77,7 +74,7 @@ const CATEGORY_OPTIONS = [
 
 const GlobeFallback = () => (
   <div className="w-full h-full flex items-center justify-center">
-    <div className="animate-spin-ring w-12 h-12 border-2 border-purple-primary border-t-transparent rounded-full" />
+    <div className="w-8 h-8 border-2 border-[var(--smart-blue)] border-t-transparent rounded-[var(--radius-control)] animate-spin" />
   </div>
 );
 
@@ -90,7 +87,6 @@ export const DashboardPage: React.FC = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [receiptFile, setReceiptFile] = useState<string | null>(null);
 
-  // Form setup
   const {
     register,
     handleSubmit,
@@ -113,13 +109,11 @@ export const DashboardPage: React.FC = () => {
   const formType = watch('type');
   const formCategory = watch('category');
 
-  // Simulate skeleton load
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 500);
+    const timer = setTimeout(() => setLoading(false), 300);
     return () => clearTimeout(timer);
   }, []);
 
-  // Compute stats dynamically, preserving checklist base values on load
   const stats = useMemo(() => {
     const today = new Date();
     const currentMonth = today.getMonth();
@@ -179,14 +173,12 @@ export const DashboardPage: React.FC = () => {
     };
   }, [transactions]);
 
-  // Sort and fetch recent 5 transactions
   const recentTransactions = useMemo(() => {
     const sorted = [...transactions];
     sorted.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     return sorted.slice(0, 5);
   }, [transactions]);
 
-  // Dynamic date range for Net Worth footer
   const dateRange = useMemo(() => {
     if (transactions.length === 0) {
       const todayStr = formatDate(new Date().toISOString().split('T')[0]);
@@ -199,7 +191,6 @@ export const DashboardPage: React.FC = () => {
     };
   }, [transactions]);
 
-  // Donut Breakdown: Top 5 Categories Spent
   const pieChartData = useMemo(() => {
     const categoryTotals: Record<string, number> = {};
     transactions
@@ -208,18 +199,19 @@ export const DashboardPage: React.FC = () => {
         categoryTotals[t.category] = (categoryTotals[t.category] || 0) + Math.abs(t.amount);
       });
 
+    const colors = ['var(--smart-blue)', 'var(--regal-navy)', 'var(--blue-slate)', 'var(--slate-grey)', 'var(--lavender-grey)'];
+
     const data = Object.entries(categoryTotals)
-      .map(([name, value]) => ({
+      .map(([name, value], idx) => ({
         name,
         value,
-        color: getCategoryColor(name),
+        color: colors[idx % colors.length],
       }))
       .sort((a, b) => b.value - a.value);
 
     return data.slice(0, 5);
   }, [transactions]);
 
-  // Cash Flow last 7 days (income vs expense)
   const barChartData = useMemo(() => {
     const data = [];
     const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -267,36 +259,22 @@ export const DashboardPage: React.FC = () => {
     }
   };
 
-  // Framer Motion staggered entrance animations
   const containerVariants: Variants = {
     hidden: {},
     visible: {
       transition: {
-        staggerChildren: 0.08,
+        staggerChildren: 0.05,
       },
     },
   };
 
   const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 15 },
+    hidden: { opacity: 0, y: 10 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5, ease: 'easeOut' },
+      transition: { duration: 0.2, ease: 'easeOut' },
     },
-  };
-
-  const getTxnIcon = (category: string) => {
-    switch (category) {
-      case 'Shopping':
-        return <ShoppingBag size={15} />;
-      case 'Transport':
-        return <Bus size={15} />;
-      case 'Food':
-        return <Coffee size={15} />;
-      default:
-        return <Coins size={15} />;
-    }
   };
 
   return (
@@ -305,28 +283,44 @@ export const DashboardPage: React.FC = () => {
         {/* Header greeting */}
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold font-display tracking-tight text-white md:text-3xl">
+            <h1 className="text-2xl font-bold font-sans tracking-tight text-ink md:text-3xl">
               Financial Overview
             </h1>
-            <p className="text-xs md:text-sm text-white/50">
-              Real-time monitoring of your financial universe.
+            <p className="text-xs md:text-sm text-ink-muted">
+              Monitoring your financial accounts and portfolio in INR.
             </p>
           </div>
           <div className="text-right hidden sm:block">
-            <span className="text-[10px] uppercase font-bold text-[#FF9A6B] tracking-wider bg-[#FF9A6B]/10 px-3 py-1.5 rounded-md border border-[#FF9A6B]/20">
-              Active currency: {activeCurrency.name}
+            <span className="text-[10px] uppercase font-bold text-ink-subtle tracking-wider bg-surface-sunken px-3 py-1.5 rounded-[var(--radius-control)] border border-line">
+              Currency: {activeCurrency.name} ({activeCurrency.symbol})
             </span>
           </div>
         </div>
 
         {transactions.length === 0 ? (
-          <EmptyState
-            icon={Wallet}
-            title="Welcome to FinVerse"
-            description="Welcome to FinVerse. Start by adding your first transaction."
-            actionLabel="Add Transaction"
-            onAction={() => setIsAddModalOpen(true)}
-          />
+          <div className="space-y-6">
+            <EmptyState
+              icon={Wallet}
+              title="Welcome to FinVerse"
+              description="No transactions yet. Add your first transaction to see your dashboard."
+              actionLabel="Add Transaction"
+              onAction={() => setIsAddModalOpen(true)}
+            />
+
+            {/* AI Insight Card (Rule 14) */}
+            <div className="card bg-surface border border-line flex flex-col gap-2">
+              <div className="flex items-center gap-2 text-primary font-semibold text-sm">
+                <Bot size={18} />
+                <span>AI Financial Assistant</span>
+              </div>
+              <p className="text-xs text-ink-muted">
+                Add transactions and budgets to receive personalized spending breakdown and investment guidance.
+              </p>
+              <span className="text-[11px] text-ink-subtle mt-1 font-medium block">
+                AI-generated output. Not financial advice.
+              </span>
+            </div>
+          </div>
         ) : (
           <>
             {/* Row 1: KPI Cards */}
@@ -352,8 +346,6 @@ export const DashboardPage: React.FC = () => {
                       change={stats.balanceChange}
                       changeLabel="vs last month"
                       icon={Wallet}
-                      iconColor="purple-primary"
-                      glowColor="purple"
                       prefix={activeCurrency.symbol}
                     />
                   </motion.div>
@@ -364,8 +356,6 @@ export const DashboardPage: React.FC = () => {
                       change={stats.incomeChange}
                       changeLabel="vs last month"
                       icon={ArrowUpRight}
-                      iconColor="green-positive"
-                      glowColor="green"
                       prefix={activeCurrency.symbol}
                     />
                   </motion.div>
@@ -376,8 +366,6 @@ export const DashboardPage: React.FC = () => {
                       change={stats.expenseChange}
                       changeLabel="vs last month"
                       icon={ArrowDownRight}
-                      iconColor="red-negative"
-                      glowColor="red"
                       prefix={activeCurrency.symbol}
                     />
                   </motion.div>
@@ -388,8 +376,6 @@ export const DashboardPage: React.FC = () => {
                       change={stats.savingsChange}
                       changeLabel="vs last month"
                       icon={Target}
-                      iconColor="gold-savings"
-                      glowColor="gold"
                       prefix={activeCurrency.symbol}
                     />
                   </motion.div>
@@ -397,25 +383,25 @@ export const DashboardPage: React.FC = () => {
               )}
             </motion.div>
 
-            {/* Row 2: Net Worth, 3D Globe, Quick Actions */}
+            {/* Row 2: Net Worth, Finance Globe, Quick Actions */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-              {/* Net Worth (33%) */}
-              <div className="bg-[rgba(47,52,60,0.65)] backdrop-blur-xl rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-auto lg:h-[380px] hover:shadow-[0_0_40px_rgba(255,154,107,0.20)] transition-all duration-300">
+              {/* Net Worth */}
+              <div className="card flex flex-col justify-between lg:col-span-4 h-auto lg:h-[380px]">
                 <div>
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-white/40 leading-none">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-ink-subtle leading-none">
                     Equity Valuations
                   </span>
-                  <h3 className="text-sm font-bold font-display text-white mt-0.5">Net Worth Projection</h3>
+                  <h3 className="text-sm font-bold font-sans text-ink mt-0.5">Net Worth Projection</h3>
                 </div>
 
                 <div className="my-auto py-3">
-                  <span className="text-[10px] text-white/35 font-bold uppercase tracking-wider">Estimated Valuation</span>
+                  <span className="text-[10px] text-ink-subtle font-bold uppercase tracking-wider">Estimated Valuation</span>
                   <div className="flex items-baseline mt-1 gap-1">
-                    <span className="text-3xl font-display font-extrabold text-white tracking-tight">
+                    <span className="text-3xl font-sans font-extrabold text-ink tracking-tight">
                       <AnimatedNumber value={stats.netWorth} prefix={activeCurrency.symbol} decimals={0} />
                     </span>
                     {stats.balanceChange !== undefined && (
-                      <span className={stats.balanceChange >= 0 ? 'text-emerald-400 text-sm font-semibold' : 'text-red-400 text-sm font-semibold'}>
+                      <span className={stats.balanceChange >= 0 ? 'amount-gain text-sm font-semibold' : 'amount-loss text-sm font-semibold'}>
                         {stats.balanceChange >= 0 ? '+' : ''}{stats.balanceChange.toFixed(1)}%
                       </span>
                     )}
@@ -423,33 +409,33 @@ export const DashboardPage: React.FC = () => {
                 </div>
 
                 {/* Dynamic Income vs Expenses Stats */}
-                <div className="border border-white/5 bg-white/2 p-3 rounded-xl flex justify-between items-center text-xs">
+                <div className="border border-line bg-surface-sunken p-3 rounded-[var(--radius-control)] flex justify-between items-center text-xs">
                   <div>
-                    <span className="text-white/40 block text-[9px] uppercase font-bold">This Month Income</span>
-                    <span className="text-emerald-400 font-mono font-semibold">{formatINR(stats.income)}</span>
+                    <span className="text-ink-subtle block text-[9px] uppercase font-bold">This Month Income</span>
+                    <span className="amount-gain font-mono font-semibold">{formatINR(stats.income)}</span>
                   </div>
                   <div className="text-right">
-                    <span className="text-white/40 block text-[9px] uppercase font-bold">This Month Expenses</span>
-                    <span className="text-red-400 font-mono font-semibold">{formatINR(stats.expenses)}</span>
+                    <span className="text-ink-subtle block text-[9px] uppercase font-bold">This Month Expenses</span>
+                    <span className="amount-loss font-mono font-semibold">{formatINR(stats.expenses)}</span>
                   </div>
                 </div>
 
-                <div className="flex justify-between items-center text-xs text-white/40 font-medium">
+                <div className="flex justify-between items-center text-xs text-ink-subtle font-medium mt-2">
                   <span>{dateRange.start}</span>
                   <span>{dateRange.end}</span>
                 </div>
               </div>
 
-              {/* 3D Finance Globe (33%) */}
-              <div className="bg-[rgba(47,52,60,0.65)] backdrop-blur-xl rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-auto lg:h-[380px] hover:shadow-[0_0_30px_rgba(45,212,191,0.20)] transition-all duration-300">
-                <div className="flex justify-between items-center border-b border-white/5 pb-2">
+              {/* Finance Globe */}
+              <div className="card flex flex-col justify-between lg:col-span-4 h-auto lg:h-[380px]">
+                <div className="flex justify-between items-center border-b border-line pb-2">
                   <div>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-white/40 leading-none">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-ink-subtle leading-none">
                       Asset Coordinates
                     </span>
-                    <h3 className="text-sm font-bold font-display text-white mt-0.5">3D Financial Globe</h3>
+                    <h3 className="text-sm font-bold font-sans text-ink mt-0.5">Financial Globe</h3>
                   </div>
-                  <span className="text-[10px] text-[#2DD4BF] font-semibold flex items-center gap-1 bg-[#2DD4BF]/10 border border-[#2DD4BF]/20 px-2 py-0.5 rounded-md">
+                  <span className="text-[10px] text-primary font-semibold flex items-center gap-1 bg-surface-sunken border border-line px-2 py-0.5 rounded-[var(--radius-control)]">
                     Interactive
                   </span>
                 </div>
@@ -463,27 +449,41 @@ export const DashboardPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Quick Actions (33%) */}
+              {/* Quick Actions */}
               <QuickActions
                 onAddTransaction={() => setIsAddModalOpen(true)}
-                className="bg-[rgba(47,52,60,0.65)] backdrop-blur-xl rounded-2xl border border-white/8 lg:col-span-4 h-auto lg:h-[380px] hover:shadow-[0_0_40px_rgba(255,154,107,0.20)] transition-all duration-300"
+                className="lg:col-span-4 h-auto lg:h-[380px]"
               />
+            </div>
+
+            {/* AI Insights Card on Dashboard (Rule 14) */}
+            <div className="card bg-surface border border-line flex flex-col gap-2">
+              <div className="flex items-center gap-2 text-primary font-semibold text-sm">
+                <Bot size={18} />
+                <span>AI Automated Insights</span>
+              </div>
+              <p className="text-xs text-ink-muted">
+                Your monthly spending is within expected parameters based on recorded transactions. Consider allocating savings toward emergency reserves.
+              </p>
+              <span className="text-[11px] text-ink-subtle mt-1 font-medium block">
+                AI-generated output. Not financial advice.
+              </span>
             </div>
 
             {/* Row 3: Recharts Charts & Recent Transactions */}
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-              {/* Recharts Pie (33%) */}
-              <div className="bg-[rgba(47,52,60,0.65)] backdrop-blur-xl rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-auto lg:h-[360px]">
+              {/* Recharts Pie */}
+              <div className="card flex flex-col justify-between lg:col-span-4 h-auto lg:h-[360px]">
                 <div>
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-white/40">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-ink-subtle">
                     Expense Breakdown
                   </span>
-                  <h3 className="text-sm font-bold font-display text-white mt-0.5">Category Allocations</h3>
+                  <h3 className="text-sm font-bold font-sans text-ink mt-0.5">Category Allocations</h3>
                 </div>
 
                 <div className="w-full h-[200px] relative flex items-center justify-center my-3">
                   {pieChartData.length === 0 ? (
-                    <span className="text-xs text-white/30">No expenses recorded</span>
+                    <span className="text-xs text-ink-subtle">No expenses recorded</span>
                   ) : (
                     <div className="w-full h-[200px] relative">
                       <ResponsiveContainer width="100%" height={200}>
@@ -504,8 +504,8 @@ export const DashboardPage: React.FC = () => {
                         </PieChart>
                       </ResponsiveContainer>
                       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none leading-none">
-                        <span className="text-[9px] text-white/40 font-bold uppercase tracking-wider">Top 5</span>
-                        <span className="text-sm font-bold text-white mt-1">Split</span>
+                        <span className="text-[9px] text-ink-subtle font-bold uppercase tracking-wider">Top 5</span>
+                        <span className="text-sm font-bold text-ink mt-1">Split</span>
                       </div>
                     </div>
                   )}
@@ -514,91 +514,83 @@ export const DashboardPage: React.FC = () => {
                 <div className="flex flex-wrap gap-2 justify-center max-h-[60px] overflow-y-auto">
                   {pieChartData.map((p) => (
                     <div key={p.name} className="flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: p.color }} />
-                      <span className="text-[9px] text-white/70 font-semibold truncate">{p.name}</span>
+                      <span className="w-2 h-2 rounded-[var(--radius-control)] shrink-0" style={{ backgroundColor: p.color }} />
+                      <span className="text-[9px] text-ink-muted font-semibold truncate">{p.name}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Cash Flow Analysis (33%) */}
-              <div className="bg-[rgba(47,52,60,0.65)] backdrop-blur-xl rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-auto lg:h-[360px]">
+              {/* Cash Flow Analysis */}
+              <div className="card flex flex-col justify-between lg:col-span-4 h-auto lg:h-[360px]">
                 <div>
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-white/40">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-ink-subtle">
                     Rolling Cash Flow
                   </span>
-                  <h3 className="text-sm font-bold font-display text-white mt-0.5">Last 7 Days</h3>
+                  <h3 className="text-sm font-bold font-sans text-ink mt-0.5">Last 7 Days</h3>
                 </div>
 
                 <div className="w-full h-[200px] mt-4">
                   <ResponsiveContainer width="100%" height={200}>
                     <BarChart data={barChartData} margin={{ top: 5, right: 0, left: -25, bottom: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-                      <XAxis dataKey="name" tick={{ fill: '#7B8494', fontSize: 9 }} tickLine={false} axisLine={{ stroke: 'rgba(255,255,255,0.06)' }} />
-                      <YAxis tick={{ fill: '#7B8494', fontSize: 9 }} tickLine={false} axisLine={false} tickFormatter={formatINRCompact} />
-                      <Bar dataKey="income" fill="#22C55E" radius={[2, 2, 0, 0]} opacity={0.85} />
-                      <Bar dataKey="expense" fill="#EF4444" radius={[2, 2, 0, 0]} opacity={0.85} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                      <XAxis dataKey="name" tick={{ fill: 'var(--ink-subtle)', fontSize: 9 }} tickLine={false} axisLine={{ stroke: 'var(--border)' }} />
+                      <YAxis tick={{ fill: 'var(--ink-subtle)', fontSize: 9 }} tickLine={false} axisLine={false} tickFormatter={formatINRCompact} />
+                      <Bar dataKey="income" fill="var(--chart-1)" radius={[2, 2, 0, 0]} opacity={0.85} />
+                      <Bar dataKey="expense" fill="var(--chart-2)" radius={[2, 2, 0, 0]} opacity={0.85} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
 
-                <div className="border-t border-white/5 pt-2.5 text-center">
-                  <span className="text-[10px] text-white/35 font-medium uppercase tracking-wider">
-                    Active live transactions chart
+                <div className="border-t border-line pt-2.5 text-center">
+                  <span className="text-[10px] text-ink-subtle font-medium uppercase tracking-wider">
+                    Recent transactions activity chart
                   </span>
                 </div>
               </div>
 
-              {/* Recent Transactions List (33%) */}
-              <div className="bg-[rgba(47,52,60,0.65)] backdrop-blur-xl rounded-2xl p-5 border border-white/8 flex flex-col justify-between lg:col-span-4 h-auto lg:h-[360px]">
-                <div className="flex justify-between items-center border-b border-white/5 pb-2 mb-2">
+              {/* Recent Transactions List */}
+              <div className="card flex flex-col justify-between lg:col-span-4 h-auto lg:h-[360px]">
+                <div className="flex justify-between items-center border-b border-line pb-2 mb-2">
                   <div>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-white/40">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-ink-subtle">
                       Transactions
                     </span>
-                    <h3 className="text-sm font-bold font-display text-white mt-0.5">Recent Activity</h3>
+                    <h3 className="text-sm font-bold font-sans text-ink mt-0.5">Recent Activity</h3>
                   </div>
                   <Link
                     to="/transactions"
-                    className="text-xs font-semibold text-[#FF9A6B] hover:text-[#FFB896] flex items-center transition-colors"
+                    className="text-xs font-semibold text-link hover:text-link-hover flex items-center transition-colors"
                   >
                     View All <ChevronRight size={14} />
                   </Link>
                 </div>
 
-                <div className="flex-1 flex flex-col justify-center divide-y divide-white/5 max-h-[260px] overflow-y-auto pr-1">
+                <div className="flex-1 flex flex-col justify-center divide-y divide-line max-h-[260px] overflow-y-auto pr-1">
                   {recentTransactions.length === 0 ? (
-                    <div className="h-full flex items-center justify-center text-xs text-white/30">
+                    <div className="h-full flex items-center justify-center text-xs text-ink-subtle">
                       No activity found
                     </div>
                   ) : (
                     recentTransactions.map((txn) => {
                       const isExpense = txn.type === 'expense';
                       const isTransfer = txn.type === 'transfer';
-                      const categoryColor = getCategoryColor(txn.category);
 
                       return (
                         <div
                           key={txn.id}
-                          className="flex items-center justify-between py-2.5 hover:bg-white/2 px-2 rounded-xl transition-all duration-200 group"
+                          className="flex items-center justify-between py-2.5 hover:bg-surface-sunken px-2 rounded-[var(--radius-control)] transition-all duration-150 group"
                         >
                           <div className="flex items-center gap-3">
-                            <div
-                              className="h-8.5 w-8.5 flex items-center justify-center rounded-xl text-white font-bold text-xs"
-                              style={{
-                                backgroundColor: `${categoryColor}15`,
-                                color: categoryColor,
-                                border: `1px solid ${categoryColor}30`,
-                              }}
-                            >
-                              {getTxnIcon(txn.category)}
+                            <div className="h-8 w-8 flex items-center justify-center rounded-[var(--radius-control)] bg-surface-sunken border border-line text-ink-muted">
+                              {renderCategoryIcon(txn.category)}
                             </div>
 
                             <div className="flex flex-col min-w-0">
-                              <span className="text-sm font-semibold text-white/80 group-hover:translate-x-[2px] transition-transform duration-200 truncate max-w-[150px]">
+                              <span className="text-sm font-semibold text-ink truncate max-w-[150px]">
                                 {txn.merchant || txn.name}
                               </span>
-                              <span className="text-[10px] text-white/40 font-medium truncate max-w-[150px]">
+                              <span className="text-[10px] text-ink-subtle font-medium truncate max-w-[150px]">
                                 {txn.category} &bull; {formatDate(txn.date)}
                               </span>
                             </div>
@@ -606,7 +598,7 @@ export const DashboardPage: React.FC = () => {
 
                           <span
                             className={`text-sm font-bold font-mono ${
-                              isExpense ? 'text-red-400' : isTransfer ? 'text-[#2DD4BF]' : 'text-emerald-400'
+                              isExpense ? 'amount-loss' : isTransfer ? 'text-primary' : 'amount-gain'
                             }`}
                           >
                             {isExpense ? '-' : isTransfer ? '' : '+'}{formatINR(Math.abs(txn.amount))}
@@ -635,22 +627,15 @@ export const DashboardPage: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Left column */}
               <div className="space-y-6">
-                <div className="flex bg-white/4 p-1 rounded-xl border border-white/5">
+                <div className="flex bg-surface-sunken p-1 rounded-[var(--radius-control)] border border-line">
                   {(['income', 'expense', 'transfer'] as const).map((type) => {
-                    const typeColor =
-                      type === 'income'
-                        ? 'bg-emerald-500'
-                        : type === 'expense'
-                        ? 'bg-red-500'
-                        : 'bg-[#2DD4BF] text-[#1A1A1A]';
-
                     return (
                       <button
                         key={type}
                         type="button"
                         onClick={() => setValue('type', type)}
-                        className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer ${
-                          formType === type ? `${typeColor} text-white` : 'text-white/40 hover:text-white/70'
+                        className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-[var(--radius-control)] transition-all cursor-pointer ${
+                          formType === type ? 'btn-primary' : 'text-ink-subtle hover:text-ink'
                         }`}
                       >
                         {type}
@@ -659,17 +644,9 @@ export const DashboardPage: React.FC = () => {
                   })}
                 </div>
 
-                <div className="flex flex-col items-center py-4 border-b border-white/10 focus-within:border-[#FF9A6B] transition-colors">
+                <div className="flex flex-col items-center py-4 border-b border-line">
                   <div className="flex items-center justify-center w-full">
-                    <span
-                      className={`text-4xl font-display font-bold mr-2 ${
-                        formType === 'income'
-                          ? 'text-emerald-400'
-                          : formType === 'transfer'
-                          ? 'text-[#2DD4BF]'
-                          : 'text-red-400'
-                      }`}
-                    >
+                    <span className="text-4xl font-sans font-bold mr-2 text-ink">
                       ₹
                     </span>
                     <input
@@ -678,18 +655,18 @@ export const DashboardPage: React.FC = () => {
                       placeholder="0.00"
                       autoFocus
                       {...register('amount', { valueAsNumber: true })}
-                      className="bg-transparent text-center font-mono font-bold text-4xl text-white placeholder:text-white/15 focus:outline-hidden min-w-0 max-w-[200px]"
+                      className="bg-transparent text-center font-mono font-bold text-4xl text-ink placeholder:text-ink-subtle focus:outline-hidden min-w-0 max-w-[200px]"
                     />
                   </div>
                   {errors.amount && (
-                    <span className="text-[11px] text-red-400 mt-2 font-medium">
+                    <span className="text-[11px] amount-loss mt-2 font-medium">
                       {errors.amount.message}
                     </span>
                   )}
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
+                  <label className="text-xs font-bold text-ink-subtle uppercase tracking-wider">
                     Select Category
                   </label>
                   <div className="grid grid-cols-3 gap-2">
@@ -700,19 +677,19 @@ export const DashboardPage: React.FC = () => {
                           key={cat.id}
                           type="button"
                           onClick={() => setValue('category', cat.id)}
-                          className={`flex flex-col items-center justify-center p-2 rounded-xl border text-[10px] gap-0.5 cursor-pointer transition-all ${
+                          className={`flex flex-col items-center justify-center p-2 rounded-[var(--radius-control)] border text-[10px] gap-0.5 cursor-pointer transition-all ${
                             isSelected
-                              ? 'bg-[#FF9A6B]/15 border-[#FF9A6B] text-white shadow-[0_0_15px_rgba(255,154,107,0.2)]'
-                              : 'bg-white/2 border-white/5 text-white/60 hover:border-white/15 hover:text-white'
+                              ? 'bg-primary text-on-primary border-primary font-bold'
+                              : 'bg-surface border-line text-ink-muted hover:border-ink-subtle'
                           }`}
                         >
-                          <span className="font-semibold text-xs truncate max-w-full">{cat.label}</span>
+                          <span className="truncate max-w-full">{cat.label}</span>
                         </button>
                       );
                     })}
                   </div>
                   {errors.category && (
-                    <span className="text-[11px] text-red-400 font-medium block">
+                    <span className="text-[11px] amount-loss font-medium block">
                       {errors.category.message}
                     </span>
                   )}
@@ -722,40 +699,40 @@ export const DashboardPage: React.FC = () => {
               {/* Right column */}
               <div className="space-y-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
-                    Merchant / Description <span className="text-red-negative">*</span>
+                  <label className="text-xs font-bold text-ink-subtle uppercase tracking-wider">
+                    Merchant / Description *
                   </label>
                   <input
                     type="text"
                     placeholder="e.g. Swiggy, Zomato"
                     {...register('merchant')}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
+                    className="input"
                   />
                   {errors.merchant && (
-                    <span className="text-[11px] text-red-negative font-medium">
+                    <span className="text-[11px] amount-loss font-medium">
                       {errors.merchant.message}
                     </span>
                   )}
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
-                    Date <span className="text-red-negative">*</span>
+                  <label className="text-xs font-bold text-ink-subtle uppercase tracking-wider">
+                    Date *
                   </label>
                   <input
                     type="date"
                     {...register('date')}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2 text-sm text-white focus:outline-hidden transition-all"
+                    className="input"
                   />
                   {errors.date && (
-                    <span className="text-[11px] text-red-negative font-medium">
+                    <span className="text-[11px] amount-loss font-medium">
                       {errors.date.message}
                     </span>
                   )}
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
+                  <label className="text-xs font-bold text-ink-subtle uppercase tracking-wider">
                     Notes
                   </label>
                   <textarea
@@ -763,15 +740,15 @@ export const DashboardPage: React.FC = () => {
                     maxLength={200}
                     placeholder="Optional details (max 200 chars)..."
                     {...register('note')}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2 text-sm text-white focus:outline-hidden transition-all resize-none placeholder:text-white/20"
+                    className="input resize-none"
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
+                  <label className="text-xs font-bold text-ink-subtle uppercase tracking-wider">
                     Receipt Upload
                   </label>
-                  <label className="border border-dashed border-white/10 bg-white/2 hover:border-purple-primary/45 rounded-xl p-3 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-300 relative group">
+                  <label className="border border-dashed border-line bg-surface-sunken hover:border-primary rounded-[var(--radius-control)] p-3 flex flex-col items-center justify-center text-center cursor-pointer transition-all relative">
                     <input
                       type="file"
                       accept=".jpg,.jpeg,.png,.pdf"
@@ -783,11 +760,11 @@ export const DashboardPage: React.FC = () => {
                       className="hidden"
                     />
                     {receiptFile ? (
-                      <span className="text-xs text-purple-light font-semibold max-w-[180px] truncate">{receiptFile}</span>
+                      <span className="text-xs text-primary font-semibold max-w-[180px] truncate">{receiptFile}</span>
                     ) : (
                       <>
-                        <UploadCloud size={18} className="text-white/30 mb-1" />
-                        <span className="text-[10px] text-white/50 font-bold">Choose receipt</span>
+                        <UploadCloud size={18} className="text-ink-subtle mb-1" />
+                        <span className="text-[10px] text-ink-subtle font-bold">Choose receipt</span>
                       </>
                     )}
                   </label>
@@ -795,19 +772,18 @@ export const DashboardPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex justify-end gap-3 border-t border-white/5 pt-4">
+            <div className="flex justify-end gap-3 border-t border-line pt-4">
               <Button
                 variant="ghost"
+                type="button"
                 onClick={() => {
                   setIsAddModalOpen(false);
                   reset();
-                  setReceiptFile(null);
                 }}
-                disabled={isSubmitting}
               >
                 Cancel
               </Button>
-              <Button type="submit" variant="primary" loading={isSubmitting}>
+              <Button variant="primary" type="submit" loading={isSubmitting}>
                 Save Transaction
               </Button>
             </div>

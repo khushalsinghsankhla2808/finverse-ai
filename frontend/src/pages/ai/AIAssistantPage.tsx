@@ -33,7 +33,6 @@ export const AIAssistantPage: React.FC = () => {
   const { showToast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  // States
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -42,7 +41,6 @@ export const AIAssistantPage: React.FC = () => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [insights, setInsights] = useState<any[]>([]);
 
-  // Load suggestions & history on mount
   useEffect(() => {
     const initPage = async () => {
       const results = await Promise.allSettled([
@@ -85,7 +83,6 @@ export const AIAssistantPage: React.FC = () => {
     initPage();
   }, []);
 
-  // Scroll to bottom on message updates
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -119,7 +116,6 @@ export const AIAssistantPage: React.FC = () => {
   const handleSendMessage = async (text: string) => {
     if (!text.trim() || isLoading) return;
 
-    // Optimistic user bubble append
     const userMsg: Message = {
       role: 'user',
       content: text,
@@ -139,7 +135,6 @@ export const AIAssistantPage: React.FC = () => {
 
       setMessages((prev) => [...prev, aiMsg]);
 
-      // Update session references
       if (!activeSessionId) {
         setActiveSessionId(res.data.sessionId);
         setSessions((prev) => [
@@ -177,15 +172,15 @@ export const AIAssistantPage: React.FC = () => {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-[#FF9A6B]/15 border border-[#FF9A6B]/30 text-[#FF9A6B] rounded-xl">
+            <div className="p-2.5 bg-surface-sunken border border-line text-primary rounded-[var(--radius-control)]">
               <Bot size={22} />
             </div>
             <div>
-              <h1 className="text-2xl font-display font-bold text-white tracking-tight">FinVerse AI Assistant</h1>
-              <p className="text-xs text-white/50 font-medium">Financial assistant powered by Google Gemini</p>
+              <h1 className="text-2xl font-sans font-bold text-ink tracking-tight">FinVerse AI Assistant</h1>
+              <p className="text-xs text-ink-muted font-medium">Ask questions about your spending, budgets and goals.</p>
             </div>
           </div>
-          <span className="text-[10px] font-semibold text-amber-300 bg-amber-400/10 border border-amber-400/20 px-3 py-1 rounded-md">
+          <span className="text-[10px] font-semibold text-ink-subtle bg-surface-sunken border border-line px-3 py-1 rounded-[var(--radius-control)]">
             AI-generated output. Not financial advice.
           </span>
         </div>
@@ -194,13 +189,13 @@ export const AIAssistantPage: React.FC = () => {
         <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Left Panel: Chats List & Insights */}
           <div className="lg:col-span-1 flex flex-col gap-4 min-h-0">
-            {/* Chats Session manager */}
-            <div className="bg-[#2F343C] p-4 border border-white/8 rounded-2xl flex flex-col min-h-0 flex-1">
+            {/* Conversations manager */}
+            <div className="card p-4 flex flex-col min-h-0 flex-1">
               <div className="flex justify-between items-center gap-2 mb-3">
-                <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">Conversations</span>
+                <span className="text-[10px] font-bold text-ink-subtle uppercase tracking-wider">Conversations</span>
                 <button
                   onClick={handleClearHistory}
-                  className="p-1 text-white/30 hover:text-red-400 transition-all cursor-pointer"
+                  className="p-1 text-ink-subtle hover:text-loss transition-all cursor-pointer"
                   title="Clear all sessions"
                 >
                   <Trash2 size={12} />
@@ -209,14 +204,14 @@ export const AIAssistantPage: React.FC = () => {
 
               <button
                 onClick={handleCreateNewChat}
-                className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl border border-dashed border-white/10 hover:border-[#FF9A6B] bg-white/2 hover:bg-white/5 text-xs text-white/80 font-semibold cursor-pointer mb-3 transition-all"
+                className="w-full flex items-center justify-center gap-2 p-2.5 rounded-[var(--radius-control)] border border-dashed border-line bg-surface-sunken hover:border-primary text-xs text-ink font-semibold cursor-pointer mb-3 transition-all"
               >
                 <Plus size={14} /> New Chat
               </button>
 
               <div className="flex-1 overflow-y-auto space-y-1.5 pr-1">
                 {sessions.length === 0 ? (
-                  <span className="text-[11px] text-white/30 block text-center py-4">No recent chats</span>
+                  <span className="text-[11px] text-ink-subtle block text-center py-4">No recent chats</span>
                 ) : (
                   sessions.map((s) => {
                     const isActive = s.id === activeSessionId;
@@ -224,10 +219,10 @@ export const AIAssistantPage: React.FC = () => {
                       <button
                         key={s.id}
                         onClick={() => handleSelectSession(s.id)}
-                        className={`w-full text-left p-2.5 rounded-xl text-xs font-medium truncate cursor-pointer transition-all border ${
+                        className={`w-full text-left p-2.5 rounded-[var(--radius-control)] text-xs font-medium truncate cursor-pointer transition-all border ${
                           isActive
-                            ? 'bg-[#FF9A6B]/15 border-[#FF9A6B]/40 text-[#FF9A6B]'
-                            : 'bg-white/2 border-white/5 text-white/60 hover:bg-white/4'
+                            ? 'bg-primary text-on-primary border-primary'
+                            : 'bg-surface-sunken border-line text-ink-muted hover:text-ink'
                         }`}
                       >
                         {s.sessionTitle}
@@ -239,46 +234,48 @@ export const AIAssistantPage: React.FC = () => {
             </div>
 
             {/* Smart Insights summary */}
-            <div className="bg-[#2F343C] p-4 border border-white/8 rounded-2xl flex flex-col min-h-0 flex-1 max-h-[240px]">
+            <div className="card p-4 flex flex-col min-h-0 flex-1 max-h-[240px]">
               <div className="flex justify-between items-center mb-2">
-                <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">AI Spending Insights</span>
-                <span className="text-[9px] text-white/40">AI-generated</span>
+                <span className="text-[10px] font-bold text-ink-subtle uppercase tracking-wider">AI Spending Insights</span>
               </div>
               <div className="flex-1 overflow-y-auto space-y-2 pr-1 text-[11px]">
                 {insights.length === 0 ? (
-                  <span className="text-white/30 block text-center py-3">Generating insights...</span>
+                  <span className="text-ink-subtle block text-center py-3">Generating insights...</span>
                 ) : (
                   insights.map((ins, i) => (
                     <div
                       key={i}
-                      className="p-2.5 bg-white/3 hover:bg-white/6 rounded-xl border border-white/5 flex items-start gap-2.5"
+                      className="p-2.5 bg-surface-sunken rounded-[var(--radius-control)] border border-line flex items-start gap-2.5"
                     >
-                      <div className="mt-0.5 shrink-0 text-[#2DD4BF]">
-                        {ins.type === 'warning' ? <AlertTriangle size={15} className="text-amber-400" /> : ins.type === 'achievement' ? <Trophy size={15} className="text-emerald-400" /> : <Lightbulb size={15} className="text-[#2DD4BF]" />}
+                      <div className="mt-0.5 shrink-0 text-primary">
+                        {ins.type === 'warning' ? <AlertTriangle size={15} className="text-warning" /> : ins.type === 'achievement' ? <Trophy size={15} className="amount-gain" /> : <Lightbulb size={15} className="text-primary" />}
                       </div>
                       <div>
-                        <h4 className="font-bold text-white/90">{ins.title}</h4>
-                        <p className="text-white/60 mt-0.5 leading-tight">{ins.description}</p>
+                        <h4 className="font-bold text-ink">{ins.title}</h4>
+                        <p className="text-ink-muted mt-0.5 leading-tight">{ins.description}</p>
                       </div>
                     </div>
                   ))
                 )}
               </div>
+              <span className="text-[10px] text-ink-subtle mt-2 font-medium block border-t border-line pt-1">
+                AI-generated output. Not financial advice.
+              </span>
             </div>
           </div>
 
           {/* Right Panel: Chat Thread Window */}
-          <div className="lg:col-span-3 bg-[#2F343C] border border-white/8 rounded-2xl flex flex-col min-h-0 justify-between">
-            {/* Suggested prompts bar (only if new session) */}
+          <div className="lg:col-span-3 card p-0 flex flex-col min-h-0 justify-between">
+            {/* Suggested prompts bar */}
             {messages.length === 0 && (
-              <div className="p-4 border-b border-white/5">
-                <span className="text-[9px] font-bold text-white/40 uppercase tracking-wider block mb-2">Suggested Queries</span>
+              <div className="p-4 border-b border-line">
+                <span className="text-[9px] font-bold text-ink-subtle uppercase tracking-wider block mb-2">Suggested Queries</span>
                 <div className="flex flex-wrap gap-2">
                   {suggestions.slice(0, 4).map((sug) => (
                     <button
                       key={sug}
                       onClick={() => handleSendMessage(sug)}
-                      className="px-3 py-1.5 rounded-md bg-white/3 border border-white/5 hover:border-[#FF9A6B] text-[10px] text-white/70 font-semibold hover:text-[#FF9A6B] cursor-pointer transition-all"
+                      className="px-3 py-1.5 rounded-[var(--radius-control)] bg-surface-sunken border border-line hover:border-primary text-[10px] text-ink-muted font-semibold hover:text-ink cursor-pointer transition-all"
                     >
                       {sug}
                     </button>
@@ -290,11 +287,11 @@ export const AIAssistantPage: React.FC = () => {
             {/* Message thread */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
               {messages.length === 0 ? (
-                <div className="h-full flex flex-col items-center justify-center text-center space-y-4 max-w-sm mx-auto select-none opacity-40">
-                  <Brain size={48} className="text-[#FF9A6B]" />
+                <div className="h-full flex flex-col items-center justify-center text-center space-y-4 max-w-sm mx-auto select-none opacity-60">
+                  <Brain size={48} className="text-primary" />
                   <div>
-                    <h3 className="font-bold text-white text-sm">FinVerse Financial Assistant</h3>
-                    <p className="text-xs text-white/60 mt-1 leading-normal">
+                    <h3 className="font-bold text-ink text-sm">FinVerse Financial Assistant</h3>
+                    <p className="text-xs text-ink-muted mt-1 leading-normal">
                       Ask about monthly spending trends, budget limits, or investment projections. AI-generated output for informational purposes only.
                     </p>
                   </div>
@@ -309,18 +306,18 @@ export const AIAssistantPage: React.FC = () => {
                         isUser ? 'ml-auto flex-row-reverse' : 'mr-auto'
                       }`}
                     >
-                      <div className={`p-2 rounded-xl shrink-0 w-8 h-8 flex items-center justify-center text-xs border ${
+                      <div className={`p-2 rounded-[var(--radius-control)] shrink-0 w-8 h-8 flex items-center justify-center text-xs border ${
                         isUser
-                          ? 'bg-[#FF9A6B]/15 border-[#FF9A6B]/30 text-[#FF9A6B]'
-                          : 'bg-[#373D46] border-white/10 text-white/85'
+                          ? 'bg-primary text-on-primary border-primary'
+                          : 'bg-surface-sunken border-line text-ink'
                       }`}>
                         {isUser ? <User size={14} /> : <Bot size={14} />}
                       </div>
 
-                      <div className={`rounded-2xl px-4 py-2.5 text-xs border shadow-xs ${
+                      <div className={`rounded-[var(--radius-card)] px-4 py-2.5 text-xs border ${
                         isUser
-                          ? 'bg-[#FF9A6B] border-[#FF9A6B] text-[#1A1A1A] font-medium rounded-tr-none'
-                          : 'bg-[#2F343C] border-white/8 text-white/90 rounded-tl-none leading-relaxed'
+                          ? 'bg-[var(--sapphire)] border-[var(--sapphire)] text-white font-medium'
+                          : 'bg-surface border-line text-ink leading-relaxed'
                       }`}>
                         {isUser ? (
                           msg.content
@@ -328,21 +325,21 @@ export const AIAssistantPage: React.FC = () => {
                           <div>
                             <ReactMarkdown
                               components={{
-                                h1: (props) => <h1 className="text-sm font-bold text-white mt-3 mb-1" {...props} />,
-                                h2: (props) => <h2 className="text-sm font-bold text-white mt-2.5 mb-1" {...props} />,
-                                h3: (props) => <h3 className="text-xs font-bold text-white/90 mt-2 mb-1" {...props} />,
+                                h1: (props) => <h1 className="text-sm font-bold text-ink mt-3 mb-1" {...props} />,
+                                h2: (props) => <h2 className="text-sm font-bold text-ink mt-2.5 mb-1" {...props} />,
+                                h3: (props) => <h3 className="text-xs font-bold text-ink-muted mt-2 mb-1" {...props} />,
                                 p: (props) => <p className="mb-2 last:mb-0 leading-relaxed" {...props} />,
-                                ul: (props) => <ul className="list-disc pl-4 mb-2 space-y-1 text-white/80" {...props} />,
-                                ol: (props) => <ol className="list-decimal pl-4 mb-2 space-y-1 text-white/80" {...props} />,
+                                ul: (props) => <ul className="list-disc pl-4 mb-2 space-y-1 text-ink-muted" {...props} />,
+                                ol: (props) => <ol className="list-decimal pl-4 mb-2 space-y-1 text-ink-muted" {...props} />,
                                 li: (props) => <li className="pl-0.5" {...props} />,
-                                strong: (props) => <strong className="font-bold text-[#2DD4BF]" {...props} />,
-                                code: (props) => <code className="bg-white/5 border border-white/10 px-1 py-0.5 rounded font-mono text-[10px]" {...props} />,
+                                strong: (props) => <strong className="font-bold text-primary" {...props} />,
+                                code: (props) => <code className="bg-surface-sunken border border-line px-1 py-0.5 rounded font-mono text-[10px]" {...props} />,
                               }}
                             >
                               {msg.content}
                             </ReactMarkdown>
-                            <span className="block mt-2 text-[9px] text-white/40 italic border-t border-white/5 pt-1">
-                              AI-generated response. Not financial advice.
+                            <span className="block mt-2 text-[9px] text-ink-subtle border-t border-line pt-1">
+                              AI-generated output. Not financial advice.
                             </span>
                           </div>
                         )}
@@ -355,13 +352,13 @@ export const AIAssistantPage: React.FC = () => {
               {/* Loader */}
               {isLoading && (
                 <div className="flex gap-3 mr-auto max-w-[85%]">
-                  <div className="p-2 rounded-xl shrink-0 w-8 h-8 flex items-center justify-center text-xs border bg-[#373D46] border-white/10 text-white/85">
+                  <div className="p-2 rounded-[var(--radius-control)] shrink-0 w-8 h-8 flex items-center justify-center text-xs border bg-surface-sunken border-line text-ink">
                     <Bot size={14} />
                   </div>
-                  <div className="rounded-2xl px-4 py-2.5 text-xs border bg-[#2F343C] border-white/8 text-white/50 rounded-tl-none flex items-center gap-1.5 select-none">
-                    <span className="w-1.5 h-1.5 bg-[#FF9A6B] rounded-full animate-bounce" />
-                    <span className="w-1.5 h-1.5 bg-[#FF9A6B] rounded-full animate-bounce [animation-delay:0.2s]" />
-                    <span className="w-1.5 h-1.5 bg-[#FF9A6B] rounded-full animate-bounce [animation-delay:0.4s]" />
+                  <div className="rounded-[var(--radius-card)] px-4 py-2.5 text-xs border bg-surface border-line text-ink-subtle flex items-center gap-1.5 select-none">
+                    <span className="w-1.5 h-1.5 bg-primary rounded-[var(--radius-control)] animate-pulse" />
+                    <span className="w-1.5 h-1.5 bg-primary rounded-[var(--radius-control)] animate-pulse" />
+                    <span className="w-1.5 h-1.5 bg-primary rounded-[var(--radius-control)] animate-pulse" />
                   </div>
                 </div>
               )}
@@ -369,28 +366,28 @@ export const AIAssistantPage: React.FC = () => {
             </div>
 
             {/* Input form */}
-            <div className="p-4 border-t border-white/5 bg-[#262A31]">
+            <div className="p-4 border-t border-line bg-surface-sunken rounded-b-[var(--radius-card)]">
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
                   handleSendMessage(inputValue);
                 }}
-                className="flex items-center gap-2 bg-[#373D46] border border-white/8 rounded-xl px-4 py-2 focus-within:border-[#FF9A6B] transition-all"
+                className="flex items-center gap-2"
               >
                 <input
                   type="text"
-                  placeholder="Ask FinVerse AI..."
+                  placeholder="Ask questions about your spending, budgets and goals..."
                   value={inputValue}
                   disabled={isLoading}
                   onChange={(e) => setInputValue(e.target.value)}
-                  className="flex-1 bg-transparent text-xs text-white placeholder:text-[#7B8494] focus:outline-hidden focus:ring-0 focus:border-transparent py-1 disabled:opacity-50"
+                  className="input flex-1"
                 />
                 <button
                   type="submit"
                   disabled={!inputValue.trim() || isLoading}
-                  className="p-2 rounded-lg bg-[#FF9A6B] text-[#1A1A1A] font-bold hover:bg-[#FFB896] transition-all cursor-pointer disabled:opacity-40 disabled:hover:bg-[#FF9A6B] disabled:cursor-not-allowed shrink-0"
+                  className="btn btn-primary shrink-0"
                 >
-                  <Send size={13} />
+                  <Send size={14} />
                 </button>
               </form>
             </div>

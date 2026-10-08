@@ -52,7 +52,7 @@ const emptyToUndefined = <T extends z.ZodTypeAny>(schema: T) =>
 
 /**
  * Query params for GET /transactions.
- * All optional — filters, search, and pagination.
+ * All optional - filters, search, and pagination.
  */
 export const transactionQuerySchema = paginationQuerySchema.extend({
   type: emptyToUndefined(z.enum(['income', 'expense', 'transfer'])).optional(),
@@ -75,7 +75,7 @@ export const transactionQuerySchema = paginationQuerySchema.extend({
 });
 
 /**
- * Bulk delete payload — array of MongoDB ObjectIds.
+ * Bulk delete payload - array of MongoDB ObjectIds.
  */
 export const bulkDeleteSchema = z.object({
   ids: z

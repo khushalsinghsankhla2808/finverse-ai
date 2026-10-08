@@ -350,7 +350,7 @@ export const TransactionsPage: React.FC = () => {
 
         {/* Summary Row */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-green/2">
+          <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-white/8 shadow-md">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Income This Month</span>
               <div className="w-8 h-8 rounded-lg bg-green-positive/10 border border-green-positive/20 flex items-center justify-center text-green-positive">
@@ -360,7 +360,7 @@ export const TransactionsPage: React.FC = () => {
             <h2 className="text-2xl font-bold text-white font-mono mt-3">{formatINR(summary.income)}</h2>
           </div>
 
-          <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-red/2">
+          <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-white/8 shadow-md">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Expenses This Month</span>
               <div className="w-8 h-8 rounded-lg bg-red-negative/10 border border-red-negative/20 flex items-center justify-center text-red-negative">
@@ -370,10 +370,10 @@ export const TransactionsPage: React.FC = () => {
             <h2 className="text-2xl font-bold text-white font-mono mt-3">{formatINR(summary.expense)}</h2>
           </div>
 
-          <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-purple/2">
+          <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-white/8 shadow-md">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Net Cash Flow</span>
-              <div className="w-8 h-8 rounded-lg bg-purple-primary/10 border border-purple-primary/20 flex items-center justify-center text-purple-light">
+              <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
                 <ArrowRightLeft size={16} />
               </div>
             </div>
@@ -384,10 +384,10 @@ export const TransactionsPage: React.FC = () => {
         </div>
 
         {/* Filter Workspace */}
-        <div className="glassmorphism bg-bg-surface/30 p-5 border border-white/8 rounded-2xl space-y-4">
+        <div className="glassmorphism bg-surface/30 p-5 border border-white/8 rounded-lg space-y-4">
           {/* Row 1: Sliding Pill Tabs */}
           <div className="flex border-b border-white/5 pb-3">
-            <div className="flex bg-white/4 p-1 rounded-xl border border-white/5 relative">
+            <div className="flex bg-white/4 p-1 rounded-md border border-white/5 relative">
               {['all', 'income', 'expense', 'transfer'].map((tab) => (
                 <button
                   key={tab}
@@ -400,7 +400,7 @@ export const TransactionsPage: React.FC = () => {
                     <motion.div
                       layoutId="activeFilterTab"
                       transition={{ type: 'spring', damping: 22, stiffness: 220 }}
-                      className="absolute inset-0 bg-purple-primary rounded-lg shadow-glow-purple/30 z-0"
+                      className="absolute inset-0 bg-primary rounded-lg shadow-md z-0"
                     />
                   )}
                   <span className="relative z-10">{tab}</span>
@@ -419,7 +419,7 @@ export const TransactionsPage: React.FC = () => {
                 placeholder="Search description, category..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl pl-10 pr-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
+                className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md pl-10 pr-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
               />
             </div>
 
@@ -428,7 +428,7 @@ export const TransactionsPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsCategoryDropdownOpen(!isCategoryDropdownOpen)}
-                className="w-full flex items-center justify-between bg-white/3 hover:bg-white/5 border border-white/8 rounded-xl px-4 py-2 text-sm text-white focus:outline-hidden transition-all text-left cursor-pointer"
+                className="w-full flex items-center justify-between bg-white/3 hover:bg-white/5 border border-white/8 rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all text-left cursor-pointer"
               >
                 <span className="truncate">
                   {selectedCategories.length === 0
@@ -444,7 +444,7 @@ export const TransactionsPage: React.FC = () => {
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 5 }}
-                    className="absolute z-20 left-0 right-0 mt-1 glassmorphism bg-bg-surface/90 border border-white/10 rounded-xl shadow-xl max-h-56 overflow-y-auto p-2 space-y-1"
+                    className="absolute z-20 left-0 right-0 mt-1 glassmorphism bg-surface/90 border border-white/10 rounded-md shadow-xl max-h-56 overflow-y-auto p-2 space-y-1"
                   >
                     {uniqueCategories.map((cat) => {
                       const isChecked = selectedCategories.includes(cat);
@@ -463,7 +463,7 @@ export const TransactionsPage: React.FC = () => {
                                 setSelectedCategories((prev) => prev.filter((c) => c !== cat));
                               }
                             }}
-                            className="accent-purple-primary rounded-sm h-3.5 w-3.5"
+                            className="accent-primary rounded-sm h-3.5 w-3.5"
                           />
                           <span>{getCategoryEmoji(cat)}</span>
                           <span>{cat}</span>
@@ -482,7 +482,7 @@ export const TransactionsPage: React.FC = () => {
                   type="date"
                   value={dateFrom}
                   onChange={(e) => setDateFrom(e.target.value)}
-                  className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-3 py-2 text-xs text-white/80 focus:outline-hidden transition-all"
+                  className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-3 py-2 text-xs text-white/80 focus:outline-hidden transition-all"
                 />
               </div>
               <span className="text-xs text-white/30">to</span>
@@ -491,14 +491,14 @@ export const TransactionsPage: React.FC = () => {
                   type="date"
                   value={dateTo}
                   onChange={(e) => setDateTo(e.target.value)}
-                  className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-3 py-2 text-xs text-white/80 focus:outline-hidden transition-all"
+                  className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-3 py-2 text-xs text-white/80 focus:outline-hidden transition-all"
                 />
               </div>
 
               {(search || activeType !== 'all' || selectedCategories.length > 0 || dateFrom || dateTo) && (
                 <button
                   onClick={clearFilters}
-                  className="p-2 rounded-xl text-white/50 hover:text-white hover:bg-white/5 transition-all cursor-pointer shrink-0"
+                  className="p-2 rounded-md text-white/50 hover:text-white hover:bg-white/5 transition-all cursor-pointer shrink-0"
                   title="Clear Filters"
                 >
                   <X size={16} />
@@ -509,7 +509,7 @@ export const TransactionsPage: React.FC = () => {
         </div>
 
         {/* Transactions Table Workspace */}
-        <div className="glassmorphism bg-bg-surface/20 border border-white/8 rounded-2xl overflow-hidden shadow-xl">
+        <div className="glassmorphism bg-surface/20 border border-white/8 rounded-lg overflow-hidden shadow-xl">
           {transactions.length === 0 ? (
             <EmptyState
               icon={Plus}
@@ -541,7 +541,7 @@ export const TransactionsPage: React.FC = () => {
                             selectedIds.length === paginatedTransactions.length
                           }
                           onChange={(e) => handleSelectAll(e.target.checked)}
-                          className="accent-purple-primary cursor-pointer rounded-sm"
+                          className="accent-primary cursor-pointer rounded-sm"
                         />
                       </th>
                       <th className="py-4 px-4">Merchant / Details</th>
@@ -572,7 +572,7 @@ export const TransactionsPage: React.FC = () => {
                               type="checkbox"
                               checked={isSelected}
                               onChange={(e) => handleSelectOne(txn.id, e.target.checked)}
-                              className="accent-purple-primary cursor-pointer rounded-sm"
+                              className="accent-primary cursor-pointer rounded-sm"
                             />
                           </td>
                           <td className="py-4 px-4">
@@ -651,7 +651,7 @@ export const TransactionsPage: React.FC = () => {
                           type="checkbox"
                           checked={isSelected}
                           onChange={(e) => handleSelectOne(txn.id, e.target.checked)}
-                          className="accent-purple-primary cursor-pointer rounded-sm"
+                          className="accent-primary cursor-pointer rounded-sm"
                         />
                         <div
                           style={{ backgroundColor: `${categoryColor}15`, color: categoryColor }}
@@ -734,7 +734,7 @@ export const TransactionsPage: React.FC = () => {
               initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 100, opacity: 0 }}
-              className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 glassmorphism bg-purple-primary/10 border border-purple-primary/30 p-3 rounded-2xl flex items-center justify-between gap-6 shadow-[0_10px_30px_rgba(124,58,237,0.15)] max-w-sm w-[90%]"
+              className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 glassmorphism bg-primary/10 border border-primary/30 p-3 rounded-lg flex items-center justify-between gap-6 shadow-[0_10px_30px_rgba(124,58,237,0.15)] max-w-sm w-[90%]"
             >
               <div className="flex flex-col pl-2">
                 <span className="text-xs font-bold text-white leading-none">
@@ -797,14 +797,14 @@ export const TransactionsPage: React.FC = () => {
               {/* Left Column */}
               <div className="space-y-6">
                 {/* Type Selection */}
-                <div className="flex bg-white/4 p-1 rounded-xl border border-white/5">
+                <div className="flex bg-white/4 p-1 rounded-md border border-white/5">
                   {(['income', 'expense', 'transfer'] as const).map((type) => {
                     const typeColor =
                       type === 'income'
-                        ? 'bg-green-positive shadow-glow-green/10'
+                        ? 'bg-green-positive shadow-md-green/10'
                         : type === 'expense'
-                        ? 'bg-red-negative shadow-glow-red/10'
-                        : 'bg-blue-600 shadow-glow-blue/10';
+                        ? 'bg-red-negative shadow-md-red/10'
+                        : 'bg-blue-600 shadow-md-blue/10';
 
                     return (
                       <button
@@ -824,7 +824,7 @@ export const TransactionsPage: React.FC = () => {
                 </div>
 
                 {/* Giant Amount Input */}
-                <div className="flex flex-col items-center py-4 border-b border-white/10 group focus-within:border-purple-primary transition-colors">
+                <div className="flex flex-col items-center py-4 border-b border-white/10 group focus-within:border-primary transition-colors">
                   <div className="flex items-center justify-center w-full">
                     <span
                       className={`text-4xl font-display font-bold mr-2 ${
@@ -866,9 +866,9 @@ export const TransactionsPage: React.FC = () => {
                           key={cat.id}
                           type="button"
                           onClick={() => setValue('category', cat.id)}
-                          className={`flex flex-col items-center justify-center p-2.5 rounded-xl border text-xs gap-1 transition-all cursor-pointer ${
+                          className={`flex flex-col items-center justify-center p-2.5 rounded-md border text-xs gap-1 transition-all cursor-pointer ${
                             isSelected
-                              ? 'bg-purple-primary/10 border-purple-primary text-white shadow-glow-purple/5'
+                              ? 'bg-primary/10 border-primary text-white shadow-md'
                               : 'bg-white/2 border-white/5 text-white/60 hover:border-white/15 hover:text-white'
                           }`}
                         >
@@ -898,7 +898,7 @@ export const TransactionsPage: React.FC = () => {
                     type="text"
                     placeholder="e.g. Swiggy, Amazon India, Salary"
                     {...register('merchant')}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
+                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
                   />
                   {errors.merchant && (
                     <span className="text-[11px] text-red-negative font-medium">
@@ -917,7 +917,7 @@ export const TransactionsPage: React.FC = () => {
                     <input
                       type="date"
                       {...register('date')}
-                      className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:outline-hidden transition-all"
+                      className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md pl-10 pr-4 py-2.5 text-sm text-white focus:outline-hidden transition-all"
                     />
                   </div>
                   {errors.date && (
@@ -937,7 +937,7 @@ export const TransactionsPage: React.FC = () => {
                     maxLength={200}
                     placeholder="Add description notes (max 200 characters)..."
                     {...register('note')}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all resize-none placeholder:text-white/20"
+                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all resize-none placeholder:text-white/20"
                   />
                   {errors.note && (
                     <span className="text-[11px] text-red-negative font-medium">
@@ -951,7 +951,7 @@ export const TransactionsPage: React.FC = () => {
                   <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
                     Receipt Upload
                   </label>
-                  <label className="border border-dashed border-white/10 bg-white/2 hover:border-purple-primary/45 rounded-xl p-4 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-300 relative group">
+                  <label className="border border-dashed border-white/10 bg-white/2 hover:border-primary/45 rounded-md p-4 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-300 relative group">
                     <input
                       type="file"
                       accept=".jpg,.jpeg,.png,.pdf"
@@ -959,8 +959,8 @@ export const TransactionsPage: React.FC = () => {
                       className="hidden"
                     />
                     {receiptFile ? (
-                      <div className="flex items-center gap-2 text-white text-xs bg-purple-primary/10 border border-purple-primary/20 px-3 py-1.5 rounded-lg select-none">
-                        <FileText size={14} className="text-purple-light" />
+                      <div className="flex items-center gap-2 text-white text-xs bg-primary/10 border border-primary/20 px-3 py-1.5 rounded-lg select-none">
+                        <FileText size={14} className="text-primary" />
                         <span className="font-semibold max-w-[150px] truncate">{receiptFile}</span>
                         <button
                           type="button"
@@ -975,7 +975,7 @@ export const TransactionsPage: React.FC = () => {
                       </div>
                     ) : (
                       <>
-                        <UploadCloud size={24} className="text-white/35 group-hover:text-purple-light transition-colors mb-2" />
+                        <UploadCloud size={24} className="text-white/35 group-hover:text-primary transition-colors mb-2" />
                         <span className="text-xs font-bold text-white/60">Upload receipt</span>
                         <span className="text-[10px] text-white/30 mt-1">Accepts PNG, JPG, PDF</span>
                       </>
@@ -1016,14 +1016,14 @@ export const TransactionsPage: React.FC = () => {
               {/* Left Column */}
               <div className="space-y-6">
                 {/* Type Selection */}
-                <div className="flex bg-white/4 p-1 rounded-xl border border-white/5">
+                <div className="flex bg-white/4 p-1 rounded-md border border-white/5">
                   {(['income', 'expense', 'transfer'] as const).map((type) => {
                     const typeColor =
                       type === 'income'
-                        ? 'bg-green-positive shadow-glow-green/10'
+                        ? 'bg-green-positive shadow-md-green/10'
                         : type === 'expense'
-                        ? 'bg-red-negative shadow-glow-red/10'
-                        : 'bg-blue-600 shadow-glow-blue/10';
+                        ? 'bg-red-negative shadow-md-red/10'
+                        : 'bg-blue-600 shadow-md-blue/10';
 
                     return (
                       <button
@@ -1043,7 +1043,7 @@ export const TransactionsPage: React.FC = () => {
                 </div>
 
                 {/* Giant Amount Input */}
-                <div className="flex flex-col items-center py-4 border-b border-white/10 group focus-within:border-purple-primary transition-colors">
+                <div className="flex flex-col items-center py-4 border-b border-white/10 group focus-within:border-primary transition-colors">
                   <div className="flex items-center justify-center w-full">
                     <span
                       className={`text-4xl font-display font-bold mr-2 ${
@@ -1084,9 +1084,9 @@ export const TransactionsPage: React.FC = () => {
                           key={cat.id}
                           type="button"
                           onClick={() => setValue('category', cat.id)}
-                          className={`flex flex-col items-center justify-center p-2.5 rounded-xl border text-xs gap-1 transition-all cursor-pointer ${
+                          className={`flex flex-col items-center justify-center p-2.5 rounded-md border text-xs gap-1 transition-all cursor-pointer ${
                             isSelected
-                              ? 'bg-purple-primary/10 border-purple-primary text-white shadow-glow-purple/5'
+                              ? 'bg-primary/10 border-primary text-white shadow-md'
                               : 'bg-white/2 border-white/5 text-white/60 hover:border-white/15 hover:text-white'
                           }`}
                         >
@@ -1116,7 +1116,7 @@ export const TransactionsPage: React.FC = () => {
                     type="text"
                     placeholder="e.g. Swiggy, Amazon India, Salary"
                     {...register('merchant')}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
+                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
                   />
                   {errors.merchant && (
                     <span className="text-[11px] text-red-negative font-medium">
@@ -1135,7 +1135,7 @@ export const TransactionsPage: React.FC = () => {
                     <input
                       type="date"
                       {...register('date')}
-                      className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:outline-hidden transition-all"
+                      className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md pl-10 pr-4 py-2.5 text-sm text-white focus:outline-hidden transition-all"
                     />
                   </div>
                   {errors.date && (
@@ -1155,7 +1155,7 @@ export const TransactionsPage: React.FC = () => {
                     maxLength={200}
                     placeholder="Add description notes (max 200 characters)..."
                     {...register('note')}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all resize-none placeholder:text-white/20"
+                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all resize-none placeholder:text-white/20"
                   />
                   {errors.note && (
                     <span className="text-[11px] text-red-negative font-medium">
@@ -1169,7 +1169,7 @@ export const TransactionsPage: React.FC = () => {
                   <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
                     Receipt Upload
                   </label>
-                  <label className="border border-dashed border-white/10 bg-white/2 hover:border-purple-primary/45 rounded-xl p-4 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-300 relative group">
+                  <label className="border border-dashed border-white/10 bg-white/2 hover:border-primary/45 rounded-md p-4 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-300 relative group">
                     <input
                       type="file"
                       accept=".jpg,.jpeg,.png,.pdf"
@@ -1177,8 +1177,8 @@ export const TransactionsPage: React.FC = () => {
                       className="hidden"
                     />
                     {receiptFile ? (
-                      <div className="flex items-center gap-2 text-white text-xs bg-purple-primary/10 border border-purple-primary/20 px-3 py-1.5 rounded-lg select-none">
-                        <FileText size={14} className="text-purple-light" />
+                      <div className="flex items-center gap-2 text-white text-xs bg-primary/10 border border-primary/20 px-3 py-1.5 rounded-lg select-none">
+                        <FileText size={14} className="text-primary" />
                         <span className="font-semibold max-w-[150px] truncate">{receiptFile}</span>
                         <button
                           type="button"
@@ -1193,7 +1193,7 @@ export const TransactionsPage: React.FC = () => {
                       </div>
                     ) : (
                       <>
-                        <UploadCloud size={24} className="text-white/35 group-hover:text-purple-light transition-colors mb-2" />
+                        <UploadCloud size={24} className="text-white/35 group-hover:text-primary transition-colors mb-2" />
                         <span className="text-xs font-bold text-white/60">Upload receipt</span>
                         <span className="text-[10px] text-white/30 mt-1">Accepts PNG, JPG, PDF</span>
                       </>

@@ -1,0 +1,247 @@
+/*
+  FinVerse theme
+  Tailwind CSS 4. Import this file right after Tailwind in frontend/src/index.css:
+
+    @import "tailwindcss";
+    @import "./theme.css";
+
+  Rules baked in: blue-only gradients, no purple, no pill buttons,
+  one orange accent used only on the logo hover.
+*/
+
+/* 1. Palette (your ten colors, exact names) */
+:root {
+  --smart-blue: #0466c8;
+  --sapphire: #0353a4;
+  --regal-navy: #023e7d;
+  --prussian-blue: #002855;
+  --prussian-blue-2: #001845;
+  --prussian-blue-3: #001233;
+  --twilight-indigo: #33415c;
+  --blue-slate: #5c677d;
+  --slate-grey: #7d8597;
+  --lavender-grey: #979dac; /* muted text and disabled states only, never a gradient stop */
+
+  /* Added to complete the palette (the ten colors have no light neutral or orange) */
+  --accent-orange: #e8730c;
+  --paper: #f4f6fa;
+  --paper-tint: #e4eefa;
+  --paper-sunken: #eaeff6;
+  --paper-line: #d5dae3;
+  --ink-on-dark: #eef2f8;
+  --link-on-dark: #7ab3f5;
+  --link-on-dark-hover: #a5cbf8;
+  --primary-on-dark-hover: #1f7bdc;
+  --gain: #1e7b4f;
+  --loss: #b3261e;
+  --warning: #9a6700;
+
+  color-scheme: light dark;
+}
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+
+/* 2. Semantic tokens (light, dark) */
+:root {
+  --ground: light-dark(var(--paper), var(--prussian-blue-3));
+  --surface: light-dark(#ffffff, var(--prussian-blue-2));
+  --surface-sunken: light-dark(var(--paper-sunken), #000e28);
+  --border: light-dark(var(--paper-line), var(--twilight-indigo));
+
+  --ink: light-dark(var(--prussian-blue-3), var(--ink-on-dark));
+  --ink-muted: light-dark(var(--twilight-indigo), var(--lavender-grey));
+  --ink-subtle: light-dark(var(--blue-slate), var(--slate-grey));
+
+  --primary: var(--smart-blue);
+  --primary-hover: light-dark(var(--sapphire), var(--primary-on-dark-hover));
+  --on-primary: #ffffff;
+  --link: light-dark(var(--sapphire), var(--link-on-dark));
+  --link-hover: light-dark(var(--regal-navy), var(--link-on-dark-hover));
+  --focus: light-dark(var(--smart-blue), var(--link-on-dark));
+
+  --chart-1: light-dark(var(--smart-blue), #5aa5f2);
+  --chart-2: light-dark(var(--regal-navy), #1f7bdc);
+  --chart-3: light-dark(var(--blue-slate), var(--slate-grey));
+  --chart-4: light-dark(var(--lavender-grey), var(--lavender-grey));
+
+  --logo-ink: light-dark(#111111, #f6f7f5);
+  --logo-from: light-dark(var(--sapphire), #6fa8dc);
+  --logo-to: light-dark(var(--accent-orange), #f28c28);
+
+  --radius-control: 6px;
+  --radius-card: 8px;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* 3. Gradients (all blue family, plus the logo hover) */
+:root {
+  --gradient-brand: linear-gradient(135deg, var(--smart-blue) 0%, var(--regal-navy) 55%, var(--prussian-blue-2) 100%);
+  --gradient-deep: linear-gradient(180deg, var(--prussian-blue) 0%, var(--prussian-blue-3) 100%);
+  --gradient-slate: linear-gradient(135deg, var(--twilight-indigo) 0%, var(--prussian-blue) 100%);
+  --gradient-soft: linear-gradient(180deg, light-dark(var(--paper-tint), var(--prussian-blue-2)) 0%, var(--ground) 100%);
+  --gradient-button: linear-gradient(180deg, var(--smart-blue) 0%, var(--sapphire) 100%);
+  --gradient-button-hover: linear-gradient(180deg, var(--sapphire) 0%, var(--regal-navy) 100%);
+  /* Do not interpolate this one in oklch: blue to orange then routes through purple */
+  --gradient-wordmark: linear-gradient(90deg, var(--logo-from) 0%, var(--logo-to) 100%);
+}
+
+/* 4. Tailwind utilities: bg-ground, text-ink, bg-primary, bg-brand-gradient, ... */
+@theme inline {
+  --color-smart-blue: var(--smart-blue);
+  --color-sapphire: var(--sapphire);
+  --color-regal-navy: var(--regal-navy);
+  --color-prussian-blue: var(--prussian-blue);
+  --color-prussian-blue-2: var(--prussian-blue-2);
+  --color-prussian-blue-3: var(--prussian-blue-3);
+  --color-twilight-indigo: var(--twilight-indigo);
+  --color-blue-slate: var(--blue-slate);
+  --color-slate-grey: var(--slate-grey);
+  --color-lavender-grey: var(--lavender-grey);
+
+  --color-ground: var(--ground);
+  --color-surface: var(--surface);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-line: var(--border);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-subtle: var(--ink-subtle);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-link: var(--link);
+  --color-focus: var(--focus);
+  --color-gain: var(--gain);
+  --color-loss: var(--loss);
+  --color-warning: var(--warning);
+}
+
+@utility bg-brand-gradient { background-image: var(--gradient-brand); }
+@utility bg-deep-gradient { background-image: var(--gradient-deep); }
+@utility bg-slate-gradient { background-image: var(--gradient-slate); }
+@utility bg-soft-gradient { background-image: var(--gradient-soft); }
+
+/* 5. Base */
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--ink);
+    background-color: var(--ground);
+    background-image: var(--gradient-soft);
+    background-repeat: no-repeat;
+    background-size: 100% 480px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; letter-spacing: -0.01em; }
+
+  a { color: var(--link); text-underline-offset: 0.2em; }
+  a:hover { color: var(--link-hover); }
+
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  ::selection { background: var(--smart-blue); color: #ffffff; }
+
+  ::placeholder { color: var(--ink-subtle); opacity: 1; }
+}
+
+/* 6. Components */
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0.625rem 1.125rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-control);
+    font: inherit;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .btn:disabled, .btn[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; }
+
+  .btn-primary {
+    color: var(--on-primary);
+    background-color: var(--primary);
+    background-image: var(--gradient-button);
+  }
+  .btn-primary:hover { color: var(--on-primary); background-image: var(--gradient-button-hover); }
+
+  .btn-secondary {
+    color: var(--ink);
+    background-color: var(--surface);
+    border-color: var(--border);
+  }
+  .btn-secondary:hover { background-color: var(--surface-sunken); color: var(--ink); }
+
+  .card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    padding: 1.25rem;
+  }
+
+  .input {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.625rem 0.75rem;
+    color: var(--ink);
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-control);
+    font: inherit;
+  }
+  .input:hover { border-color: var(--ink-subtle); }
+  .input:focus-visible { border-color: var(--focus); outline-offset: 0; }
+
+  /* Gradient sections */
+  /* Dark surfaces force the dark scheme, so text, borders and the logo flip automatically inside them. Add the on-dark class to any other dark panel. */
+  .on-dark { color-scheme: dark; }
+  .band-brand { color-scheme: dark; color: #ffffff; background-color: var(--regal-navy); background-image: var(--gradient-brand); }
+  .band-brand h1, .band-brand h2, .band-brand h3 { color: #ffffff; }
+  .band-brand a { color: #ffffff; }
+
+  .site-footer { color-scheme: dark; color: #dde4ef; background-color: var(--prussian-blue-3); background-image: var(--gradient-deep); }
+  .site-footer a { color: #ffffff; }
+  .site-footer a:hover { color: var(--link-on-dark-hover); }
+
+  /* Money. Always pair with a + or - sign or an arrow, never color alone */
+  .amount-gain { color: var(--gain); }
+  .amount-loss { color: var(--loss); }
+  :root[data-theme="dark"] .amount-gain { color: #4fc38a; }
+  :root[data-theme="dark"] .amount-loss { color: #ff8a80; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .amount-gain { color: #4fc38a; }
+    :root:not([data-theme="light"]) .amount-loss { color: #ff8a80; }
+  }
+
+  /* Logo: black by default, blue to orange wordmark on hover or keyboard focus */
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    color: var(--logo-ink);
+    text-decoration: none;
+  }
+  .logo-mark-bg { fill: var(--logo-ink); }
+  .logo-mark-f { fill: light-dark(#ffffff, #111111); }
+  .logo-wordmark-base { fill: var(--logo-ink); opacity: 1; transition: opacity 150ms ease; }
+  .logo-wordmark-gradient { fill: url(#fv-wordmark-gradient); opacity: 0; transition: opacity 150ms ease; }
+  .logo-stop-start { stop-color: var(--logo-from); }
+  .logo-stop-end { stop-color: var(--logo-to); }
+  .logo:hover .logo-wordmark-base,
+  .logo:focus-visible .logo-wordmark-base { opacity: 0; }
+  .logo:hover .logo-wordmark-gradient,
+  .logo:focus-visible .logo-wordmark-gradient { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-wordmark-base, .logo-wordmark-gradient { transition: none; }
+}

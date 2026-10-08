@@ -203,7 +203,7 @@ export const generateReport = async (
     let downloadUrl = '';
 
     // Use BACKEND_URL (set on Render) so the download link always points to the
-    // backend's own origin — CLIENT_URL is the frontend's domain and must never be
+    // backend's own origin - CLIENT_URL is the frontend's domain and must never be
     // used to build a self-referencing backend route.
     const backendUrl = env.BACKEND_URL || 'http://localhost:5000';
 

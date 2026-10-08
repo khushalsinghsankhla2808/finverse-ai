@@ -6,7 +6,7 @@ import { Mail, Lock, User, Check, Loader2 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import Input from '../ui/Input';
 import Checkbox from '../ui/Checkbox';
-import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const registerSchema = zod
   .object({
@@ -82,24 +82,24 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccessRedirect, o
 
   const strengthLabels = ['Too Short', 'Weak', 'Fair', 'Good', 'Strong'];
   const strengthColors = [
-    'bg-white/10', // 0
-    'bg-red-negative shadow-glow-red', // 1
-    'bg-orange-500 shadow-lg shadow-orange-500/20', // 2
-    'bg-gold-savings shadow-glow-gold', // 3
-    'bg-green-positive shadow-glow-green', // 4
+    'bg-surface-sunken',
+    'bg-red-500',
+    'bg-amber-500',
+    'bg-blue-500',
+    'bg-emerald-500',
   ];
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
-        <h2 className="text-2xl font-bold font-display tracking-tight text-white">Create your account</h2>
-        <p className="text-sm text-white/50">Start tracking your wealth in 3D AI environment</p>
+        <h2 className="text-2xl font-bold font-sans tracking-tight text-ink">Create your account</h2>
+        <p className="text-sm text-ink-muted">Create your FinVerse AI account.</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         {/* Full Name */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold uppercase tracking-wider text-white/50">Full Name</label>
+          <label className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Full Name</label>
           <Input
             type="text"
             placeholder="John Doe"
@@ -112,7 +112,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccessRedirect, o
 
         {/* Email */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold uppercase tracking-wider text-white/50">Email Address</label>
+          <label className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Email Address</label>
           <Input
             type="email"
             placeholder="name@example.com"
@@ -125,7 +125,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccessRedirect, o
 
         {/* Password */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold uppercase tracking-wider text-white/50">Password</label>
+          <label className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Password</label>
           <Input
             type="password"
             placeholder="••••••••"
@@ -139,36 +139,20 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccessRedirect, o
           {passwordVal.length > 0 && (
             <div className="flex flex-col gap-1.5 mt-1">
               <div className="flex justify-between items-center text-xs">
-                <span className="text-white/40">Password strength:</span>
-                <span
-                  className={
-                    strengthScore === 1
-                      ? 'text-red-negative font-medium'
-                      : strengthScore === 2
-                      ? 'text-orange-400 font-medium'
-                      : strengthScore === 3
-                      ? 'text-gold-savings font-medium'
-                      : strengthScore === 4
-                      ? 'text-green-positive font-medium'
-                      : 'text-white/40'
-                  }
-                >
+                <span className="text-ink-subtle">Password strength:</span>
+                <span className="font-medium text-ink">
                   {strengthLabels[strengthScore]}
                 </span>
               </div>
-              <div className="grid grid-cols-4 gap-1.5 h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+              <div className="grid grid-cols-4 gap-1.5 h-1.5 w-full bg-surface-sunken rounded-[var(--radius-control)] overflow-hidden">
                 {[1, 2, 3, 4].map((index) => (
                   <div
                     key={index}
-                    className="relative w-full h-full bg-white/5 rounded-full"
+                    className="relative w-full h-full bg-surface-sunken rounded-[var(--radius-control)]"
                   >
                     {strengthScore >= index && (
-                      <motion.div
-                        layoutId="strength-bar"
-                        initial={{ width: 0 }}
-                        animate={{ width: '100%' }}
-                        transition={{ duration: 0.3 }}
-                        className={`h-full w-full rounded-full ${strengthColors[strengthScore]}`}
+                      <div
+                        className={`h-full w-full rounded-[var(--radius-control)] ${strengthColors[strengthScore]}`}
                       />
                     )}
                   </div>
@@ -180,7 +164,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccessRedirect, o
 
         {/* Confirm Password */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold uppercase tracking-wider text-white/50">Confirm Password</label>
+          <label className="text-xs font-semibold uppercase tracking-wider text-ink-subtle">Confirm Password</label>
           <Input
             type="password"
             placeholder="••••••••"
@@ -197,20 +181,20 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccessRedirect, o
             label={
               <span>
                 I agree to the{' '}
-                <a href="#terms" className="text-[#FF9A6B] hover:underline">
+                <Link to="/terms" className="text-link hover:underline">
                   Terms of Service
-                </a>{' '}
+                </Link>{' '}
                 and{' '}
-                <a href="#privacy" className="text-[#FF9A6B] hover:underline">
+                <Link to="/privacy" className="text-link hover:underline">
                   Privacy Policy
-                </a>
+                </Link>
               </span>
             }
             disabled={isLoading || isSuccess}
             {...register('agreeTerms')}
           />
           {errors.agreeTerms && (
-            <span className="text-xs text-red-400 ml-6 mt-0.5">
+            <span className="text-xs amount-loss ml-6 mt-0.5">
               {errors.agreeTerms.message}
             </span>
           )}
@@ -218,8 +202,8 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccessRedirect, o
 
         {/* Auth Error Display */}
         {authError && (
-          <div className="text-xs text-red-400 font-medium bg-red-500/10 border border-red-500/20 px-3 py-2 rounded-lg mt-1">
-            ⚠️ {authError}
+          <div className="text-xs amount-loss font-medium bg-red-500/10 border border-red-500/20 px-3 py-2 rounded-[var(--radius-control)] mt-1">
+            {authError}
           </div>
         )}
 
@@ -227,20 +211,16 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccessRedirect, o
         <button
           type="submit"
           disabled={isLoading || isSuccess}
-          className="relative mt-2 flex h-11 w-full items-center justify-center rounded-lg bg-[#FF9A6B] hover:bg-[#FFB896] px-4 py-2 text-sm font-bold text-[#1A1A1A] transition-all duration-200 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 cursor-pointer overflow-hidden"
+          className="btn btn-primary w-full mt-2"
         >
           {isSuccess ? (
-            <motion.div
-              initial={{ scale: 0.5, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="flex items-center gap-2"
-            >
-              <Check size={18} className="text-[#1A1A1A]" />
+            <div className="flex items-center gap-2">
+              <Check size={18} />
               <span>Account Created! Redirecting...</span>
-            </motion.div>
+            </div>
           ) : isLoading ? (
             <div className="flex items-center gap-2">
-              <Loader2 size={18} className="animate-spin text-[#1A1A1A]" />
+              <Loader2 size={18} className="animate-spin" />
               <span>Creating account...</span>
             </div>
           ) : (
@@ -250,12 +230,12 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSuccessRedirect, o
       </form>
 
       {/* Bottom Link */}
-      <div className="text-center text-sm text-white/50 mt-1">
+      <div className="text-center text-sm text-ink-muted mt-1">
         Already have an account?{' '}
         <button
           type="button"
           onClick={onSignInClick}
-          className="font-semibold text-[#FF9A6B] hover:text-[#FFB896] transition-colors cursor-pointer"
+          className="font-semibold text-link hover:text-link-hover transition-colors cursor-pointer"
         >
           Sign In
         </button>

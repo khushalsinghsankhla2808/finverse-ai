@@ -6,7 +6,7 @@ import { reportSchema, downloadFilenameSchema } from '../schemas/report.schema';
 
 const router = Router();
 
-// Public download endpoint — validated with strict filename schema to prevent path traversal
+// Public download endpoint - validated with strict filename schema to prevent path traversal
 router.get('/download/:filename', validate({ params: downloadFilenameSchema }), downloadReportFile);
 
 // Protected report generation

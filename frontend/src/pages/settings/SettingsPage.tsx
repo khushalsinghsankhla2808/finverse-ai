@@ -89,12 +89,11 @@ const SectionCard: React.FC<SectionCardProps> = ({
   icon,
   title,
   subtitle,
-  accentColor = 'purple',
+  accentColor = 'blue',
   children,
 }) => {
   const accentMap: Record<string, string> = {
-    purple: 'bg-purple-primary/10 border-purple-primary/20 text-purple-light',
-    blue:   'bg-blue-500/10 border-blue-500/20 text-blue-400',
+    blue: 'bg-primary/10 border-primary/20 text-primary',
     green:  'bg-emerald-500/10 border-emerald-500/20 text-emerald-400',
     amber:  'bg-amber-500/10 border-amber-500/20 text-amber-400',
     red:    'bg-red-negative/10 border-red-negative/20 text-red-400',
@@ -106,11 +105,11 @@ const SectionCard: React.FC<SectionCardProps> = ({
       variants={cardVariants}
       initial="hidden"
       animate="visible"
-      className="glassmorphism bg-bg-surface/40 border border-white/8 rounded-2xl overflow-hidden"
+      className="glassmorphism bg-surface/40 border border-white/8 rounded-2xl overflow-hidden"
     >
       {/* Card Header */}
       <div className="flex items-center gap-4 px-6 py-5 border-b border-white/5">
-        <div className={`w-10 h-10 rounded-xl border flex items-center justify-center shrink-0 ${accentMap[accentColor]}`}>
+        <div className={`w-10 h-10 rounded-md border flex items-center justify-center shrink-0 ${accentMap[accentColor]}`}>
           {icon}
         </div>
         <div>
@@ -143,7 +142,7 @@ const Toggle: React.FC<{
       aria-checked={checked}
       onClick={() => onChange(!checked)}
       className={`relative w-11 h-6 rounded-full transition-colors duration-200 shrink-0 ${
-        checked ? 'bg-purple-primary' : 'bg-white/10'
+        checked ? 'bg-primary' : 'bg-white/10'
       }`}
     >
       <span
@@ -174,7 +173,7 @@ const Field: React.FC<{
 );
 
 const inputClass =
-  'w-full h-10 px-3.5 rounded-xl bg-white/5 border border-white/10 text-white text-sm placeholder:text-white/25 focus:outline-none focus:border-purple-primary/60 focus:bg-white/8 transition-all duration-200';
+  'w-full h-10 px-3.5 rounded-md bg-white/5 border border-white/10 text-white text-sm placeholder:text-white/25 focus:outline-none focus:border-primary/60 focus:bg-white/8 transition-all duration-200';
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
@@ -348,16 +347,16 @@ export const SettingsPage: React.FC = () => {
         </div>
 
         {/* ── 1. PROFILE ──────────────────────────────────────────────────────── */}
-        <SectionCard index={0} icon={<User size={18} />} title="Profile" subtitle="Your public identity on FinVerse" accentColor="purple">
+        <SectionCard index={0} icon={<User size={18} />} title="Profile" subtitle="Your public identity on FinVerse" accentColor="blue">
           {/* Avatar */}
           <div className="flex items-center gap-5">
             <div className="relative shrink-0">
-              <div className="w-16 h-16 rounded-2xl bg-[#FF9A6B] flex items-center justify-center text-[#1A1A1A] text-xl font-bold shadow-[0_0_24px_rgba(255,154,107,0.35)]">
+              <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center text-ground text-xl font-bold shadow-md">
                 {initials}
               </div>
               {isPremium && (
-                <div className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-[#2DD4BF] flex items-center justify-center shadow-md">
-                  <Crown size={12} className="text-[#1A1A1A]" />
+                <div className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-md">
+                  <Crown size={12} className="text-ground" />
                 </div>
               )}
             </div>
@@ -365,9 +364,9 @@ export const SettingsPage: React.FC = () => {
               <p className="text-base font-bold text-white">{user?.name || 'User'}</p>
               <p className="text-sm text-white/50">{user?.email}</p>
               <div className="flex items-center gap-2 mt-1.5">
-                <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold leading-none ${
+                <span className={`text-[10px] px-2 py-0.5 rounded-md font-bold leading-none ${
                   isPremium
-                    ? 'bg-[#2DD4BF] text-[#1A1A1A] shadow-[0_0_10px_rgba(45,212,191,0.3)]'
+                    ? 'bg-primary text-ground shadow-md'
                     : 'bg-white/10 text-white/50'
                 }`}>
                   {isPremium ? '✦ Premium' : 'Free Plan'}
@@ -541,16 +540,16 @@ export const SettingsPage: React.FC = () => {
                   key={c.code}
                   id={`currency-${c.code}`}
                   onClick={() => handleCurrencyChange(c.code)}
-                  className={`flex flex-col items-center gap-1 px-2 py-3 rounded-xl border transition-all duration-200 cursor-pointer ${
+                  className={`flex flex-col items-center gap-1 px-2 py-3 rounded-md border transition-all duration-200 cursor-pointer ${
                     activeCurrency.code === c.code
-                      ? 'bg-[rgba(255,154,107,0.14)] border-[#FF9A6B] text-white shadow-[0_0_40px_rgba(255,154,107,0.30)]'
+                      ? 'bg-primary/10 border-primary text-white shadow-md'
                       : 'bg-white/3 border-white/8 text-white/50 hover:bg-white/6 hover:text-white/80'
                   }`}
                 >
                   <span className="text-lg leading-none">{c.flag}</span>
                   <span className="text-[11px] font-bold">{c.code}</span>
                   {activeCurrency.code === c.code && (
-                    <Check size={10} className="text-[#FF9A6B]" />
+                    <Check size={10} className="text-primary" />
                   )}
                 </button>
               ))}
@@ -624,7 +623,7 @@ export const SettingsPage: React.FC = () => {
           </div>
 
           {/* Delete Account */}
-          <div className="flex items-center justify-between gap-4 p-4 rounded-xl bg-red-negative/5 border border-red-negative/15">
+          <div className="flex items-center justify-between gap-4 p-4 rounded-md bg-red-negative/5 border border-red-negative/15">
             <div>
               <p className="text-sm font-semibold text-red-400">Delete Account</p>
               <p className="text-xs text-white/40 mt-0.5">

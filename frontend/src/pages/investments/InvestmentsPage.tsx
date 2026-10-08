@@ -18,11 +18,11 @@ import EmptyState from "@/components/common/EmptyState";
 
 // Asset colors
 const ASSET_COLORS: Record<string, string> = {
-  stocks: "#FF9A6B", // Peach
-  mutual_funds: "#2DD4BF", // Teal
-  gold: "#FFB896", // Peach light
+  stocks: "#0466c8", // Peach
+  mutual_funds: "#0353a4", // Teal
+  gold: "#023e7d", // Peach light
   crypto: "#FF6B9D", // Pink
-  fixed_deposit: "#5EEAD4", // Teal light
+  fixed_deposit: "#5c677d", // Teal light
   other: "#FACC15", // Warning yellow
 };
 
@@ -261,7 +261,7 @@ export const InvestmentsPage: React.FC = () => {
             {/* Portfolio Summary Widgets */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {/* Total Invested */}
-              <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-purple/2">
+              <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-white/8 shadow-md">
                 <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">
                   Total Invested
                 </span>
@@ -271,7 +271,7 @@ export const InvestmentsPage: React.FC = () => {
               </div>
 
               {/* Current Value */}
-              <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-blue/2">
+              <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-white/8 shadow-md">
                 <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">
                   Current Value
                 </span>
@@ -282,10 +282,10 @@ export const InvestmentsPage: React.FC = () => {
 
               {/* Gain/Loss */}
               <div
-                className={`glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 ${
+                className={`glassmorphism bg-surface/40 p-5 rounded-lg border border-white/8 ${
                   (portfolioSummary?.totalGainLoss || 0) >= 0
-                    ? "shadow-glow-green/2 border-green-positive/20"
-                    : "shadow-glow-red/2 border-red-negative/20"
+                    ? "shadow-md border-green-positive/20"
+                    : "shadow-md border-red-negative/20"
                 }`}
               >
                 <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">
@@ -305,10 +305,10 @@ export const InvestmentsPage: React.FC = () => {
 
               {/* Returns Rate */}
               <div
-                className={`glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 ${
+                className={`glassmorphism bg-surface/40 p-5 rounded-lg border border-white/8 ${
                   (portfolioSummary?.totalGainLossPercent || 0) >= 0
-                    ? "shadow-glow-green/2 border-green-positive/20"
-                    : "shadow-glow-red/2 border-red-negative/20"
+                    ? "shadow-md border-green-positive/20"
+                    : "shadow-md border-red-negative/20"
                 }`}
               >
                 <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">
@@ -336,7 +336,7 @@ export const InvestmentsPage: React.FC = () => {
             {/* Charts & Table Segment */}
             <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
               {/* Allocation Donut */}
-              <div className="glassmorphism bg-bg-surface/30 p-5 border border-white/8 rounded-2xl lg:col-span-4 h-[340px] flex flex-col justify-between">
+              <div className="glassmorphism bg-surface/30 p-5 border border-white/8 rounded-lg lg:col-span-4 h-[340px] flex flex-col justify-between">
                 <div>
                   <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider block">
                     Portfolio Split
@@ -398,7 +398,7 @@ export const InvestmentsPage: React.FC = () => {
               </div>
 
               {/* Performance Table */}
-              <div className="glassmorphism bg-bg-surface/30 p-5 border border-white/8 rounded-2xl lg:col-span-6 h-[340px] flex flex-col justify-between">
+              <div className="glassmorphism bg-surface/30 p-5 border border-white/8 rounded-lg lg:col-span-6 h-[340px] flex flex-col justify-between">
                 <div>
                   <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider block">
                     Performance
@@ -490,7 +490,7 @@ export const InvestmentsPage: React.FC = () => {
                   <motionBase.div
                     key={inv.id}
                     layout
-                    className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 flex flex-col justify-between hover:scale-[1.01] hover:shadow-glow-purple/2 transition-all duration-300 relative overflow-hidden"
+                    className="glassmorphism bg-surface/40 p-5 rounded-lg border border-white/8 flex flex-col justify-between hover:scale-[1.01] hover:shadow-md transition-all duration-300 relative overflow-hidden"
                   >
                     {/* Header */}
                     <div className="flex justify-between items-start gap-4">
@@ -510,7 +510,7 @@ export const InvestmentsPage: React.FC = () => {
 
                       <div className="flex items-center gap-1.5 shrink-0">
                         {inv.platform && (
-                          <span className="px-2 py-0.5 rounded-full text-[8px] font-bold bg-white/5 border border-white/10 text-white/60">
+                          <span className="px-2 py-0.5 rounded-md text-[8px] font-bold bg-white/5 border border-white/10 text-white/60">
                             {inv.platform}
                           </span>
                         )}
@@ -623,9 +623,9 @@ export const InvestmentsPage: React.FC = () => {
                           key={type}
                           type="button"
                           onClick={() => setValue("assetType", type as any)}
-                          className={`flex flex-col items-center justify-center p-2 rounded-xl border text-[10px] gap-0.5 cursor-pointer transition-all ${
+                          className={`flex flex-col items-center justify-center p-2 rounded-md border text-[10px] gap-0.5 cursor-pointer transition-all ${
                             isSelected
-                              ? "bg-purple-primary/10 border-purple-primary text-white shadow-glow-purple/5"
+                              ? "bg-primary/10 border-primary text-white shadow-md"
                               : "bg-white/2 border-white/5 text-white/60 hover:border-white/15"
                           }`}
                         >
@@ -647,7 +647,7 @@ export const InvestmentsPage: React.FC = () => {
                     type="text"
                     placeholder="e.g. Reliance Industries, HDFC Nifty Index"
                     {...register("name")}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
+                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
                   />
                   {errors.name && (
                     <span className="text-[11px] text-red-negative font-medium">
@@ -664,7 +664,7 @@ export const InvestmentsPage: React.FC = () => {
                     type="text"
                     placeholder="e.g. RELIANCE, INFYNSE"
                     {...register("symbol")}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
+                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
                   />
                 </div>
 
@@ -676,7 +676,7 @@ export const InvestmentsPage: React.FC = () => {
                     type="text"
                     placeholder="e.g. Zerodha, Groww, SBI"
                     {...register("platform")}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
+                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
                   />
                 </div>
               </div>
@@ -693,7 +693,7 @@ export const InvestmentsPage: React.FC = () => {
                       step="any"
                       placeholder="0"
                       {...register("units", { valueAsNumber: true })}
-                      className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20 font-mono"
+                      className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20 font-mono"
                     />
                     {errors.units && (
                       <span className="text-[11px] text-red-negative font-medium">
@@ -709,7 +709,7 @@ export const InvestmentsPage: React.FC = () => {
                     <input
                       type="date"
                       {...register("purchaseDate")}
-                      className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2 text-sm text-white focus:outline-hidden transition-all"
+                      className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all"
                     />
                     {errors.purchaseDate && (
                       <span className="text-[11px] text-red-negative font-medium">
@@ -729,7 +729,7 @@ export const InvestmentsPage: React.FC = () => {
                       step="any"
                       placeholder="0.00"
                       {...register("purchasePrice", { valueAsNumber: true })}
-                      className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20 font-mono"
+                      className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20 font-mono"
                     />
                     {errors.purchasePrice && (
                       <span className="text-[11px] text-red-negative font-medium">
@@ -747,7 +747,7 @@ export const InvestmentsPage: React.FC = () => {
                       step="any"
                       placeholder="0.00"
                       {...register("currentPrice", { valueAsNumber: true })}
-                      className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20 font-mono"
+                      className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20 font-mono"
                     />
                     {errors.currentPrice && (
                       <span className="text-[11px] text-red-negative font-medium">
@@ -765,12 +765,12 @@ export const InvestmentsPage: React.FC = () => {
                     rows={2}
                     placeholder="Notes (optional)..."
                     {...register("notes")}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-4 py-2 text-sm text-white focus:outline-hidden transition-all resize-none placeholder:text-white/20"
+                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all resize-none placeholder:text-white/20"
                   />
                 </div>
 
                 {/* Live Preview Block */}
-                <div className="bg-white/3 border border-white/5 rounded-xl p-4 space-y-1.5 text-xs">
+                <div className="bg-white/3 border border-white/5 rounded-md p-4 space-y-1.5 text-xs">
                   <span className="text-[9px] text-white/40 uppercase font-bold tracking-wider block">
                     Live Calculation Preview
                   </span>

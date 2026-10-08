@@ -124,7 +124,7 @@ export const AnalyticsPage: React.FC = () => {
       const net = income - expense;
 
       return (
-        <div className="glassmorphism bg-bg-surface/90 border border-white/10 p-3 rounded-xl shadow-xl space-y-1">
+        <div className="glassmorphism bg-surface/90 border border-white/10 p-3 rounded-md shadow-xl space-y-1">
           <p className="text-[10px] font-bold text-white/40 uppercase tracking-wider">{label}</p>
           <div className="flex items-center gap-2 text-xs font-semibold text-green-positive">
             <span className="w-1.5 h-1.5 rounded-full bg-green-positive" />
@@ -153,7 +153,7 @@ export const AnalyticsPage: React.FC = () => {
             <p className="text-xs text-white/50 font-medium">Deep insights into your finances</p>
           </div>
 
-          <div className="flex bg-white/4 p-1 rounded-xl border border-white/5 relative self-start">
+          <div className="flex bg-white/4 p-1 rounded-md border border-white/5 relative self-start">
             {([
               { id: 'month', label: 'This Month' },
               { id: 'quarter', label: '3 Months' },
@@ -170,7 +170,7 @@ export const AnalyticsPage: React.FC = () => {
                   <motion.div
                     layoutId="activePeriodTab"
                     transition={{ type: 'spring', damping: 22, stiffness: 220 }}
-                    className="absolute inset-0 bg-purple-primary rounded-lg shadow-glow-purple/30 z-0"
+                    className="absolute inset-0 bg-primary rounded-lg shadow-md z-0"
                   />
                 )}
                 <span className="relative z-10">{opt.label}</span>
@@ -181,7 +181,7 @@ export const AnalyticsPage: React.FC = () => {
 
         {/* Summary KPI row */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-          <div className="glassmorphism bg-bg-surface/40 p-4 rounded-2xl border border-white/8 shadow-glow-red/2">
+          <div className="glassmorphism bg-surface/40 p-4 rounded-lg border border-white/8 shadow-md">
             <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">Total Spent</span>
             <div className="flex items-center gap-2 mt-2">
               <TrendingDown size={14} className="text-red-negative" />
@@ -189,15 +189,15 @@ export const AnalyticsPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="glassmorphism bg-bg-surface/40 p-4 rounded-2xl border border-white/8 shadow-glow-purple/2">
+          <div className="glassmorphism bg-surface/40 p-4 rounded-lg border border-white/8 shadow-md">
             <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">Avg Daily Spend</span>
             <div className="flex items-center gap-2 mt-2">
-              <Activity size={14} className="text-purple-light" />
+              <Activity size={14} className="text-primary" />
               <span className="text-xl font-bold font-mono text-white">{formatINR(metrics.avgDailySpend)}</span>
             </div>
           </div>
 
-          <div className="glassmorphism bg-bg-surface/40 p-4 rounded-2xl border border-white/8 shadow-glow-blue/2">
+          <div className="glassmorphism bg-surface/40 p-4 rounded-lg border border-white/8 shadow-md">
             <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">Top Category</span>
             <div className="flex items-center gap-2 mt-2">
               <Wallet size={14} className="text-blue-primary" />
@@ -205,7 +205,7 @@ export const AnalyticsPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="glassmorphism bg-bg-surface/40 p-4 rounded-2xl border border-white/8 shadow-glow-green/2">
+          <div className="glassmorphism bg-surface/40 p-4 rounded-lg border border-white/8 shadow-md">
             <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">Savings Rate</span>
             <div className="flex items-center gap-2 mt-2">
               <Percent size={14} className="text-green-positive" />
@@ -215,7 +215,7 @@ export const AnalyticsPage: React.FC = () => {
         </div>
 
         {/* Row 1: Spending Trend Bar Chart (Full Width) */}
-        <div className="glassmorphism bg-bg-surface/30 p-5 border border-white/8 rounded-2xl">
+        <div className="glassmorphism bg-surface/30 p-5 border border-white/8 rounded-2xl">
           <div className="flex items-center justify-between border-b border-white/5 pb-3 mb-4">
             <h3 className="text-sm font-bold text-white">Spending & Income Trend</h3>
             <span className="text-[10px] text-white/35 font-semibold">Currency ({activeCurrency.symbol})</span>
@@ -242,7 +242,7 @@ export const AnalyticsPage: React.FC = () => {
         {/* Row 2: Expense Breakdown Pie + Cash Flow Area */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* Pie Chart */}
-          <div className="glassmorphism bg-bg-surface/30 p-5 border border-white/8 rounded-2xl flex flex-col justify-between h-[400px]">
+          <div className="glassmorphism bg-surface/30 p-5 border border-white/8 rounded-2xl flex flex-col justify-between h-[400px]">
             <div className="flex items-center justify-between border-b border-white/5 pb-3">
               <h3 className="text-sm font-bold text-white">Expense Distribution</h3>
               <span className="text-[10px] text-white/35 font-semibold">By Category</span>
@@ -319,7 +319,7 @@ export const AnalyticsPage: React.FC = () => {
           </div>
 
           {/* Cash Flow Area Chart */}
-          <div className="glassmorphism bg-bg-surface/30 p-5 border border-white/8 rounded-2xl flex flex-col justify-between h-[400px]">
+          <div className="glassmorphism bg-surface/30 p-5 border border-white/8 rounded-2xl flex flex-col justify-between h-[400px]">
             <div className="flex items-center justify-between border-b border-white/5 pb-3">
               <h3 className="text-sm font-bold text-white">Cash Flow Dynamics</h3>
               <span className="text-[10px] text-white/35 font-semibold">Last 6 Months</span>
@@ -371,7 +371,7 @@ export const AnalyticsPage: React.FC = () => {
 
         {/* Row 3: Horizontal Comparison bars */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <div className="glassmorphism bg-bg-surface/30 p-5 border border-white/8 rounded-2xl lg:col-span-1 flex flex-col justify-between min-h-[300px]">
+          <div className="glassmorphism bg-surface/30 p-5 border border-white/8 rounded-2xl lg:col-span-1 flex flex-col justify-between min-h-[300px]">
             <div className="border-b border-white/5 pb-2">
               <h3 className="text-sm font-bold text-white">Spent Comparison</h3>
               <p className="text-[10px] text-white/40 mt-0.5">By category ranking</p>
@@ -403,7 +403,7 @@ export const AnalyticsPage: React.FC = () => {
           </div>
 
           {/* Monthly Historical Comparison Table */}
-          <div className="glassmorphism bg-bg-surface/30 p-5 border border-white/8 rounded-2xl lg:col-span-2 flex flex-col justify-between min-h-[300px]">
+          <div className="glassmorphism bg-surface/30 p-5 border border-white/8 rounded-2xl lg:col-span-2 flex flex-col justify-between min-h-[300px]">
             <div className="border-b border-white/5 pb-2">
               <h3 className="text-sm font-bold text-white">Monthly Comparison</h3>
               <p className="text-[10px] text-white/40 mt-0.5">Summary of last 6 months</p>
@@ -435,11 +435,11 @@ export const AnalyticsPage: React.FC = () => {
                       <tr
                         key={row.monthName}
                         className={`border-b border-white/3 font-medium ${
-                          isCurrent ? 'bg-purple-primary/10 text-white border-b-purple-primary/20' : 'text-white/70'
+                          isCurrent ? 'bg-primary/10 text-white border-b-primary/20' : 'text-white/70'
                         }`}
                       >
                         <td className="py-3 px-3 font-semibold text-white">
-                          {row.monthName} {row.year} {isCurrent && <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-purple-primary text-white font-bold ml-1.5 uppercase">Current</span>}
+                          {row.monthName} {row.year} {isCurrent && <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-primary text-white font-bold ml-1.5 uppercase">Current</span>}
                         </td>
                         <td className="py-3 px-3 text-green-positive font-mono">
                           {formatINR(row.income)}

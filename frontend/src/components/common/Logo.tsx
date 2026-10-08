@@ -1,85 +1,42 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { useId } from "react";
+import { Link } from "react-router-dom";
 
-interface LogoProps {
+const VIEWBOX_WIDTH = 237.72;
+const WORDMARK_PATH =
+  "M88.02 23.16V31.25H101.39V35.48H88.02V45.07H82.54V18.93H101.82V23.16Z M105.47 21.38V17.54H110.68V21.38ZM105.47 45.07V25H110.68V45.07Z M128.63 45.07V33.81Q128.63 28.52 125.05 28.52Q123.16 28.52 122 30.14Q120.84 31.77 120.84 34.31V45.07H115.62V29.49Q115.62 27.87 115.58 26.84Q115.53 25.81 115.47 25H120.45Q120.5 25.35 120.6 26.88Q120.69 28.41 120.69 28.98H120.76Q121.82 26.68 123.42 25.65Q125.01 24.61 127.22 24.61Q130.41 24.61 132.12 26.57Q133.82 28.54 133.82 32.32V45.07Z M151.26 45.07H145.71L136.04 18.93H141.76L147.14 35.72Q147.64 37.35 148.51 40.66L148.9 39.06L149.85 35.72L155.21 18.93H160.87Z M171.6 45.44Q167.07 45.44 164.64 42.76Q162.21 40.08 162.21 34.94Q162.21 29.97 164.68 27.3Q167.15 24.62 171.67 24.62Q176 24.62 178.28 27.49Q180.56 30.36 180.56 35.89V36.04H167.69Q167.69 38.97 168.77 40.46Q169.86 41.95 171.86 41.95Q174.62 41.95 175.35 39.56L180.27 39.99Q178.13 45.44 171.6 45.44ZM171.6 27.91Q169.76 27.91 168.77 29.19Q167.78 30.47 167.72 32.77H175.52Q175.37 30.34 174.35 29.12Q173.33 27.91 171.6 27.91Z M184.11 45.07V29.71Q184.11 28.06 184.07 26.95Q184.02 25.85 183.97 25H188.94Q188.99 25.33 189.09 27.03Q189.18 28.73 189.18 29.28H189.25Q190.01 27.17 190.61 26.3Q191.2 25.44 192.02 25.02Q192.83 24.61 194.06 24.61Q195.06 24.61 195.67 24.88V29.24Q194.41 28.97 193.45 28.97Q191.5 28.97 190.41 30.54Q189.33 32.12 189.33 35.22V45.07Z M215.42 39.21Q215.42 42.12 213.04 43.78Q210.66 45.44 206.44 45.44Q202.31 45.44 200.11 44.13Q197.91 42.83 197.18 40.06L201.77 39.38Q202.16 40.8 203.11 41.4Q204.07 41.99 206.44 41.99Q208.63 41.99 209.64 41.44Q210.64 40.88 210.64 39.69Q210.64 38.73 209.83 38.16Q209.02 37.59 207.09 37.2Q202.68 36.33 201.14 35.58Q199.6 34.83 198.79 33.63Q197.98 32.44 197.98 30.69Q197.98 27.82 200.2 26.21Q202.42 24.61 206.48 24.61Q210.06 24.61 212.24 26Q214.42 27.39 214.96 30.02L210.34 30.51Q210.12 29.28 209.25 28.68Q208.37 28.08 206.48 28.08Q204.63 28.08 203.7 28.55Q202.77 29.02 202.77 30.14Q202.77 31.01 203.48 31.52Q204.2 32.03 205.89 32.36Q208.24 32.84 210.07 33.35Q211.9 33.86 213 34.57Q214.11 35.27 214.77 36.38Q215.42 37.48 215.42 39.21Z M227.46 45.44Q222.93 45.44 220.5 42.76Q218.07 40.08 218.07 34.94Q218.07 29.97 220.53 27.3Q223 24.62 227.53 24.62Q231.85 24.62 234.14 27.49Q236.42 30.36 236.42 35.89V36.04H223.54Q223.54 38.97 224.63 40.46Q225.71 41.95 227.72 41.95Q230.48 41.95 231.2 39.56L236.12 39.99Q233.99 45.44 227.46 45.44ZM227.46 27.91Q225.62 27.91 224.63 29.19Q223.63 30.47 223.58 32.77H231.37Q231.22 30.34 230.2 29.12Q229.18 27.91 227.46 27.91Z";
+
+type LogoProps = {
+  height?: number;
   className?: string;
-  showWordmark?: boolean;
-}
+};
 
-export const Logo: React.FC<LogoProps> = ({ className = '', showWordmark = true }) => {
-  const logoId = React.useId();
-  const lightGradId = `wordmark-grad-light-${logoId.replace(/:/g, '')}`;
-  const darkGradId = `wordmark-grad-dark-${logoId.replace(/:/g, '')}`;
-
-  const wordmarkPath =
-    "M80 14h24v8H88v6h14v8H88v14H80ZM108 14h6v6h-6ZM108 26h6v24h-6ZM118 26h6v4h.2c1.2-2.8 3.8-4.2 7.8-4.2 5 0 8 3 8 8v16h-6V35c0-3-1.5-4.5-4.5-4.5-3 0-4.5 1.5-4.5 4.5v15h-6ZM142 14h6.5l5.5 25 5.5-25H166l-9 36h-6ZM180 25.8c-5.5 0-9.8 4.2-9.8 10.2 0 6 4.3 10.2 10.2 10.2 3.8 0 6.8-1.5 8.6-4.2l-4.5-2.6c-1 1.4-2.4 2.2-4.1 2.2-2.5 0-4.2-1.6-4.5-4.2h13.8c.1-.5.1-1.1.1-1.6 0-5.8-3.8-10-9.8-10zm-4.1 8c.3-2.4 1.9-3.8 4.1-3.8 2.2 0 3.7 1.4 4 3.8h-8.1zM194 26h6v4.2c1.2-2.8 3.5-4.2 6.8-4.2h1.2v6.2h-1.8c-3.6 0-5.4 1.8-5.4 5.4V50h-6ZM220 25.8c-4.8 0-7.8 2.5-7.8 6.2 0 3.6 2.4 5.2 6.2 6.2 2.8.8 3.8 1.4 3.8 2.6 0 1.2-1.2 2-3 2-2 0-3.6-.8-4.6-2.2l-4.2 3.2c1.8 2.8 4.8 4.4 8.8 4.4 5.2 0 8.4-2.6 8.4-6.4 0-3.8-2.4-5.4-6.4-6.4-2.6-.7-3.6-1.3-3.6-2.4 0-1.1 1.1-1.8 2.6-1.8 1.8 0 3.1.7 4 2l4.2-3c-1.6-2.6-4.3-4.2-8.4-4.2zM242 25.8c-5.5 0-9.8 4.2-9.8 10.2 0 6 4.3 10.2 10.2 10.2 3.8 0 6.8-1.5 8.6-4.2l-4.5-2.6c-1 1.4-2.4 2.2-4.1 2.2-2.5 0-4.2-1.6-4.5-4.2h13.8c.1-.5.1-1.1.1-1.6 0-5.8-3.8-10-9.8-10zm-4.1 8c.3-2.4 1.9-3.8 4.1-3.8 2.2 0 3.7 1.4 4 3.8h-8.1z";
+export function Logo({ height = 40, className = "" }: LogoProps) {
+  const gradientId = useId().replace(/[^a-zA-Z0-9_-]/g, "");
 
   return (
-    <Link
-      to="/"
-      aria-label="FinVerse home"
-      className={`group inline-flex items-center gap-3 outline-hidden focus-visible:ring-2 focus-visible:ring-[#FF9A6B] focus-visible:ring-offset-2 rounded-md transition-all ${className}`}
-    >
+    <Link to="/" className={`logo ${className}`.trim()} aria-label="FinVerse home">
       <svg
-        viewBox={showWordmark ? "0 0 256 64" : "0 0 64 64"}
-        className={showWordmark ? "h-9 w-auto overflow-visible select-none" : "h-9 w-9 overflow-visible select-none"}
+        viewBox={`0 0 ${VIEWBOX_WIDTH} 64`}
+        height={height}
+        width={(height * VIEWBOX_WIDTH) / 64}
         aria-hidden="true"
+        focusable="false"
       >
         <defs>
-          {/* Light Mode Hover Gradient: #1F4E79 to #E8730C */}
-          <linearGradient id={lightGradId} x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#1F4E79" />
-            <stop offset="100%" stopColor="#E8730C" />
-          </linearGradient>
-
-          {/* Dark Mode Hover Gradient: #6FA8DC to #E8730C */}
-          <linearGradient id={darkGradId} x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#6FA8DC" />
-            <stop offset="100%" stopColor="#E8730C" />
+          <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" className="logo-stop-start" />
+            <stop offset="1" className="logo-stop-end" />
           </linearGradient>
         </defs>
-
-        {/* LOGO MARK: 64x64, rx=6 */}
-        <rect
-          width="64"
-          height="64"
-          rx="6"
-          fill="#111111"
-          className="dark:fill-[#F6F7F5]"
-        />
+        <rect className="logo-mark-bg" width="64" height="64" rx="6" />
+        <path className="logo-mark-f" d="M17 14H49V24H27V28H41V38H27V50H17Z" />
+        <path className="logo-wordmark-base" d={WORDMARK_PATH} />
         <path
-          d="M17 14H49V24H27V28H41V38H27V50H17Z"
-          fill="#FFFFFF"
-          className="dark:fill-[#111111]"
+          className="logo-wordmark-gradient"
+          style={{ fill: `url(#${gradientId})` }}
+          d={WORDMARK_PATH}
         />
-
-        {showWordmark && (
-          <g>
-            {/* Base Wordmark (Default state: #111111 in light, #F6F7F5 in dark) */}
-            <path
-              d={wordmarkPath}
-              fill="#111111"
-              className="dark:fill-[#F6F7F5]"
-            />
-
-            {/* Hover Gradient Overlay (Light Mode) */}
-            <path
-              d={wordmarkPath}
-              fill={`url(#${lightGradId})`}
-              className="dark:hidden opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-150 ease-out motion-reduce:transition-none"
-            />
-
-            {/* Hover Gradient Overlay (Dark Mode) */}
-            <path
-              d={wordmarkPath}
-              fill={`url(#${darkGradId})`}
-              className="hidden dark:block opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-150 ease-out motion-reduce:transition-none"
-            />
-          </g>
-        )}
       </svg>
     </Link>
   );
-};
-
-export default Logo;
+}

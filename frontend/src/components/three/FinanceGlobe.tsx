@@ -26,7 +26,7 @@ const FloatingText: React.FC<FloatingTextProps> = ({ text, position, speed = 1 }
       ref={ref}
       position={position}
       fontSize={0.35}
-      color="#FF9A6B" // peach-500 floating currency symbols
+      color="#0466c8"
       anchorX="center"
       anchorY="middle"
     >
@@ -43,9 +43,9 @@ export const FinanceGlobe: React.FC = () => {
         style={{ background: 'transparent', width: '100%', height: '100%' }}
         frameloop="always"
       >
-        <ambientLight color="#2DD4BF" intensity={0.7} />
-        <pointLight color="#2DD4BF" intensity={2.0} position={[5, 3, 5]} />
-        <pointLight color="#FF9A6B" intensity={1.5} position={[-5, -3, -5]} />
+        <ambientLight color="#0353a4" intensity={0.7} />
+        <pointLight color="#0466c8" intensity={2.0} position={[5, 3, 5]} />
+        <pointLight color="#023e7d" intensity={1.5} position={[-5, -3, -5]} />
         
         <OrbitControls
           enablePan={false}
@@ -59,34 +59,34 @@ export const FinanceGlobe: React.FC = () => {
           <mesh>
             <sphereGeometry args={[1.7, 64, 64]} />
             <meshStandardMaterial
-              color="#2F343C" // grey-700
+              color="#001845"
               roughness={0.7}
               metalness={0.3}
             />
           </mesh>
 
-          {/* Wireframe overlay in teal #2DD4BF */}
+          {/* Wireframe overlay */}
           <mesh>
             <sphereGeometry args={[1.72, 32, 32]} />
             <meshBasicMaterial
-              color="#2DD4BF"
+              color="#0466c8"
               wireframe={true}
               transparent={true}
               opacity={0.25}
             />
           </mesh>
 
-          {/* Floating symbols in peach #FF9A6B */}
+          {/* Floating symbols */}
           <FloatingText text="₹" position={[2.0, 0.4, 0]} speed={1.3} />
           <FloatingText text="$" position={[-1.7, -0.8, 1.0]} speed={1.0} />
           <FloatingText text="€" position={[0.4, 1.4, -1.3]} speed={1.6} />
         </group>
 
-        {/* Teal glow ring below the globe */}
+        {/* Glow ring below the globe */}
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.9, 0]}>
           <ringGeometry args={[1.0, 1.6, 64]} />
           <meshBasicMaterial
-            color="#2DD4BF"
+            color="#0466c8"
             transparent={true}
             opacity={0.3}
             side={THREE.DoubleSide}

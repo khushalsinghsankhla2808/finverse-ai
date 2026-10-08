@@ -9,7 +9,7 @@ export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({ className }) =
   return (
     <div
       className={cn(
-        'animate-shimmer rounded bg-white/5 border border-white/5',
+        'animate-pulse rounded-md bg-surface-sunken border border-line',
         className
       )}
     />

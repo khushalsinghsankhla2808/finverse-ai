@@ -15,8 +15,8 @@ import reportService from '@/services/reportService';
 import { useToast } from '@/hooks/useToast';
 import PageTransition from '@/components/common/PageTransition';
 import Button from '@/components/common/Button';
+import { REPORT_FORMAT_ICONS } from '@/lib/categoryIcons';
 
-// Validation Schema
 const reportSchema = z.object({
   type: z.enum(['monthly', 'yearly', 'custom']),
   format: z.enum(['pdf', 'excel', 'csv']),
@@ -61,7 +61,6 @@ export const ReportsPage: React.FC = () => {
     },
   ]);
 
-  // Form setup
   const {
     register,
     handleSubmit,
@@ -73,7 +72,7 @@ export const ReportsPage: React.FC = () => {
     defaultValues: {
       type: 'monthly',
       format: 'pdf',
-      startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 30 days ago
+      startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       endDate: new Date().toISOString().split('T')[0],
       categories: [],
     },
@@ -113,7 +112,6 @@ export const ReportsPage: React.FC = () => {
       const res = await reportService.generate(values);
       const { downloadUrl, fileName } = res.data;
 
-      // Add to local history list
       const newReport: HistoricalReport = {
         id: `rep-${Date.now()}`,
         name: fileName,
@@ -124,8 +122,6 @@ export const ReportsPage: React.FC = () => {
       setHistory((prev) => [newReport, ...prev]);
 
       showToast('Report generated successfully!', 'success');
-
-      // Trigger automatic tab download
       window.open(downloadUrl, '_blank');
     } catch (err) {
       showToast('Failed to compile report statement', 'error');
@@ -164,29 +160,29 @@ export const ReportsPage: React.FC = () => {
 
   return (
     <PageTransition>
-      <div className="space-y-6">
+      <div className="space-y-6 text-ink">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-display font-bold text-white tracking-tight">Reports & Statements</h1>
-          <p className="text-xs text-white/50 font-medium">Export statements and financial analyses</p>
+          <h1 className="text-3xl font-sans font-bold tracking-tight">Reports & Statements</h1>
+          <p className="text-xs text-ink-muted font-medium">Export statements and financial analyses</p>
         </div>
 
         {/* Quick Export Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* PDF Card */}
-          <div className="glassmorphism bg-bg-surface/30 p-5 border border-white/8 rounded-2xl flex flex-col justify-between hover:scale-[1.01] transition-all duration-300">
+          <div className="card flex flex-col justify-between">
             <div className="flex justify-between items-start">
-              <div className="p-3 bg-red-500/10 border border-red-500/20 text-red-500 rounded-xl">
+              <div className="p-3 bg-surface-sunken border border-line text-loss rounded-[var(--radius-control)]">
                 <FileText size={20} />
               </div>
-              <span className="px-2 py-0.5 rounded-full text-[8px] font-bold bg-white/5 border border-white/10 text-white/50">
-                PDF Layout
+              <span className="px-2 py-0.5 rounded-[var(--radius-control)] text-[10px] font-bold bg-surface-sunken border border-line text-ink-subtle flex items-center gap-1">
+                <FileText size={10} /> PDF
               </span>
             </div>
             <div className="my-5">
-              <h3 className="text-sm font-bold text-white">Statement PDF</h3>
-              <p className="text-[11px] text-white/50 mt-1 leading-relaxed">
-                Full-page styled document covering balance, category ratios and transaction ledgers.
+              <h3 className="text-sm font-bold text-ink">Statement PDF</h3>
+              <p className="text-[11px] text-ink-muted mt-1 leading-relaxed">
+                Full-page document covering balance, category ratios and transaction ledgers.
               </p>
             </div>
             <Button
@@ -200,18 +196,18 @@ export const ReportsPage: React.FC = () => {
           </div>
 
           {/* Excel Card */}
-          <div className="glassmorphism bg-bg-surface/30 p-5 border border-white/8 rounded-2xl flex flex-col justify-between hover:scale-[1.01] transition-all duration-300">
+          <div className="card flex flex-col justify-between">
             <div className="flex justify-between items-start">
-              <div className="p-3 bg-green-positive/10 border border-green-positive/20 text-green-positive rounded-xl">
+              <div className="p-3 bg-surface-sunken border border-line amount-gain rounded-[var(--radius-control)]">
                 <FileSpreadsheet size={20} />
               </div>
-              <span className="px-2 py-0.5 rounded-full text-[8px] font-bold bg-white/5 border border-white/10 text-white/50">
-                Spreadsheet
+              <span className="px-2 py-0.5 rounded-[var(--radius-control)] text-[10px] font-bold bg-surface-sunken border border-line text-ink-subtle flex items-center gap-1">
+                <FileSpreadsheet size={10} /> Excel
               </span>
             </div>
             <div className="my-5">
-              <h3 className="text-sm font-bold text-white">Excel Workbook</h3>
-              <p className="text-[11px] text-white/50 mt-1 leading-relaxed">
+              <h3 className="text-sm font-bold text-ink">Excel Workbook</h3>
+              <p className="text-[11px] text-ink-muted mt-1 leading-relaxed">
                 Multi-tab grid worksheet containing transactional raw files and category metrics.
               </p>
             </div>
@@ -226,18 +222,18 @@ export const ReportsPage: React.FC = () => {
           </div>
 
           {/* CSV Card */}
-          <div className="glassmorphism bg-bg-surface/30 p-5 border border-white/8 rounded-2xl flex flex-col justify-between hover:scale-[1.01] transition-all duration-300">
+          <div className="card flex flex-col justify-between">
             <div className="flex justify-between items-start">
-              <div className="p-3 bg-blue-500/10 border border-blue-500/20 text-blue-500 rounded-xl">
+              <div className="p-3 bg-surface-sunken border border-line text-primary rounded-[var(--radius-control)]">
                 <Layers size={20} />
               </div>
-              <span className="px-2 py-0.5 rounded-full text-[8px] font-bold bg-white/5 border border-white/10 text-white/50">
-                Plain Text
+              <span className="px-2 py-0.5 rounded-[var(--radius-control)] text-[10px] font-bold bg-surface-sunken border border-line text-ink-subtle flex items-center gap-1">
+                <FileSpreadsheet size={10} /> CSV
               </span>
             </div>
             <div className="my-5">
-              <h3 className="text-sm font-bold text-white">CSV Data File</h3>
-              <p className="text-[11px] text-white/50 mt-1 leading-relaxed">
+              <h3 className="text-sm font-bold text-ink">CSV Data File</h3>
+              <p className="text-[11px] text-ink-muted mt-1 leading-relaxed">
                 Standard comma-separated format suited for ingestion in custom sheet pipelines.
               </p>
             </div>
@@ -255,26 +251,26 @@ export const ReportsPage: React.FC = () => {
         {/* Builder & History segments */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
           {/* Custom Builder Form */}
-          <div className="glassmorphism bg-bg-surface/30 p-5 border border-white/8 rounded-2xl lg:col-span-2 flex flex-col justify-between">
+          <div className="card lg:col-span-2 flex flex-col justify-between">
             <div>
-              <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider block">Builder</span>
-              <h3 className="text-sm font-bold text-white mt-0.5">Custom Report Builder</h3>
+              <span className="text-[10px] font-bold text-ink-subtle uppercase tracking-wider block">Builder</span>
+              <h3 className="text-sm font-bold text-ink mt-0.5">Custom Report Builder</h3>
             </div>
 
             <form onSubmit={handleSubmit(onGenerateSubmit)} className="space-y-4 mt-4 text-xs">
               {/* Type selector */}
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-white/50 uppercase tracking-wider block">Statement Type</label>
+                <label className="text-[10px] font-bold text-ink-subtle uppercase tracking-wider block">Statement Type</label>
                 <div className="grid grid-cols-3 gap-2">
                   {(['monthly', 'yearly', 'custom'] as const).map((t) => (
                     <button
                       key={t}
                       type="button"
                       onClick={() => setValue('type', t)}
-                      className={`py-1.5 rounded-xl border text-[10px] font-semibold text-center cursor-pointer transition-all ${
+                      className={`py-1.5 rounded-[var(--radius-control)] border text-[10px] font-semibold text-center cursor-pointer transition-all ${
                         formType === t
-                          ? 'bg-purple-primary/10 border-purple-primary text-white'
-                          : 'bg-white/2 border-white/5 text-white/60 hover:border-white/12'
+                          ? 'bg-primary text-on-primary border-primary'
+                          : 'bg-surface border-line text-ink-muted hover:border-ink-subtle'
                       }`}
                     >
                       {t.toUpperCase()}
@@ -285,17 +281,17 @@ export const ReportsPage: React.FC = () => {
 
               {/* Format selector */}
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-white/50 uppercase tracking-wider block">Output Format</label>
+                <label className="text-[10px] font-bold text-ink-subtle uppercase tracking-wider block">Output Format</label>
                 <div className="grid grid-cols-3 gap-2">
                   {(['pdf', 'excel', 'csv'] as const).map((f) => (
                     <button
                       key={f}
                       type="button"
                       onClick={() => setValue('format', f)}
-                      className={`py-1.5 rounded-xl border text-[10px] font-semibold text-center cursor-pointer transition-all ${
+                      className={`py-1.5 rounded-[var(--radius-control)] border text-[10px] font-semibold text-center cursor-pointer transition-all ${
                         formFormat === f
-                          ? 'bg-purple-primary/10 border-purple-primary text-white'
-                          : 'bg-white/2 border-white/5 text-white/60 hover:border-white/12'
+                          ? 'bg-primary text-on-primary border-primary'
+                          : 'bg-surface border-line text-ink-muted hover:border-ink-subtle'
                       }`}
                     >
                       {f.toUpperCase()}
@@ -307,29 +303,29 @@ export const ReportsPage: React.FC = () => {
               {/* Date pickers */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] font-bold text-white/50 uppercase tracking-wider">Start Date</label>
+                  <label className="text-[10px] font-bold text-ink-subtle uppercase tracking-wider">Start Date</label>
                   <input
                     type="date"
                     {...register('startDate')}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-3 py-1.5 text-xs text-white focus:outline-hidden"
+                    className="input text-xs"
                   />
-                  {errors.startDate && <span className="text-[10px] text-red-negative font-medium">{errors.startDate.message}</span>}
+                  {errors.startDate && <span className="text-[10px] amount-loss font-medium">{errors.startDate.message}</span>}
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[10px] font-bold text-white/50 uppercase tracking-wider">End Date</label>
+                  <label className="text-[10px] font-bold text-ink-subtle uppercase tracking-wider">End Date</label>
                   <input
                     type="date"
                     {...register('endDate')}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-purple-primary rounded-xl px-3 py-1.5 text-xs text-white focus:outline-hidden"
+                    className="input text-xs"
                   />
-                  {errors.endDate && <span className="text-[10px] text-red-negative font-medium">{errors.endDate.message}</span>}
+                  {errors.endDate && <span className="text-[10px] amount-loss font-medium">{errors.endDate.message}</span>}
                 </div>
               </div>
 
               {/* Multi-select category tags */}
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-white/50 uppercase tracking-wider block">Filter Category tags</label>
+                <label className="text-[10px] font-bold text-ink-subtle uppercase tracking-wider block">Filter Category tags</label>
                 <div className="flex flex-wrap gap-1.5 max-h-85px overflow-y-auto pr-1">
                   {CATEGORY_OPTIONS.map((cat) => {
                     const isSelected = formCategories.includes(cat);
@@ -338,10 +334,10 @@ export const ReportsPage: React.FC = () => {
                         key={cat}
                         type="button"
                         onClick={() => handleToggleCategory(cat)}
-                        className={`px-2.5 py-1 rounded-md text-[9px] font-bold cursor-pointer transition-all border ${
+                        className={`px-2.5 py-1 rounded-[var(--radius-control)] text-[9px] font-bold cursor-pointer transition-all border ${
                           isSelected
-                            ? 'bg-purple-primary/10 border-purple-primary/50 text-white shadow-glow-purple/2'
-                            : 'bg-white/2 border-white/5 text-white/55 hover:border-white/12'
+                            ? 'bg-primary text-on-primary border-primary'
+                            : 'bg-surface border-line text-ink-muted hover:border-ink-subtle'
                         }`}
                       >
                         {cat}
@@ -364,45 +360,52 @@ export const ReportsPage: React.FC = () => {
           </div>
 
           {/* Download History Table */}
-          <div className="glassmorphism bg-bg-surface/30 p-5 border border-white/8 rounded-2xl lg:col-span-3 flex flex-col justify-between">
+          <div className="card lg:col-span-3 flex flex-col justify-between">
             <div>
-              <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider block">Archive</span>
-              <h3 className="text-sm font-bold text-white mt-0.5">Exports Ledger History</h3>
+              <span className="text-[10px] font-bold text-ink-subtle uppercase tracking-wider block">Archive</span>
+              <h3 className="text-sm font-bold text-ink mt-0.5">Exports Ledger History</h3>
             </div>
 
             <div className="flex-1 mt-4 overflow-y-auto pr-1 text-xs">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-white/5 text-[9px] uppercase font-bold text-white/40 tracking-wider">
+                  <tr className="border-b border-line text-[9px] uppercase font-bold text-ink-subtle tracking-wider">
                     <th className="py-2 px-3">Report Name</th>
                     <th className="py-2 px-3">Generated At</th>
                     <th className="py-2 px-3 text-right">Download</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {history.map((rep) => (
-                    <tr key={rep.id} className="border-b border-white/3 font-medium text-white/70">
-                      <td className="py-3 px-3 flex items-center gap-2 max-w-150px">
-                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-white/5 border border-white/10 uppercase">{rep.format}</span>
-                        <span className="font-semibold text-white truncate" title={rep.name}>
-                          {rep.name}
-                        </span>
-                      </td>
-                      <td className="py-3 px-3 font-mono text-[10px]">
-                        {new Date(rep.generatedAt).toLocaleString()}
-                      </td>
-                      <td className="py-3 px-3 text-right">
-                        <a
-                          href={rep.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-1 text-purple-primary font-bold hover:underline"
-                        >
-                          Link <ExternalLink size={10} />
-                        </a>
-                      </td>
-                    </tr>
-                  ))}
+                  {history.map((rep) => {
+                    const formatInfo = REPORT_FORMAT_ICONS[rep.format] || { icon: FileText, label: rep.format.toUpperCase() };
+                    const FormatIcon = formatInfo.icon;
+
+                    return (
+                      <tr key={rep.id} className="border-b border-line font-medium text-ink-muted">
+                        <td className="py-3 px-3 flex items-center gap-2 max-w-150px">
+                          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-[var(--radius-control)] bg-surface-sunken border border-line uppercase flex items-center gap-1">
+                            <FormatIcon size={10} /> {formatInfo.label}
+                          </span>
+                          <span className="font-semibold text-ink truncate" title={rep.name}>
+                            {rep.name}
+                          </span>
+                        </td>
+                        <td className="py-3 px-3 font-mono text-[10px]">
+                          {new Date(rep.generatedAt).toLocaleString()}
+                        </td>
+                        <td className="py-3 px-3 text-right">
+                          <a
+                            href={rep.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 text-link font-bold hover:underline"
+                          >
+                            Link <ExternalLink size={10} />
+                          </a>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

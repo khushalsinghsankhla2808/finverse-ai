@@ -89,7 +89,7 @@ export const authAccountLimiter = async (
 ): Promise<void | Response> => {
   const email = req.body?.email?.toLowerCase?.();
   if (!email) {
-    // No email in body (e.g., /refresh, /logout, /me) — skip per-account limiting
+    // No email in body (e.g., /refresh, /logout, /me) - skip per-account limiting
     return next();
   }
 
@@ -113,7 +113,7 @@ export const authAccountLimiter = async (
         const timeSinceLastFail = Date.now() - data.lastFailedAt;
 
         if (timeSinceLastFail < delay) {
-          // Still within backoff window — reject
+          // Still within backoff window - reject
           const retryAfterMs = delay - timeSinceLastFail;
           const retryAfterSeconds = Math.ceil(retryAfterMs / 1000);
 
@@ -127,7 +127,7 @@ export const authAccountLimiter = async (
           res.set('Retry-After', String(retryAfterSeconds));
           return res.status(429).json(buildRateLimitResponse(retryAfterSeconds));
         }
-        // Backoff expired — allow the request through
+        // Backoff expired - allow the request through
       }
     }
 
@@ -137,7 +137,7 @@ export const authAccountLimiter = async (
         const statusCode = res.statusCode;
 
         if (statusCode === 401 || statusCode === 400) {
-          // Failed attempt — increment counter
+          // Failed attempt - increment counter
           const existing = await redis.get(key);
           const data = existing
             ? (JSON.parse(existing) as { failCount: number; lastFailedAt: number })
@@ -149,7 +149,7 @@ export const authAccountLimiter = async (
           const ttlSeconds = Math.ceil(config.windowMs / 1000);
           await redis.set(key, JSON.stringify(data), 'EX', ttlSeconds);
         } else if (statusCode >= 200 && statusCode < 300) {
-          // Successful attempt — reset counter
+          // Successful attempt - reset counter
           await redis.del(key);
         }
       } catch {

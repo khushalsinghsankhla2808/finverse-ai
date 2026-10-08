@@ -46,7 +46,7 @@ const ToastItem: React.FC<{ toast: ToastType }> = ({ toast }) => {
       animate={{ opacity: 1, x: 0, scale: 1 }}
       exit={{ opacity: 0, x: 50, scale: 0.9 }}
       transition={{ type: 'spring', damping: 20, stiffness: 200 }}
-      className={`glassmorphism bg-bg-surface/75 border border-white/5 border-l-4 ${border} rounded-lg shadow-xl w-80 p-4 relative overflow-hidden flex items-start gap-3`}
+      className={`glassmorphism bg-surface/75 border border-white/5 border-l-4 ${border} rounded-lg shadow-xl w-80 p-4 relative overflow-hidden flex items-start gap-3`}
     >
       {icon}
       <div className="flex-1 text-xs font-semibold text-white/90 leading-normal pr-4">

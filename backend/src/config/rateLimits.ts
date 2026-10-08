@@ -3,12 +3,12 @@
  *
  * Every threshold is driven by environment variables with sensible defaults.
  * Override any value per-environment (dev / staging / prod) via the corresponding
- * RL_* env var — see .env for the full list.
+ * RL_* env var - see .env for the full list.
  */
 
 export const rateLimitConfig = {
   /**
-   * Tier 1 — Auth Routes (/api/auth/*)
+   * Tier 1 - Auth Routes (/api/auth/*)
    * Dual-axis: per-IP AND per-account (email) with exponential backoff.
    */
   auth: {
@@ -31,7 +31,7 @@ export const rateLimitConfig = {
   },
 
   /**
-   * Tier 2 — Public Endpoints (unauthenticated, high-traffic)
+   * Tier 2 - Public Endpoints (unauthenticated, high-traffic)
    * Per-IP with burst allowance.
    */
   public: {
@@ -41,7 +41,7 @@ export const rateLimitConfig = {
   },
 
   /**
-   * Tier 3 — Authenticated User Actions
+   * Tier 3 - Authenticated User Actions
    * Per-userId (NOT per-IP), separate window per user.
    */
   authenticated: {
@@ -50,7 +50,7 @@ export const rateLimitConfig = {
   },
 
   /**
-   * Global fallback — safety net across all /api/* routes.
+   * Global fallback - safety net across all /api/* routes.
    * Intentionally generous; the tier-specific limits do the real work.
    */
   global: {

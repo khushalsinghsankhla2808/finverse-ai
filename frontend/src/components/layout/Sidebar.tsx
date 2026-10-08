@@ -74,7 +74,6 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
     navigate('/login');
   };
 
-  // Outer variants for expanded/collapsed width
   const sidebarVariants = {
     expanded: { width: 260 },
     collapsed: { width: 72 },
@@ -96,8 +95,7 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
         animate={mobileOpen ? { x: 0, width: 260 } : { x: 0 }}
         variants={sidebarVariants}
         className={cn(
-          'fixed top-0 bottom-0 left-0 z-50 flex flex-col justify-between border-r border-white/8 bg-[#373D46] text-white/70 transition-transform duration-300 ease-in-out',
-          // Mobile state overrides
+          'fixed top-0 bottom-0 left-0 z-50 flex flex-col justify-between border-r border-line bg-surface text-ink transition-transform duration-200 ease-in-out',
           mobileOpen
             ? 'translate-x-0'
             : '-translate-x-full lg:translate-x-0',
@@ -106,25 +104,20 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
       >
         {/* Top Section */}
         <div>
-          <div className="relative flex h-16 items-center px-4 border-b border-white/5">
+          <div className="relative flex h-16 items-center px-4 border-b border-line">
             <div className={cn(
-              "flex items-center overflow-hidden transition-all duration-300",
+              "flex items-center overflow-hidden transition-all duration-200",
               sidebarCollapsed ? "justify-center w-full" : "justify-start"
             )}>
-              <Logo showWordmark={!sidebarCollapsed} />
+              <Logo />
             </div>
 
             {/* Collapse Toggle Button (Desktop only) */}
             <button
               onClick={toggleSidebar}
-              className="hidden lg:flex absolute -right-3 top-5 z-50 h-6 w-6 items-center justify-center rounded-md border border-white/10 bg-[#373D46] text-white/80 hover:bg-white/10 hover:text-white transition-colors cursor-pointer shadow-md"
+              className="hidden lg:flex absolute -right-3 top-5 z-50 h-6 w-6 items-center justify-center rounded-[var(--radius-control)] border border-line bg-surface text-ink hover:bg-surface-sunken transition-colors cursor-pointer shadow-md"
             >
-              <motion.div
-                animate={{ rotate: sidebarCollapsed ? 180 : 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <ChevronLeft size={14} />
-              </motion.div>
+              <ChevronLeft size={14} className={cn("transition-transform duration-200", sidebarCollapsed && "rotate-180")} />
             </button>
           </div>
 
@@ -139,17 +132,16 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
                   key={item.path}
                   onClick={() => handleNavClick(item)}
                   className={cn(
-                    'group relative flex h-10 w-full items-center rounded-lg px-3 transition-all duration-150 cursor-pointer overflow-hidden',
+                    'group relative flex h-10 w-full items-center rounded-[var(--radius-control)] px-3 transition-all duration-150 cursor-pointer overflow-hidden',
                     isActive
-                      ? 'bg-[rgba(255,154,107,0.14)] text-[#FF9A6B] font-semibold border-l-3 border-[#FF9A6B] shadow-[inset_4px_0_12px_rgba(255,154,107,0.1)]'
-                      : 'hover:bg-white/5 hover:text-white/90 text-white/60'
+                      ? 'bg-primary text-on-primary font-semibold'
+                      : 'hover:bg-surface-sunken text-ink-muted hover:text-ink'
                   )}
                 >
                   {/* Icon */}
                   <div
                     className={cn(
                       'flex items-center justify-center shrink-0 transition-all duration-150',
-                      isActive ? 'text-[#FF9A6B] scale-110' : 'group-hover:brightness-130',
                       sidebarCollapsed ? 'w-full' : 'mr-3'
                     )}
                   >
@@ -158,25 +150,21 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
 
                   {/* Label */}
                   {!sidebarCollapsed && (
-                    <motion.div
-                      initial={{ opacity: 0, width: 0 }}
-                      animate={{ opacity: 1, width: 'auto' }}
-                      className="grow flex items-center justify-between min-w-0"
-                    >
-                      <span className="text-sm font-medium tracking-wide group-hover:translate-x-[2px] transition-transform duration-150 truncate">
+                    <div className="grow flex items-center justify-between min-w-0">
+                      <span className="text-sm font-medium tracking-wide truncate">
                         {item.label}
                       </span>
                       {item.label === 'Transactions' && currentMonthTxnCount > 0 && (
-                        <span className="ml-2 px-1.5 py-0.5 text-[9px] font-bold bg-[#FF9A6B] text-[#1A1A1A] rounded-full leading-none shrink-0 shadow-sm">
+                        <span className="ml-2 px-1.5 py-0.5 text-[9px] font-bold bg-surface-sunken text-ink border border-line rounded-[var(--radius-control)] leading-none shrink-0">
                           {currentMonthTxnCount}
                         </span>
                       )}
-                    </motion.div>
+                    </div>
                   )}
 
                   {/* Tooltip on Collapsed */}
                   {sidebarCollapsed && (
-                    <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-[#1B1E23] border border-white/10 text-xs font-medium text-white rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap">
+                    <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-surface border border-line text-xs font-medium text-ink rounded-[var(--radius-control)] opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none z-50 whitespace-nowrap">
                       {item.label}
                     </div>
                   )}
@@ -188,33 +176,32 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
 
         {/* Bottom Section */}
         <div>
-          <div className="border-t border-white/5 p-3 flex flex-col gap-1">
+          <div className="border-t border-line p-3 flex flex-col gap-1">
             {/* Settings Link */}
             <button
               onClick={() => handleNavClick({ icon: Settings, label: 'Settings', path: '/settings' })}
               className={cn(
-                'group relative flex h-10 w-full items-center rounded-lg px-3 transition-all duration-150 cursor-pointer',
+                'group relative flex h-10 w-full items-center rounded-[var(--radius-control)] px-3 transition-all duration-150 cursor-pointer',
                 location.pathname === '/settings'
-                  ? 'bg-[rgba(255,154,107,0.14)] text-[#FF9A6B] font-semibold border-l-3 border-[#FF9A6B]'
-                  : 'hover:bg-white/5 hover:text-white/90 text-white/60'
+                  ? 'bg-primary text-on-primary font-semibold'
+                  : 'hover:bg-surface-sunken text-ink-muted hover:text-ink'
               )}
             >
               <div
                 className={cn(
                   'flex items-center justify-center shrink-0 transition-all duration-150',
-                  location.pathname === '/settings' ? 'text-[#FF9A6B] scale-110' : 'group-hover:brightness-130',
                   sidebarCollapsed ? 'w-full' : 'mr-3'
                 )}
               >
                 <Settings size={18} />
               </div>
               {!sidebarCollapsed && (
-                <span className="text-sm font-medium tracking-wide group-hover:translate-x-[2px] transition-transform duration-150">
+                <span className="text-sm font-medium tracking-wide">
                   Settings
                 </span>
               )}
               {sidebarCollapsed && (
-                <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-[#1B1E23] border border-white/10 text-xs font-medium text-white rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap">
+                <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-surface border border-line text-xs font-medium text-ink rounded-[var(--radius-control)] opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none z-50 whitespace-nowrap">
                   Settings
                 </div>
               )}
@@ -223,11 +210,11 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
             {/* Logout button */}
             <button
               onClick={handleLogout}
-              className="group relative flex h-10 w-full items-center rounded-lg px-3 hover:bg-red-500/10 text-white/60 hover:text-red-400 transition-all duration-150 cursor-pointer"
+              className="group relative flex h-10 w-full items-center rounded-[var(--radius-control)] px-3 hover:bg-red-500/10 text-ink-muted hover:text-loss transition-all duration-150 cursor-pointer"
             >
               <div
                 className={cn(
-                  'flex items-center justify-center shrink-0 transition-all duration-150 group-hover:brightness-130',
+                  'flex items-center justify-center shrink-0 transition-all duration-150',
                   sidebarCollapsed ? 'w-full' : 'mr-3'
                 )}
               >
@@ -237,7 +224,7 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
                 <span className="text-sm font-medium tracking-wide">Logout</span>
               )}
               {sidebarCollapsed && (
-                <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-[#1B1E23] border border-white/10 text-xs font-medium text-white rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap">
+                <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-surface border border-line text-xs font-medium text-ink rounded-[var(--radius-control)] opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none z-50 whitespace-nowrap">
                   Logout
                 </div>
               )}
@@ -245,33 +232,29 @@ export const Sidebar: React.FC<{ mobileOpen?: boolean; onCloseMobile?: () => voi
           </div>
 
           {/* User Profile Section */}
-          <div className="border-t border-white/5 p-4 flex flex-col gap-3">
+          <div className="border-t border-line p-4 flex flex-col gap-3">
             <div className="flex items-center gap-3 overflow-hidden">
-              <div className="h-9 w-9 shrink-0 flex items-center justify-center rounded-md bg-[#FF9A6B] text-[#1A1A1A] text-xs font-bold">
+              <div className="h-9 w-9 shrink-0 flex items-center justify-center rounded-[var(--radius-control)] bg-primary text-on-primary text-xs font-bold">
                 {user?.name ? user.name.slice(0, 2).toUpperCase() : 'US'}
               </div>
               {!sidebarCollapsed && (
-                <motion.div
-                  initial={{ opacity: 0, width: 0 }}
-                  animate={{ opacity: 1, width: 'auto' }}
-                  className="flex flex-col min-w-0"
-                >
-                  <span className="text-sm font-semibold text-white truncate leading-none mb-1">
+                <div className="flex flex-col min-w-0">
+                  <span className="text-sm font-semibold text-ink truncate leading-none mb-1">
                     {user?.name || 'User Profile'}
                   </span>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] px-1.5 py-0.5 rounded-md font-bold bg-[#2DD4BF] text-[#1A1A1A] leading-none">
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-[var(--radius-control)] font-bold bg-surface-sunken text-primary border border-line leading-none">
                       Active
                     </span>
                   </div>
-                </motion.div>
+                </div>
               )}
             </div>
             {!sidebarCollapsed && (
-              <div className="flex items-center gap-3 text-[10px] text-white/40 pt-1 border-t border-white/5">
-                <NavLink to="/privacy" className="hover:text-white transition-colors">Privacy Policy</NavLink>
+              <div className="flex items-center gap-3 text-[10px] text-ink-subtle pt-1 border-t border-line">
+                <NavLink to="/privacy" className="hover:text-ink transition-colors">Privacy Policy</NavLink>
                 <span>•</span>
-                <NavLink to="/terms" className="hover:text-white transition-colors">Terms</NavLink>
+                <NavLink to="/terms" className="hover:text-ink transition-colors">Terms</NavLink>
               </div>
             )}
           </div>

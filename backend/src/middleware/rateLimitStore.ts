@@ -48,7 +48,7 @@ export class RedisStore implements Store {
       };
     }
 
-    // First hit — initialize counter
+    // First hit - initialize counter
     const resetTime = Date.now() + this.windowMs;
     const data = { totalHits: 1, resetTime };
     await redis.set(storeKey, JSON.stringify(data), 'EX', ttlSeconds);

@@ -39,17 +39,17 @@ const budgetCreateSchema = z.object({
 type BudgetFormValues = z.infer<typeof budgetCreateSchema>;
 
 const CATEGORIES_MAPPINGS = [
-  { category: 'Housing', color: '#FF9A6B' },
-  { category: 'Food', color: '#2DD4BF' },
+  { category: 'Housing', color: '#0466c8' },
+  { category: 'Food', color: '#0353a4' },
   { category: 'Transport', color: '#10B981' },
-  { category: 'Shopping', color: '#F59E0B' },
-  { category: 'Entertainment', color: '#F43F5E' },
-  { category: 'Groceries', color: '#5EEAD4' },
-  { category: 'Utilities', color: '#EC4899' },
-  { category: 'Healthcare', color: '#14B8A6' },
-  { category: 'Education', color: '#FF9A6B' },
-  { category: 'Investment', color: '#F59E0B' },
-  { category: 'Other', color: '#6B7280' },
+  { category: 'Shopping', color: '#002855' },
+  { category: 'Entertainment', color: '#33415c' },
+  { category: 'Groceries', color: '#0353a4' },
+  { category: 'Utilities', color: '#5c677d' },
+  { category: 'Healthcare', color: '#33415c' },
+  { category: 'Education', color: '#0466c8' },
+  { category: 'Investment', color: '#002855' },
+  { category: 'Other', color: '#7d8597' },
 ];
 
 export const BudgetsPage: React.FC = () => {
@@ -103,7 +103,7 @@ export const BudgetsPage: React.FC = () => {
   // Submit create budget
   const onCreateSubmit = async (values: BudgetFormValues) => {
     const matchingIcon = values.category ? values.category.slice(0, 2).toUpperCase() : 'BU';
-    const matchingColor = CATEGORIES_MAPPINGS.find((c) => c.category === values.category)?.color || '#6B7280';
+    const matchingColor = CATEGORIES_MAPPINGS.find((c) => c.category === values.category)?.color || '#7d8597';
 
     try {
       addBudget({
@@ -204,17 +204,17 @@ export const BudgetsPage: React.FC = () => {
           <>
             {/* Summary Row */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-purple/2">
+              <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-white/8 shadow-md">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Total Budgeted</span>
-                  <div className="w-8 h-8 rounded-lg bg-purple-primary/10 border border-purple-primary/20 flex items-center justify-center text-purple-light">
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
                     <Sliders size={16} />
                   </div>
                 </div>
                 <h2 className="text-2xl font-bold text-white font-mono mt-3">{formatINR(summary.limit)}</h2>
               </div>
 
-              <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-red/2">
+              <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-white/8 shadow-md">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Total Spent</span>
                   <div className="w-8 h-8 rounded-lg bg-red-negative/10 border border-red-negative/20 flex items-center justify-center text-red-negative">
@@ -224,7 +224,7 @@ export const BudgetsPage: React.FC = () => {
                 <h2 className="text-2xl font-bold text-white font-mono mt-3">{formatINR(summary.spent)}</h2>
               </div>
 
-              <div className="glassmorphism bg-bg-surface/40 p-5 rounded-2xl border border-white/8 shadow-glow-green/2">
+              <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-white/8 shadow-md">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Remaining Budget</span>
                   <div className="w-8 h-8 rounded-lg bg-green-positive/10 border border-green-positive/20 flex items-center justify-center text-green-positive">
@@ -247,10 +247,10 @@ export const BudgetsPage: React.FC = () => {
 
                 // Border style maps based on alert threshold state
                 const cardGlow = isOverBudget
-                  ? 'border-red-negative shadow-glow-red/5'
+                  ? 'border-red-negative shadow-md'
                   : isApproaching
                   ? 'border-gold-savings/35 border-l-gold-savings border-l-[3px]'
-                  : 'border-white/8 hover:shadow-glow-purple/2';
+                  : 'border-white/8 hover:shadow-md';
 
                 return (
                   <motion.div
@@ -259,7 +259,7 @@ export const BudgetsPage: React.FC = () => {
                     // Shakes card on mount if over budget
                     animate={isOverBudget ? { x: [0, -6, 6, -6, 6, -3, 3, 0] } : {}}
                     transition={{ duration: 0.5 }}
-                    className={`glassmorphism bg-bg-surface/40 rounded-2xl p-5 border flex flex-col justify-between hover:scale-[1.01] transition-all duration-300 relative ${cardGlow}`}
+                    className={`glassmorphism bg-surface/40 rounded-2xl p-5 border flex flex-col justify-between hover:scale-[1.01] transition-all duration-300 relative ${cardGlow}`}
                   >
                     {/* Header */}
                     <div className="flex items-center justify-between">
@@ -398,9 +398,9 @@ export const BudgetsPage: React.FC = () => {
                         type="button"
                         disabled={isBudgeted}
                         onClick={() => setValue('category', cat.category)}
-                        className={`flex flex-col items-center justify-center p-3 rounded-xl border text-xs gap-1 transition-all relative ${
+                        className={`flex flex-col items-center justify-center p-3 rounded-md border text-xs gap-1 transition-all relative ${
                           isSelected
-                            ? 'bg-purple-primary/10 border-purple-primary text-white shadow-glow-purple/5'
+                            ? 'bg-primary/10 border-primary text-white shadow-md'
                             : 'bg-white/2 border-white/5 text-white/60 hover:border-white/15 hover:text-white disabled:opacity-30 disabled:pointer-events-none'
                         }`}
                       >
@@ -409,7 +409,7 @@ export const BudgetsPage: React.FC = () => {
                           {cat.category}
                         </span>
                         {isBudgeted && (
-                          <span className="absolute top-1 right-1 text-[8px] bg-purple-primary/10 border border-purple-primary/20 text-purple-light px-1 rounded-sm uppercase tracking-wider font-bold">
+                          <span className="absolute top-1 right-1 text-[8px] bg-primary/10 border border-primary/20 text-primary px-1 rounded-sm uppercase tracking-wider font-bold">
                             Active
                           </span>
                         )}
@@ -446,10 +446,10 @@ export const BudgetsPage: React.FC = () => {
                 </div>
 
                 {/* Giant Amount Input */}
-                <div className="flex flex-col items-center py-4 border-b border-white/10 focus-within:border-purple-primary transition-colors">
+                <div className="flex flex-col items-center py-4 border-b border-white/10 focus-within:border-primary transition-colors">
                   <span className="text-xs text-white/40 uppercase font-bold tracking-wider mb-2">Limit Amount</span>
                   <div className="flex items-center justify-center w-full">
-                    <span className="text-4xl font-display font-bold mr-2 text-purple-light">{activeCurrency.symbol}</span>
+                    <span className="text-4xl font-display font-bold mr-2 text-primary">{activeCurrency.symbol}</span>
                     <input
                       type="number"
                       placeholder="0"
@@ -470,14 +470,14 @@ export const BudgetsPage: React.FC = () => {
                   <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
                     Frequency
                   </label>
-                  <div className="flex bg-white/4 p-1 rounded-xl border border-white/5">
+                  <div className="flex bg-white/4 p-1 rounded-md border border-white/5">
                     {['monthly', 'weekly'].map((p) => (
                       <button
                         key={p}
                         type="button"
                         onClick={() => setValue('period', p as any)}
                         className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer ${
-                          formPeriod === p ? 'bg-purple-primary text-white shadow-glow-purple/10' : 'text-white/40 hover:text-white/70'
+                          formPeriod === p ? 'bg-primary text-white shadow-md/10' : 'text-white/40 hover:text-white/70'
                         }`}
                       >
                         {p}
@@ -518,7 +518,7 @@ export const BudgetsPage: React.FC = () => {
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center justify-between text-xs font-bold text-white">
                     <span>Alert me when spent reaches:</span>
-                    <span className="font-mono text-purple-light">{formAlertThreshold}%</span>
+                    <span className="font-mono text-primary">{formAlertThreshold}%</span>
                   </div>
 
                   <input
@@ -527,12 +527,12 @@ export const BudgetsPage: React.FC = () => {
                     max="100"
                     step="5"
                     {...register('alertThreshold', { valueAsNumber: true })}
-                    className="w-full accent-purple-primary h-1.5 bg-white/10 rounded-lg cursor-pointer"
+                    className="w-full accent-primary h-1.5 bg-white/10 rounded-lg cursor-pointer"
                   />
                 </div>
 
                 {/* Progress bar preview */}
-                <div className="bg-white/3 border border-white/5 rounded-xl p-4 space-y-2">
+                <div className="bg-white/3 border border-white/5 rounded-md p-4 space-y-2">
                   <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider block">
                     Alert Bar Preview
                   </span>
@@ -582,10 +582,10 @@ export const BudgetsPage: React.FC = () => {
         >
           <form onSubmit={handleSubmit(onEditSubmit)} className="space-y-6">
             {/* Giant Amount Input */}
-            <div className="flex flex-col items-center py-4 border-b border-white/10 focus-within:border-purple-primary transition-colors">
+            <div className="flex flex-col items-center py-4 border-b border-white/10 focus-within:border-primary transition-colors">
               <span className="text-xs text-white/40 uppercase font-bold tracking-wider mb-2">Limit Amount</span>
               <div className="flex items-center justify-center w-full">
-                <span className="text-4xl font-display font-bold mr-2 text-purple-light">{activeCurrency.symbol}</span>
+                <span className="text-4xl font-display font-bold mr-2 text-primary">{activeCurrency.symbol}</span>
                 <input
                   type="number"
                   placeholder="0"
@@ -605,14 +605,14 @@ export const BudgetsPage: React.FC = () => {
               <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
                 Frequency
               </label>
-              <div className="flex bg-white/4 p-1 rounded-xl border border-white/5">
+              <div className="flex bg-white/4 p-1 rounded-md border border-white/5">
                 {['monthly', 'weekly'].map((p) => (
                   <button
                     key={p}
                     type="button"
                     onClick={() => setValue('period', p as any)}
                     className={`flex-1 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all cursor-pointer ${
-                      formPeriod === p ? 'bg-purple-primary text-white shadow-glow-purple/10' : 'text-white/40 hover:text-white/70'
+                      formPeriod === p ? 'bg-primary text-white shadow-md/10' : 'text-white/40 hover:text-white/70'
                     }`}
                   >
                     {p}
@@ -625,7 +625,7 @@ export const BudgetsPage: React.FC = () => {
             <div className="flex flex-col gap-3">
               <div className="flex items-center justify-between text-xs font-bold text-white">
                 <span>Alert me when spent reaches:</span>
-                <span className="font-mono text-purple-light">{formAlertThreshold}%</span>
+                <span className="font-mono text-primary">{formAlertThreshold}%</span>
               </div>
               <input
                 type="range"
@@ -633,7 +633,7 @@ export const BudgetsPage: React.FC = () => {
                 max="100"
                 step="5"
                 {...register('alertThreshold', { valueAsNumber: true })}
-                className="w-full accent-purple-primary h-1.5 bg-white/10 rounded-lg cursor-pointer"
+                className="w-full accent-primary h-1.5 bg-white/10 rounded-lg cursor-pointer"
               />
             </div>
 

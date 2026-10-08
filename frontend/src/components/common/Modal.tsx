@@ -74,7 +74,7 @@ export const Modal: React.FC<ModalProps> = ({
                 duration: 0.25,
               }}
               className={cn(
-                'relative z-10 glassmorphism bg-bg-surface/60 border border-white/10 rounded-[20px] shadow-2xl overflow-hidden flex flex-col',
+                'relative z-10 glassmorphism bg-surface/60 border border-white/10 rounded-[20px] shadow-2xl overflow-hidden flex flex-col',
                 sizes[size]
               )}
             >
