@@ -14,7 +14,6 @@ import {
   Shield,
   Eye,
   EyeOff,
-  Crown,
   Check,
   AlertTriangle,
   Download,
@@ -96,7 +95,7 @@ const SectionCard: React.FC<SectionCardProps> = ({
     blue: 'bg-primary/10 border-primary/20 text-primary',
     green:  'bg-emerald-500/10 border-emerald-500/20 text-emerald-400',
     amber:  'bg-amber-500/10 border-amber-500/20 text-amber-400',
-    red:    'bg-red-negative/10 border-red-negative/20 text-red-400',
+    red:    'bg-loss/10 border-loss/20 text-red-400',
   };
 
   return (
@@ -105,10 +104,10 @@ const SectionCard: React.FC<SectionCardProps> = ({
       variants={cardVariants}
       initial="hidden"
       animate="visible"
-      className="glassmorphism bg-surface/40 border border-white/8 rounded-2xl overflow-hidden"
+      className="glassmorphism bg-surface/40 border border-line rounded-2xl overflow-hidden"
     >
       {/* Card Header */}
-      <div className="flex items-center gap-4 px-6 py-5 border-b border-white/5">
+      <div className="flex items-center gap-4 px-6 py-5 border-b border-line">
         <div className={`w-10 h-10 rounded-md border flex items-center justify-center shrink-0 ${accentMap[accentColor]}`}>
           {icon}
         </div>
@@ -173,7 +172,7 @@ const Field: React.FC<{
 );
 
 const inputClass =
-  'w-full h-10 px-3.5 rounded-md bg-white/5 border border-white/10 text-white text-sm placeholder:text-white/25 focus:outline-none focus:border-primary/60 focus:bg-white/8 transition-all duration-200';
+  'w-full h-10 px-3.5 rounded-md bg-surface-sunken border border-line text-white text-sm placeholder:text-white/25 focus:outline-none focus:border-primary/60 focus:bg-surface-sunken transition-all duration-200';
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
@@ -330,7 +329,6 @@ export const SettingsPage: React.FC = () => {
 
   // User initials
   const initials = user?.name ? user.name.slice(0, 2).toUpperCase() : 'US';
-  const isPremium = user?.plan === 'Premium';
 
   // Account created / last login (these come through /auth/me as IUserDocument fields)
   const userDoc = user as any;
@@ -351,32 +349,18 @@ export const SettingsPage: React.FC = () => {
           {/* Avatar */}
           <div className="flex items-center gap-5">
             <div className="relative shrink-0">
-              <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center text-ground text-xl font-bold shadow-md">
+              <div className="w-16 h-16 rounded-md bg-primary flex items-center justify-center text-ground text-xl font-bold shadow-md">
                 {initials}
               </div>
-              {isPremium && (
-                <div className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-md">
-                  <Crown size={12} className="text-ground" />
-                </div>
-              )}
             </div>
             <div>
-              <p className="text-base font-bold text-white">{user?.name || 'User'}</p>
-              <p className="text-sm text-white/50">{user?.email}</p>
-              <div className="flex items-center gap-2 mt-1.5">
-                <span className={`text-[10px] px-2 py-0.5 rounded-md font-bold leading-none ${
-                  isPremium
-                    ? 'bg-primary text-ground shadow-md'
-                    : 'bg-white/10 text-white/50'
-                }`}>
-                  {isPremium ? '✦ Premium' : 'Free Plan'}
-                </span>
-              </div>
+              <p className="text-base font-bold text-ink">{user?.name || 'User'}</p>
+              <p className="text-sm text-ink-muted">{user?.email}</p>
             </div>
           </div>
 
           {/* Name edit form */}
-          <form onSubmit={handleProfileSubmit(onProfileSave)} className="space-y-4 pt-2 border-t border-white/5">
+          <form onSubmit={handleProfileSubmit(onProfileSave)} className="space-y-4 pt-2 border-t border-line">
             <Field label="Display Name" error={profileErrors.name?.message}>
               <input
                 id="settings-name"
@@ -416,7 +400,7 @@ export const SettingsPage: React.FC = () => {
 
           {/* Account metadata */}
           {(createdAt || lastLogin) && (
-            <div className="flex flex-wrap gap-4 pt-2 border-t border-white/5">
+            <div className="flex flex-wrap gap-4 pt-2 border-t border-line">
               {createdAt && (
                 <div className="flex items-center gap-2 text-xs text-white/40">
                   <Calendar size={13} />
@@ -510,7 +494,7 @@ export const SettingsPage: React.FC = () => {
           </form>
 
           {/* Logout all devices */}
-          <div className="flex items-center justify-between pt-4 border-t border-white/5">
+          <div className="flex items-center justify-between pt-4 border-t border-line">
             <div>
               <p className="text-sm font-medium text-white/80">Log Out</p>
               <p className="text-xs text-white/40 mt-0.5">Sign out of your current session</p>
@@ -543,7 +527,7 @@ export const SettingsPage: React.FC = () => {
                   className={`flex flex-col items-center gap-1 px-2 py-3 rounded-md border transition-all duration-200 cursor-pointer ${
                     activeCurrency.code === c.code
                       ? 'bg-primary/10 border-primary text-white shadow-md'
-                      : 'bg-white/3 border-white/8 text-white/50 hover:bg-white/6 hover:text-white/80'
+                      : 'bg-surface-sunken border-line text-white/50 hover:bg-white/6 hover:text-white/80'
                   }`}
                 >
                   <span className="text-lg leading-none">{c.flag}</span>
@@ -571,7 +555,7 @@ export const SettingsPage: React.FC = () => {
               label="Budget Overspend Alerts"
               description="Get notified when a category exceeds its limit"
             />
-            <div className="h-px bg-white/5" />
+            <div className="h-px bg-surface-sunken" />
             <Toggle
               id="notif-goal"
               checked={notifPrefs.goal_milestone}
@@ -579,7 +563,7 @@ export const SettingsPage: React.FC = () => {
               label="Goal Milestone Reminders"
               description="Alerts when you hit savings milestones or deadlines approach"
             />
-            <div className="h-px bg-white/5" />
+            <div className="h-px bg-surface-sunken" />
             <Toggle
               id="notif-transaction"
               checked={notifPrefs.transaction}
@@ -587,7 +571,7 @@ export const SettingsPage: React.FC = () => {
               label="Transaction Notifications"
               description="Notify on new income or expense transactions"
             />
-            <div className="h-px bg-white/5" />
+            <div className="h-px bg-surface-sunken" />
             <Toggle
               id="notif-system"
               checked={notifPrefs.system}
@@ -596,7 +580,7 @@ export const SettingsPage: React.FC = () => {
               description="Platform updates and AI-generated financial suggestions"
             />
           </div>
-          <p className="text-xs text-white/30 pt-2 border-t border-white/5">
+          <p className="text-xs text-white/30 pt-2 border-t border-line">
             Preferences saved locally. Server-side delivery coming in a future update.
           </p>
         </SectionCard>
@@ -623,7 +607,7 @@ export const SettingsPage: React.FC = () => {
           </div>
 
           {/* Delete Account */}
-          <div className="flex items-center justify-between gap-4 p-4 rounded-md bg-red-negative/5 border border-red-negative/15">
+          <div className="flex items-center justify-between gap-4 p-4 rounded-md bg-loss/5 border border-loss/15">
             <div>
               <p className="text-sm font-semibold text-red-400">Delete Account</p>
               <p className="text-xs text-white/40 mt-0.5">
@@ -679,7 +663,7 @@ export const SettingsPage: React.FC = () => {
       >
         <div className="space-y-4">
           <div className="flex flex-col items-center gap-3 text-center">
-            <div className="w-14 h-14 rounded-full bg-red-negative/10 border border-red-negative/20 flex items-center justify-center text-red-400">
+            <div className="w-14 h-14 rounded-full bg-loss/10 border border-loss/20 flex items-center justify-center text-red-400">
               <AlertTriangle size={26} />
             </div>
             <div>
@@ -700,7 +684,7 @@ export const SettingsPage: React.FC = () => {
               type="text"
               value={deleteConfirmText}
               onChange={(e) => setDeleteConfirmText(e.target.value)}
-              className={`${inputClass} border-red-negative/20 focus:border-red-negative/60`}
+              className={`${inputClass} border-loss/20 focus:border-loss/60`}
               placeholder="DELETE"
               autoComplete="off"
             />

@@ -26,7 +26,7 @@ export const GlowCard: React.FC<GlowCardProps> = ({
   return (
     <div
       className={cn(
-        'bg-[rgba(47,52,60,0.65)] backdrop-blur-xl border border-white/8 rounded-2xl p-5 transition-all duration-300 ease-out hover:-translate-y-1',
+        'bg-[rgba(47,52,60,0.65)] backdrop-blur-xl border border-line rounded-2xl p-5 transition-all duration-300 ease-out hover:-translate-y-1',
         glowColor && glowClasses[glowColor] ? glowClasses[glowColor] : 'hover:shadow-[0_0_40px_rgba(4,102,200,0.30)] hover:border-primary/30',
         className
       )}

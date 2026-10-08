@@ -43,9 +43,9 @@ export const FinanceGlobe: React.FC = () => {
         style={{ background: 'transparent', width: '100%', height: '100%' }}
         frameloop="always"
       >
-        <ambientLight color="#0353a4" intensity={0.7} />
-        <pointLight color="#0466c8" intensity={2.0} position={[5, 3, 5]} />
-        <pointLight color="#023e7d" intensity={1.5} position={[-5, -3, -5]} />
+        <ambientLight color="#5aa5f2" intensity={0.9} />
+        <pointLight color="#1f7bdc" intensity={2.5} position={[5, 3, 5]} />
+        <pointLight color="#5aa5f2" intensity={1.8} position={[-5, -3, -5]} />
         
         <OrbitControls
           enablePan={false}
@@ -59,9 +59,9 @@ export const FinanceGlobe: React.FC = () => {
           <mesh>
             <sphereGeometry args={[1.7, 64, 64]} />
             <meshStandardMaterial
-              color="#001845"
-              roughness={0.7}
-              metalness={0.3}
+              color="#0466c8"
+              roughness={0.5}
+              metalness={0.4}
             />
           </mesh>
 
@@ -69,10 +69,10 @@ export const FinanceGlobe: React.FC = () => {
           <mesh>
             <sphereGeometry args={[1.72, 32, 32]} />
             <meshBasicMaterial
-              color="#0466c8"
+              color="#5aa5f2"
               wireframe={true}
               transparent={true}
-              opacity={0.25}
+              opacity={0.45}
             />
           </mesh>
 
@@ -86,9 +86,9 @@ export const FinanceGlobe: React.FC = () => {
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.9, 0]}>
           <ringGeometry args={[1.0, 1.6, 64]} />
           <meshBasicMaterial
-            color="#0466c8"
+            color="#5aa5f2"
             transparent={true}
-            opacity={0.3}
+            opacity={0.35}
             side={THREE.DoubleSide}
           />
         </mesh>

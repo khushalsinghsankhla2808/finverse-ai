@@ -52,7 +52,7 @@ export const MobileNav: React.FC = () => {
   return (
     <>
       {/* Bottom Nav Bar (Mobile Viewports Only) */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 h-16 border-t border-white/8 bg-surface-sunken/90 backdrop-blur-md flex items-center justify-around px-2 pb-safe lg:hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-40 h-16 border-t border-line bg-surface-sunken/90 backdrop-blur-md flex items-center justify-around px-2 pb-safe lg:hidden">
         {mainTabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = location.pathname === tab.path;
@@ -104,14 +104,14 @@ export const MobileNav: React.FC = () => {
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 220 }}
-              className="fixed bottom-0 left-0 right-0 z-50 rounded-t-lg border-t border-white/10 bg-surface p-6 pb-8 text-white flex flex-col gap-6 lg:hidden shadow-2xl"
+              className="fixed bottom-0 left-0 right-0 z-50 rounded-t-lg border-t border-line bg-surface p-6 pb-8 text-white flex flex-col gap-6 lg:hidden shadow-2xl"
             >
               {/* Header */}
               <div className="flex items-center justify-between">
                 <h3 className="font-display font-bold text-lg text-white">More Modules</h3>
                 <button
                   onClick={() => setMoreOpen(false)}
-                  className="h-8 w-8 rounded-lg bg-white/5 border border-transparent hover:border-white/10 flex items-center justify-center text-white/50 hover:text-white cursor-pointer"
+                  className="h-8 w-8 rounded-lg bg-surface-sunken border border-transparent hover:border-line flex items-center justify-center text-white/50 hover:text-white cursor-pointer"
                 >
                   <X size={16} />
                 </button>
@@ -134,7 +134,7 @@ export const MobileNav: React.FC = () => {
                         'flex flex-col items-center justify-center p-3 rounded-md border transition-all duration-200 cursor-pointer gap-2',
                         isActive
                           ? 'border-primary bg-primary/15 text-primary'
-                          : 'border-white/5 bg-white/2 text-white/60 hover:bg-white/5 hover:text-white'
+                          : 'border-line bg-surface-sunken text-white/60 hover:bg-surface-sunken hover:text-white'
                       )}
                     >
                       <Icon size={20} className={isActive ? 'text-primary' : ''} />
@@ -147,7 +147,7 @@ export const MobileNav: React.FC = () => {
               </div>
 
               {/* Logout button */}
-              <div className="border-t border-white/5 pt-4 mt-2">
+              <div className="border-t border-line pt-4 mt-2">
                 <button
                   onClick={handleLogout}
                   className="w-full h-11 flex items-center justify-center gap-2 rounded-lg border border-red-500/20 bg-red-500/5 hover:bg-red-500/10 text-red-400 font-semibold text-sm transition-all duration-150 cursor-pointer"

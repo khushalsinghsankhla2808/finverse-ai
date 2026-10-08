@@ -36,7 +36,7 @@
 
 ## 📖 About
 
-**FinVerse AI** is a full-stack personal finance management platform built for the modern Indian investor. It combines intelligent transaction tracking, budget management, investment portfolio monitoring, and savings goal planning — all enhanced by a conversational AI advisor powered by Google Gemini.
+**FinVerse AI** is a full-stack personal finance management platform built for the modern Indian investor. It combines intelligent transaction tracking, budget management, investment portfolio monitoring, and savings goal planning  -  all enhanced by a conversational AI advisor powered by Google Gemini.
 
 The platform features a premium glassmorphic dark-mode UI with 3D visualizations, real-time analytics dashboards, and automated financial report generation in PDF and Excel formats.
 
@@ -52,31 +52,31 @@ A quick tour of FinVerse AI, from sign-in to AI-powered insights.
   <tr>
     <td align="center" width="50%">
       <img src="https://github.com/user-attachments/assets/8d308354-b1ca-4d44-a915-fcdb1f0a6c04" alt="FinVerse AI sign-in screen" width="100%" />
-      <br /><sub><b>Sign In</b> — glassmorphic auth screen with email/password and Google login</sub>
+      <br /><sub><b>Sign In</b>  -  glassmorphic auth screen with email/password and Google login</sub>
     </td>
     <td align="center" width="50%">
       <img src="https://github.com/user-attachments/assets/3ac190d1-240a-493d-a9c1-baa419f76cf7" alt="FinVerse AI create account screen" width="100%" />
-      <br /><sub><b>Create Account</b> — registration with password confirmation and terms acceptance</sub>
+      <br /><sub><b>Create Account</b>  -  registration with password confirmation and terms acceptance</sub>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
       <img src="https://github.com/user-attachments/assets/e6200d71-a6ec-4a49-ad61-7398e9078e1c" alt="FinVerse AI dashboard financial overview" width="100%" />
-      <br /><sub><b>Dashboard</b> — KPI cards, net worth projection, interactive 3D financial globe, quick actions, expense breakdown and 7-day cash flow</sub>
+      <br /><sub><b>Dashboard</b>  -  KPI cards, net worth projection, interactive 3D financial globe, quick actions, expense breakdown and 7-day cash flow</sub>
     </td>
     <td align="center" width="50%">
       <img src="https://github.com/user-attachments/assets/586e319d-3379-46ff-bcdb-5c1e1011020b" alt="FinVerse AI Assistant chat" width="100%" />
-      <br /><sub><b>AI Assistant</b> — Gemini-powered chat with saved conversations and auto-generated spending insights</sub>
+      <br /><sub><b>AI Assistant</b>  -  Gemini-powered chat with saved conversations and auto-generated spending insights</sub>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
       <img src="https://github.com/user-attachments/assets/11ac5a4a-a918-40c3-bfde-29ceddae90da" alt="FinVerse AI settings profile screen" width="100%" />
-      <br /><sub><b>Settings</b> — profile management plus password and session security</sub>
+      <br /><sub><b>Settings</b>  -  profile management plus password and session security</sub>
     </td>
     <td align="center" width="50%">
       <img src="https://github.com/user-attachments/assets/10aeaf69-58d5-43ae-aca0-83bee750f75d" alt="FinVerse AI currency preferences" width="100%" />
-      <br /><sub><b>Preferences</b> — multi-currency support (INR, USD, EUR, GBP, JPY, BTC), synced to your account</sub>
+      <br /><sub><b>Preferences</b>  -  multi-currency support (INR, USD, EUR, GBP, JPY, BTC), synced to your account</sub>
     </td>
   </tr>
 </table>
@@ -93,11 +93,11 @@ A quick tour of FinVerse AI, from sign-in to AI-powered insights.
 - Filtering, sorting, and full-text search (name, merchant, note)
 
 ### 📊 Analytics Dashboard
-- **KPI Cards** — Total balance, monthly income/expenses, savings rate
-- **Spending Breakdown** — Category-wise donut charts with percentage allocations
-- **Income vs. Expense Trends** — Daily, weekly, and monthly trend visualizations
-- **Cash Flow Analysis** — 7-day rolling cash flow with income/expense bars
-- **Monthly Comparison** — 6-month side-by-side financial performance
+- **KPI Cards**  -  Total balance, monthly income/expenses, savings rate
+- **Spending Breakdown**  -  Category-wise donut charts with percentage allocations
+- **Income vs. Expense Trends**  -  Daily, weekly, and monthly trend visualizations
+- **Cash Flow Analysis**  -  7-day rolling cash flow with income/expense bars
+- **Monthly Comparison**  -  6-month side-by-side financial performance
 
 ### 🎯 Budget Tracking
 - Set category-wise monthly spending limits
@@ -118,33 +118,33 @@ A quick tour of FinVerse AI, from sign-in to AI-powered insights.
 - Platform and symbol tagging
 
 ### 🤖 AI Financial Advisor
-- **Conversational Chat** — Natural language financial Q&A powered by Google Gemini 1.5 Flash
-- **Context-Aware** — Automatically injects your real financial data (last 30 days of transactions, active budgets, active goals) into every query
-- **Automated Insights** — AI-generated spending warnings, savings milestones, and goal deadline alerts
-- **Chat History** — Persistent, per-user conversation logs stored in MongoDB
-- **Smart Suggestions** — Pre-built prompt questions like _"Where am I spending the most?"_ and _"Am I on track with my goals?"_
-- **Graceful Fallback** — Rule-based mock advisor automatically kicks in when `GEMINI_API_KEY` is not configured, so the app is fully demoable without a live key
+- **Conversational Chat**  -  Natural language financial Q&A powered by Google Gemini 1.5 Flash
+- **Context-Aware**  -  Automatically injects your real financial data (last 30 days of transactions, active budgets, active goals) into every query
+- **Automated Insights**  -  AI-generated spending warnings, savings milestones, and goal deadline alerts
+- **Chat History**  -  Persistent, per-user conversation logs stored in MongoDB
+- **Smart Suggestions**  -  Pre-built prompt questions like _"Where am I spending the most?"_ and _"Am I on track with my goals?"_
+- **Graceful Fallback**  -  Rule-based mock advisor automatically kicks in when `GEMINI_API_KEY` is not configured, so the app is fully demoable without a live key
 
 ### 📄 Report Generation
-- **PDF Reports** — Branded, multi-page financial statements with cover page, summary metrics, expense allocation tables, and transaction ledgers (via PDFKit)
-- **Excel Reports** — Multi-sheet workbooks (Summary + Transactions) with styled headers (via ExcelJS)
-- **CSV Export** — Lightweight data exports
-- **Cloud Upload** — Automatic Cloudinary upload with download links (falls back to local file serving when Cloudinary isn't configured)
-- **Custom Date Ranges** — Filter reports by date range and specific categories
-- **Path-Safe Downloads** — Report filenames are strictly validated to prevent path traversal on the public download endpoint
+- **PDF Reports**  -  Branded, multi-page financial statements with cover page, summary metrics, expense allocation tables, and transaction ledgers (via PDFKit)
+- **Excel Reports**  -  Multi-sheet workbooks (Summary + Transactions) with styled headers (via ExcelJS)
+- **CSV Export**  -  Lightweight data exports
+- **Cloud Upload**  -  Automatic Cloudinary upload with download links (falls back to local file serving when Cloudinary isn't configured)
+- **Custom Date Ranges**  -  Filter reports by date range and specific categories
+- **Path-Safe Downloads**  -  Report filenames are strictly validated to prevent path traversal on the public download endpoint
 
 ### 🔐 Authentication & Account Management
-- **Firebase Authentication** — Email/password and Google sign-in handled client-side by Firebase; the backend verifies Firebase ID tokens on every request (no passwords ever touch the Express server)
-- **Auto-Sync & Legacy Migration** — `/auth/sync` creates or links a MongoDB user profile to a Firebase UID the first time a user signs in, including a safe migration path for pre-Firebase accounts (only allowed once the email is verified or the sign-in came from Google)
-- **Currency Preferences** — Per-user currency setting synchronized across app and backend
-- **Cascading Account Deletion** — Irreversible delete that wipes the user profile, budgets, goals, transactions, investments, notifications, and AI chat history in one cascade
+- **Firebase Authentication**  -  Email/password and Google sign-in handled client-side by Firebase; the backend verifies Firebase ID tokens on every request (no passwords ever touch the Express server)
+- **Auto-Sync & Legacy Migration**  -  `/auth/sync` creates or links a MongoDB user profile to a Firebase UID the first time a user signs in, including a safe migration path for pre-Firebase accounts (only allowed once the email is verified or the sign-in came from Google)
+- **Currency Preferences**  -  Per-user currency setting synchronized across app and backend
+- **Cascading Account Deletion**  -  Irreversible delete that wipes the user profile, budgets, goals, transactions, investments, notifications, and AI chat history in one cascade
 
 ### 🎨 Premium UI/UX
-- **Glassmorphic Dark Theme** — Deep purple palette with frosted-glass effects
-- **3D Globe Visualization** — Interactive Three.js finance globe on the dashboard, wrapped in its own error boundary
-- **Framer Motion Animations** — Page transitions, hover effects, and micro-interactions
-- **Responsive Design** — Mobile-first layout with a collapsible sidebar and dedicated mobile nav
-- **Lazy Loading** — Code-split routes with suspense fallbacks and skeleton loaders
+- **Glassmorphic Dark Theme**  -  Deep purple palette with frosted-glass effects
+- **3D Globe Visualization**  -  Interactive Three.js finance globe on the dashboard, wrapped in its own error boundary
+- **Framer Motion Animations**  -  Page transitions, hover effects, and micro-interactions
+- **Responsive Design**  -  Mobile-first layout with a collapsible sidebar and dedicated mobile nav
+- **Lazy Loading**  -  Code-split routes with suspense fallbacks and skeleton loaders
 
 ---
 
@@ -281,17 +281,17 @@ See the [Environment Variables](#-environment-variables) section below for the f
 ### 4. Start Development Servers
 
 ```bash
-# From the repo root — runs both frontend and backend concurrently
+# From the repo root  -  runs both frontend and backend concurrently
 npm run dev:all
 ```
 
 Or run them individually:
 
 ```bash
-# Terminal 1 — Backend (http://localhost:5000)
+# Terminal 1  -  Backend (http://localhost:5000)
 npm run dev:backend
 
-# Terminal 2 — Frontend (http://localhost:5173)
+# Terminal 2  -  Frontend (http://localhost:5173)
 npm run dev:frontend
 ```
 
@@ -313,16 +313,16 @@ PORT=5000
 NODE_ENV=development
 
 # ── Database ───────────────────────────────────────
-# MongoDB Atlas connection string — whitelist 0.0.0.0/0 for cloud hosts
+# MongoDB Atlas connection string  -  whitelist 0.0.0.0/0 for cloud hosts
 MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/FinVerse
 
 # ── Redis ──────────────────────────────────────────
 REDIS_URL=redis://localhost:6379
 
-# ── Google Gemini AI (optional — falls back to rule-based advisor) ──
+# ── Google Gemini AI (optional  -  falls back to rule-based advisor) ──
 GEMINI_API_KEY=
 
-# ── Cloudinary (optional — falls back to local file storage) ──
+# ── Cloudinary (optional  -  falls back to local file storage) ──
 CLOUDINARY_CLOUD_NAME=
 CLOUDINARY_API_KEY=
 CLOUDINARY_API_SECRET=
@@ -342,7 +342,7 @@ FIREBASE_PROJECT_ID=
 FIREBASE_CLIENT_EMAIL=
 FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
 
-# ── Rate Limiting (optional — sensible defaults are built in) ──
+# ── Rate Limiting (optional  -  sensible defaults are built in) ──
 # RL_AUTH_IP_WINDOW_MS=900000        # 15 min
 # RL_AUTH_IP_MAX=10
 # RL_AUTH_ACCOUNT_WINDOW_MS=1800000  # 30 min
@@ -464,7 +464,7 @@ All routes are prefixed with `/api/v1` and require `Authorization: Bearer <Fireb
 ```text
 finverse-ai/
 ├── backend/
-│   ├── server.ts                     # Entry point — boots Express + MongoDB
+│   ├── server.ts                     # Entry point  -  boots Express + MongoDB
 │   ├── .env.example                  # Environment variable template
 │   ├── tsconfig.json
 │   ├── package.json
@@ -591,15 +591,15 @@ npm run test:ui         # Run Vitest with the interactive UI
 
 FinVerse AI ships with several production-oriented protections out of the box:
 
-- **Firebase-verified auth** — the backend never stores or handles passwords; every request is authenticated by verifying a Firebase ID token server-side.
-- **Tiered rate limiting** — dual-axis per-IP + per-account limiting with exponential backoff on auth routes, per-user limits on authenticated routes, and a generous global fallback, all environment-configurable (see `rateLimits.ts`).
-- **Strict input validation** — every route body/query/params is validated against a Zod schema in strict mode before it reaches a controller.
-- **Data isolation** — every database query is scoped to `req.user.id`, so one user can never read or modify another user's data.
-- **ReDoS-safe search** — user-supplied search strings are regex-escaped before being used in MongoDB queries.
-- **Path-traversal-safe downloads** — report filenames are validated against a strict schema before being read from disk.
-- **Log redaction** — sensitive fields (passwords, tokens, card numbers) are automatically stripped from request logs.
-- **Security headers** — `helmet()` is applied globally; CORS is locked to an explicit `CLIENT_URL` allow-list.
-- **Automated dependency audits** — a GitHub Actions workflow (`security-audit.yml`) runs `npm audit` on both the frontend and backend on every push/PR and weekly on a schedule, failing the build on high/critical vulnerabilities.
+- **Firebase-verified auth**  -  the backend never stores or handles passwords; every request is authenticated by verifying a Firebase ID token server-side.
+- **Tiered rate limiting**  -  dual-axis per-IP + per-account limiting with exponential backoff on auth routes, per-user limits on authenticated routes, and a generous global fallback, all environment-configurable (see `rateLimits.ts`).
+- **Strict input validation**  -  every route body/query/params is validated against a Zod schema in strict mode before it reaches a controller.
+- **Data isolation**  -  every database query is scoped to `req.user.id`, so one user can never read or modify another user's data.
+- **ReDoS-safe search**  -  user-supplied search strings are regex-escaped before being used in MongoDB queries.
+- **Path-traversal-safe downloads**  -  report filenames are validated against a strict schema before being read from disk.
+- **Log redaction**  -  sensitive fields (passwords, tokens, card numbers) are automatically stripped from request logs.
+- **Security headers**  -  `helmet()` is applied globally; CORS is locked to an explicit `CLIENT_URL` allow-list.
+- **Automated dependency audits**  -  a GitHub Actions workflow (`security-audit.yml`) runs `npm audit` on both the frontend and backend on every push/PR and weekly on a schedule, failing the build on high/critical vulnerabilities.
 
 If you discover a security issue, please open a private security advisory on GitHub rather than a public issue.
 
@@ -657,5 +657,5 @@ This project does not yet include a `LICENSE` file. Until one is added, all righ
 ---
 
 <p align="center">
-  <sub>Built with ❤️ and a lot of ☕ — FinVerse AI</sub>
+  <sub>FinVerse AI</sub>
 </p>

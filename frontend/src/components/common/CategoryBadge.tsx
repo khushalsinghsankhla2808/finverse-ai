@@ -12,16 +12,16 @@ export const CategoryBadge: React.FC<CategoryBadgeProps> = ({ category, classNam
     switch (cat) {
       case 'Income':
       case 'Salary':
-        return 'bg-green-positive/10 text-green-positive border-green-positive/20';
+        return 'bg-gain/10 text-gain border-gain/20';
       case 'Expense':
       case 'Healthcare':
       case 'Medical':
-        return 'bg-red-negative/10 text-red-negative border-red-negative/20';
+        return 'bg-loss/10 text-loss border-loss/20';
       case 'Savings':
       case 'Emergency':
       case 'Investment':
       case 'Investments':
-        return 'bg-gold-savings/10 text-gold-savings border-gold-savings/20';
+        return 'bg-warning/10 text-warning border-warning/20';
       default:
         return 'bg-primary/10 text-primary border-primary/20';
     }

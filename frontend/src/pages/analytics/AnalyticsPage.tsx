@@ -124,17 +124,17 @@ export const AnalyticsPage: React.FC = () => {
       const net = income - expense;
 
       return (
-        <div className="glassmorphism bg-surface/90 border border-white/10 p-3 rounded-md shadow-xl space-y-1">
+        <div className="glassmorphism bg-surface/90 border border-line p-3 rounded-md shadow-xl space-y-1">
           <p className="text-[10px] font-bold text-white/40 uppercase tracking-wider">{label}</p>
-          <div className="flex items-center gap-2 text-xs font-semibold text-green-positive">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-positive" />
+          <div className="flex items-center gap-2 text-xs font-semibold text-gain">
+            <span className="w-1.5 h-1.5 rounded-full bg-gain" />
             <span>Income: {formatINR(income)}</span>
           </div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-red-negative">
-            <span className="w-1.5 h-1.5 rounded-full bg-red-negative" />
+          <div className="flex items-center gap-2 text-xs font-semibold text-loss">
+            <span className="w-1.5 h-1.5 rounded-full bg-loss" />
             <span>Expense: {formatINR(expense)}</span>
           </div>
-          <div className={`text-xs font-bold pt-1 border-t border-white/5 ${net >= 0 ? 'text-green-positive' : 'text-red-negative'}`}>
+          <div className={`text-xs font-bold pt-1 border-t border-line ${net >= 0 ? 'text-gain' : 'text-loss'}`}>
             Net: {net >= 0 ? '+' : ''}{formatINR(net)}
           </div>
         </div>
@@ -153,7 +153,7 @@ export const AnalyticsPage: React.FC = () => {
             <p className="text-xs text-white/50 font-medium">Deep insights into your finances</p>
           </div>
 
-          <div className="flex bg-white/4 p-1 rounded-md border border-white/5 relative self-start">
+          <div className="flex bg-surface-sunken p-1 rounded-md border border-line relative self-start">
             {([
               { id: 'month', label: 'This Month' },
               { id: 'quarter', label: '3 Months' },
@@ -181,15 +181,15 @@ export const AnalyticsPage: React.FC = () => {
 
         {/* Summary KPI row */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-          <div className="glassmorphism bg-surface/40 p-4 rounded-lg border border-white/8 shadow-md">
+          <div className="glassmorphism bg-surface/40 p-4 rounded-lg border border-line shadow-md">
             <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">Total Spent</span>
             <div className="flex items-center gap-2 mt-2">
-              <TrendingDown size={14} className="text-red-negative" />
+              <TrendingDown size={14} className="text-loss" />
               <span className="text-xl font-bold font-mono text-white">{formatINR(metrics.totalSpent)}</span>
             </div>
           </div>
 
-          <div className="glassmorphism bg-surface/40 p-4 rounded-lg border border-white/8 shadow-md">
+          <div className="glassmorphism bg-surface/40 p-4 rounded-lg border border-line shadow-md">
             <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">Avg Daily Spend</span>
             <div className="flex items-center gap-2 mt-2">
               <Activity size={14} className="text-primary" />
@@ -197,7 +197,7 @@ export const AnalyticsPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="glassmorphism bg-surface/40 p-4 rounded-lg border border-white/8 shadow-md">
+          <div className="glassmorphism bg-surface/40 p-4 rounded-lg border border-line shadow-md">
             <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">Top Category</span>
             <div className="flex items-center gap-2 mt-2">
               <Wallet size={14} className="text-blue-primary" />
@@ -205,18 +205,18 @@ export const AnalyticsPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="glassmorphism bg-surface/40 p-4 rounded-lg border border-white/8 shadow-md">
+          <div className="glassmorphism bg-surface/40 p-4 rounded-lg border border-line shadow-md">
             <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">Savings Rate</span>
             <div className="flex items-center gap-2 mt-2">
-              <Percent size={14} className="text-green-positive" />
+              <Percent size={14} className="text-gain" />
               <span className="text-xl font-bold font-mono text-white">{metrics.savingsRate.toFixed(1)}%</span>
             </div>
           </div>
         </div>
 
         {/* Row 1: Spending Trend Bar Chart (Full Width) */}
-        <div className="glassmorphism bg-surface/30 p-5 border border-white/8 rounded-2xl">
-          <div className="flex items-center justify-between border-b border-white/5 pb-3 mb-4">
+        <div className="glassmorphism bg-surface/30 p-5 border border-line rounded-2xl">
+          <div className="flex items-center justify-between border-b border-line pb-3 mb-4">
             <h3 className="text-sm font-bold text-white">Spending & Income Trend</h3>
             <span className="text-[10px] text-white/35 font-semibold">Currency ({activeCurrency.symbol})</span>
           </div>
@@ -242,8 +242,8 @@ export const AnalyticsPage: React.FC = () => {
         {/* Row 2: Expense Breakdown Pie + Cash Flow Area */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* Pie Chart */}
-          <div className="glassmorphism bg-surface/30 p-5 border border-white/8 rounded-2xl flex flex-col justify-between h-[400px]">
-            <div className="flex items-center justify-between border-b border-white/5 pb-3">
+          <div className="glassmorphism bg-surface/30 p-5 border border-line rounded-2xl flex flex-col justify-between h-[400px]">
+            <div className="flex items-center justify-between border-b border-line pb-3">
               <h3 className="text-sm font-bold text-white">Expense Distribution</h3>
               <span className="text-[10px] text-white/35 font-semibold">By Category</span>
             </div>
@@ -296,14 +296,14 @@ export const AnalyticsPage: React.FC = () => {
             </div>
 
             {/* Custom Legend */}
-            <div className="grid grid-cols-3 gap-2 border-t border-white/5 pt-3 max-h-[100px] overflow-y-auto">
+            <div className="grid grid-cols-3 gap-2 border-t border-line pt-3 max-h-[100px] overflow-y-auto">
               {expenseBreakdownData.data.map((item, index) => (
                 <div
                   key={item.name}
                   onMouseEnter={() => setHoveredPieIndex(index)}
                   onMouseLeave={() => setHoveredPieIndex(null)}
                   className={`flex flex-col p-1.5 rounded-lg border transition-all select-none ${
-                    hoveredPieIndex === index ? 'bg-white/5 border-white/10' : 'border-transparent'
+                    hoveredPieIndex === index ? 'bg-surface-sunken border-line' : 'border-transparent'
                   }`}
                 >
                   <div className="flex items-center gap-1.5 min-w-0">
@@ -319,8 +319,8 @@ export const AnalyticsPage: React.FC = () => {
           </div>
 
           {/* Cash Flow Area Chart */}
-          <div className="glassmorphism bg-surface/30 p-5 border border-white/8 rounded-2xl flex flex-col justify-between h-[400px]">
-            <div className="flex items-center justify-between border-b border-white/5 pb-3">
+          <div className="glassmorphism bg-surface/30 p-5 border border-line rounded-2xl flex flex-col justify-between h-[400px]">
+            <div className="flex items-center justify-between border-b border-line pb-3">
               <h3 className="text-sm font-bold text-white">Cash Flow Dynamics</h3>
               <span className="text-[10px] text-white/35 font-semibold">Last 6 Months</span>
             </div>
@@ -371,8 +371,8 @@ export const AnalyticsPage: React.FC = () => {
 
         {/* Row 3: Horizontal Comparison bars */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <div className="glassmorphism bg-surface/30 p-5 border border-white/8 rounded-2xl lg:col-span-1 flex flex-col justify-between min-h-[300px]">
-            <div className="border-b border-white/5 pb-2">
+          <div className="glassmorphism bg-surface/30 p-5 border border-line rounded-2xl lg:col-span-1 flex flex-col justify-between min-h-[300px]">
+            <div className="border-b border-line pb-2">
               <h3 className="text-sm font-bold text-white">Spent Comparison</h3>
               <p className="text-[10px] text-white/40 mt-0.5">By category ranking</p>
             </div>
@@ -387,7 +387,7 @@ export const AnalyticsPage: React.FC = () => {
                       <span>{item.name}</span>
                       <span className="font-mono">{formatINR(item.value)} ({item.percentage.toFixed(0)}%)</span>
                     </div>
-                    <div className="h-2 w-full bg-white/4 rounded-full overflow-hidden">
+                    <div className="h-2 w-full bg-surface-sunken rounded-full overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${item.percentage}%` }}
@@ -403,8 +403,8 @@ export const AnalyticsPage: React.FC = () => {
           </div>
 
           {/* Monthly Historical Comparison Table */}
-          <div className="glassmorphism bg-surface/30 p-5 border border-white/8 rounded-2xl lg:col-span-2 flex flex-col justify-between min-h-[300px]">
-            <div className="border-b border-white/5 pb-2">
+          <div className="glassmorphism bg-surface/30 p-5 border border-line rounded-2xl lg:col-span-2 flex flex-col justify-between min-h-[300px]">
+            <div className="border-b border-line pb-2">
               <h3 className="text-sm font-bold text-white">Monthly Comparison</h3>
               <p className="text-[10px] text-white/40 mt-0.5">Summary of last 6 months</p>
             </div>
@@ -412,7 +412,7 @@ export const AnalyticsPage: React.FC = () => {
             <div className="flex-1 mt-4 overflow-x-auto min-h-0">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
-                  <tr className="border-b border-white/5 text-[9px] uppercase font-bold text-white/40 tracking-wider">
+                  <tr className="border-b border-line text-[9px] uppercase font-bold text-white/40 tracking-wider">
                     <th className="py-2.5 px-3">Month</th>
                     <th className="py-2.5 px-3">Income</th>
                     <th className="py-2.5 px-3">Expenses</th>
@@ -426,25 +426,25 @@ export const AnalyticsPage: React.FC = () => {
                     
                     const rateColor =
                       row.savingsRate >= 20
-                        ? 'text-green-positive'
+                        ? 'text-gain'
                         : row.savingsRate >= 10
-                        ? 'text-gold-savings'
-                        : 'text-red-negative';
+                        ? 'text-warning'
+                        : 'text-loss';
 
                     return (
                       <tr
                         key={row.monthName}
-                        className={`border-b border-white/3 font-medium ${
+                        className={`border-b border-line font-medium ${
                           isCurrent ? 'bg-primary/10 text-white border-b-primary/20' : 'text-white/70'
                         }`}
                       >
                         <td className="py-3 px-3 font-semibold text-white">
                           {row.monthName} {row.year} {isCurrent && <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-primary text-white font-bold ml-1.5 uppercase">Current</span>}
                         </td>
-                        <td className="py-3 px-3 text-green-positive font-mono">
+                        <td className="py-3 px-3 text-gain font-mono">
                           {formatINR(row.income)}
                         </td>
-                        <td className="py-3 px-3 text-red-negative font-mono">
+                        <td className="py-3 px-3 text-loss font-mono">
                           {formatINR(row.expense)}
                         </td>
                         <td className="py-3 px-3 font-mono">

@@ -3,7 +3,7 @@ import LoadingSkeleton from '../common/LoadingSkeleton';
 
 export const KPICardSkeleton: React.FC = () => {
   return (
-    <div className="glassmorphism rounded-2xl p-5 border border-white/8 flex flex-col gap-4">
+    <div className="glassmorphism rounded-2xl p-5 border border-line flex flex-col gap-4">
       <div className="flex justify-between items-center">
         <LoadingSkeleton className="h-4 w-24" />
         <LoadingSkeleton className="h-10 w-10 rounded-full" />

@@ -19,11 +19,11 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 }) => {
   return (
     <div className="w-full flex items-center justify-center py-12 px-4">
-      <div className="border border-dashed border-white/10 bg-white/2 rounded-lg flex flex-col items-center justify-center text-center p-8 max-w-sm w-full shadow-lg relative overflow-hidden group hover:border-[var(--smart-blue)]/40 transition-colors duration-300">
+      <div className="border border-dashed border-line bg-surface-sunken rounded-lg flex flex-col items-center justify-center text-center p-8 max-w-sm w-full shadow-lg relative overflow-hidden group hover:border-[var(--smart-blue)]/40 transition-colors duration-300">
         {/* Subtle decorative glow */}
         <div className="absolute inset-0 bg-radial from-[var(--smart-blue)]/5 via-transparent to-transparent pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity duration-300" />
         
-        <div className="w-16 h-16 rounded-lg bg-white/4 border border-white/8 flex items-center justify-center text-white/30 mb-5 group-hover:text-primary group-hover:border-primary/30 transition-all duration-300 shadow-inner">
+        <div className="w-16 h-16 rounded-lg bg-surface-sunken border border-line flex items-center justify-center text-white/30 mb-5 group-hover:text-primary group-hover:border-primary/30 transition-all duration-300 shadow-inner">
           <Icon size={32} className="stroke-[1.5]" />
         </div>
 

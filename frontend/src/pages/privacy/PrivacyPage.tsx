@@ -32,7 +32,7 @@ export const PrivacyPage: React.FC = () => {
               FinVerse AI collects and stores personal data strictly required to deliver personal finance tracking services. The data stored in our database includes:
             </p>
             <ul className="list-disc pl-5 space-y-1 text-xs text-ink-subtle">
-              <li><strong>Account Credentials & Profile:</strong> Account email address, login tokens, display name, and currency preference.</li>
+              <li><strong>Account Credentials & Security:</strong> Account email address, display name, and currency preference. Passwords are securely hashed on our backend using bcrypt (10 rounds) prior to storage. Authentication session tokens are maintained client-side in browser LocalStorage (`finverse_user`).</li>
               <li><strong>Transactions:</strong> Amount, transaction type (income/expense/transfer), category, transaction date, merchant name, and description notes.</li>
               <li><strong>Budgets:</strong> Category limits, monthly targets, and utilization progress.</li>
               <li><strong>Savings Goals:</strong> Target amount, current saved progress, deadline dates, and category.</li>
@@ -42,34 +42,36 @@ export const PrivacyPage: React.FC = () => {
           </section>
 
           <section className="card space-y-3">
-            <h2 className="text-base font-bold text-ink">2. Data Sent to External Services</h2>
+            <h2 className="text-base font-bold text-ink">2. Data Transmitted to Google Gemini AI API</h2>
             <p>
-              To process requests and provide core features, specific data items are transmitted to third-party infrastructure providers:
+              When using the AI Assistant, your prompt query text and an aggregated context string (`contextText`) containing specific financial details are transmitted to the Google Gemini API to generate personalized financial insights. The exact fields transmitted in `contextText` include:
             </p>
             <ul className="list-disc pl-5 space-y-1 text-xs text-ink-subtle">
-              <li><strong>Google Gemini API:</strong> When using the AI Assistant, your query text and an aggregated summary of your financial metrics (last 30 days of income/expenses, active budget caps, and goal progress) are sent to Google Gemini API to generate personalized responses.</li>
-              <li><strong>Authentication Providers:</strong> User registration and sign-in credentials (email address and login tokens) are processed securely for identity verification.</li>
+              <li><strong>30-Day Totals:</strong> Total monthly income, total monthly expenses, savings rate percentage, and top spending category with spent amount.</li>
+              <li><strong>Recent Transactions:</strong> Merchant names, transaction amounts, categories, and transaction dates.</li>
+              <li><strong>Active Budgets:</strong> Category names, spent amounts, limit amounts, and percentage utilized.</li>
+              <li><strong>Active Savings Goals:</strong> Goal names, current saved amounts, target amounts, and completion percentages.</li>
             </ul>
           </section>
 
           <section className="card space-y-3">
             <h2 className="text-base font-bold text-ink">3. Local Storage and Cookies</h2>
             <p>
-              The application uses browser LocalStorage (`finverse_user`, `finverse-finance-data`, `finverse_currency`) to preserve your active session, preference selections, and offline state.
+              The application uses browser LocalStorage (`finverse_user`, `finverse-finance-data`, `finverse_currency`) to preserve your active login session token, user preferences, and offline application state.
             </p>
           </section>
 
           <section className="card space-y-3">
-            <h2 className="text-base font-bold text-ink">4. User Rights & Account Deletion</h2>
+            <h2 className="text-base font-bold text-ink">4. User Rights & Data Deletion</h2>
             <p>
-              You maintain full ownership of your data. You may export your transaction logs into PDF, Excel, or CSV files at any time via the Reports page. Additionally, you may request full data deletion by contacting us at <a href="mailto:[CONTACT EMAIL]" className="text-link hover:underline">[CONTACT EMAIL]</a>.
+              You maintain full ownership of your data. You may export your transaction logs into PDF, Excel, or CSV files at any time via the Reports page. Self-serve automated account deletion feature: [DATA DELETION]. Alternatively, you may request manual data deletion by contacting us at <a href="mailto:[CONTACT EMAIL]" className="text-link hover:underline">[CONTACT EMAIL]</a>.
             </p>
           </section>
 
           <section className="card space-y-3">
             <h2 className="text-base font-bold text-ink">5. Governing Law and Contact</h2>
             <p>
-              This policy is governed under [APPLICABLE LAW]. For questions regarding data handling or privacy requests, contact us at <a href="mailto:[CONTACT EMAIL]" className="text-link hover:underline">[CONTACT EMAIL]</a>.
+              This policy is governed under [APPLICABLE LAW]. For privacy requests or questions regarding data security, contact us at <a href="mailto:[CONTACT EMAIL]" className="text-link hover:underline">[CONTACT EMAIL]</a>.
             </p>
           </section>
         </div>

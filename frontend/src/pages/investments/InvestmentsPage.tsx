@@ -261,7 +261,7 @@ export const InvestmentsPage: React.FC = () => {
             {/* Portfolio Summary Widgets */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {/* Total Invested */}
-              <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-white/8 shadow-md">
+              <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-line shadow-md">
                 <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">
                   Total Invested
                 </span>
@@ -271,7 +271,7 @@ export const InvestmentsPage: React.FC = () => {
               </div>
 
               {/* Current Value */}
-              <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-white/8 shadow-md">
+              <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-line shadow-md">
                 <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">
                   Current Value
                 </span>
@@ -282,10 +282,10 @@ export const InvestmentsPage: React.FC = () => {
 
               {/* Gain/Loss */}
               <div
-                className={`glassmorphism bg-surface/40 p-5 rounded-lg border border-white/8 ${
+                className={`glassmorphism bg-surface/40 p-5 rounded-lg border border-line ${
                   (portfolioSummary?.totalGainLoss || 0) >= 0
-                    ? "shadow-md border-green-positive/20"
-                    : "shadow-md border-red-negative/20"
+                    ? "shadow-md border-gain/20"
+                    : "shadow-md border-loss/20"
                 }`}
               >
                 <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">
@@ -294,8 +294,8 @@ export const InvestmentsPage: React.FC = () => {
                 <h2
                   className={`text-2xl font-bold font-mono mt-2 ${
                     (portfolioSummary?.totalGainLoss || 0) >= 0
-                      ? "text-green-positive"
-                      : "text-red-negative"
+                      ? "text-gain"
+                      : "text-loss"
                   }`}
                 >
                   {(portfolioSummary?.totalGainLoss || 0) >= 0 ? "+" : ""}
@@ -305,10 +305,10 @@ export const InvestmentsPage: React.FC = () => {
 
               {/* Returns Rate */}
               <div
-                className={`glassmorphism bg-surface/40 p-5 rounded-lg border border-white/8 ${
+                className={`glassmorphism bg-surface/40 p-5 rounded-lg border border-line ${
                   (portfolioSummary?.totalGainLossPercent || 0) >= 0
-                    ? "shadow-md border-green-positive/20"
-                    : "shadow-md border-red-negative/20"
+                    ? "shadow-md border-gain/20"
+                    : "shadow-md border-loss/20"
                 }`}
               >
                 <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider">
@@ -316,15 +316,15 @@ export const InvestmentsPage: React.FC = () => {
                 </span>
                 <div className="flex items-center gap-1.5 mt-2">
                   {(portfolioSummary?.totalGainLossPercent || 0) >= 0 ? (
-                    <TrendingUp className="text-green-positive" size={20} />
+                    <TrendingUp className="text-gain" size={20} />
                   ) : (
-                    <TrendingDown className="text-red-negative" size={20} />
+                    <TrendingDown className="text-loss" size={20} />
                   )}
                   <h2
                     className={`text-2xl font-bold font-mono ${
                       (portfolioSummary?.totalGainLossPercent || 0) >= 0
-                        ? "text-green-positive"
-                        : "text-red-negative"
+                        ? "text-gain"
+                        : "text-loss"
                     }`}
                   >
                     {(portfolioSummary?.totalGainLossPercent || 0).toFixed(2)}%
@@ -336,7 +336,7 @@ export const InvestmentsPage: React.FC = () => {
             {/* Charts & Table Segment */}
             <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
               {/* Allocation Donut */}
-              <div className="glassmorphism bg-surface/30 p-5 border border-white/8 rounded-lg lg:col-span-4 h-[340px] flex flex-col justify-between">
+              <div className="glassmorphism bg-surface/30 p-5 border border-line rounded-lg lg:col-span-4 h-[340px] flex flex-col justify-between">
                 <div>
                   <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider block">
                     Portfolio Split
@@ -398,7 +398,7 @@ export const InvestmentsPage: React.FC = () => {
               </div>
 
               {/* Performance Table */}
-              <div className="glassmorphism bg-surface/30 p-5 border border-white/8 rounded-lg lg:col-span-6 h-[340px] flex flex-col justify-between">
+              <div className="glassmorphism bg-surface/30 p-5 border border-line rounded-lg lg:col-span-6 h-[340px] flex flex-col justify-between">
                 <div>
                   <span className="text-[10px] font-bold text-white/40 uppercase tracking-wider block">
                     Performance
@@ -411,7 +411,7 @@ export const InvestmentsPage: React.FC = () => {
                 <div className="flex-1 mt-4 overflow-y-auto pr-1 text-xs">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className="border-b border-white/5 text-[9px] uppercase font-bold text-white/40 tracking-wider">
+                      <tr className="border-b border-line text-[9px] uppercase font-bold text-white/40 tracking-wider">
                         <th className="py-2.5 px-3">Asset Type</th>
                         <th className="py-2.5 px-3 text-right">Invested</th>
                         <th className="py-2.5 px-3 text-right">Current</th>
@@ -437,7 +437,7 @@ export const InvestmentsPage: React.FC = () => {
                         return (
                           <tr
                             key={type}
-                            className="border-b border-white/3 font-medium text-white/80"
+                            className="border-b border-line font-medium text-white/80"
                           >
                             <td className="py-3 px-3 flex items-center gap-2">
                               <span>{ASSET_EMOJIS[type]}</span>
@@ -452,13 +452,13 @@ export const InvestmentsPage: React.FC = () => {
                               {formatINR(item.value)}
                             </td>
                             <td
-                              className={`py-3 px-3 text-right font-mono font-bold ${gain >= 0 ? "text-green-positive" : "text-red-negative"}`}
+                              className={`py-3 px-3 text-right font-mono font-bold ${gain >= 0 ? "text-gain" : "text-loss"}`}
                             >
                               {gain >= 0 ? "+" : ""}
                               {formatINR(gain)}
                             </td>
                             <td
-                              className={`py-3 px-3 text-right font-mono font-bold ${gainPercent >= 0 ? "text-green-positive" : "text-red-negative"}`}
+                              className={`py-3 px-3 text-right font-mono font-bold ${gainPercent >= 0 ? "text-gain" : "text-loss"}`}
                             >
                               {gainPercent >= 0 ? "+" : ""}
                               {gainPercent.toFixed(1)}%
@@ -470,7 +470,7 @@ export const InvestmentsPage: React.FC = () => {
                   </table>
                 </div>
 
-                <div className="border-t border-white/5 pt-2 flex justify-between items-center text-[10px] text-white/35 font-medium uppercase tracking-wider">
+                <div className="border-t border-line pt-2 flex justify-between items-center text-[10px] text-white/35 font-medium uppercase tracking-wider">
                   <span>Sorted by Current Valuation</span>
                   <span>Active Live Allocation Ranking</span>
                 </div>
@@ -490,12 +490,12 @@ export const InvestmentsPage: React.FC = () => {
                   <motionBase.div
                     key={inv.id}
                     layout
-                    className="glassmorphism bg-surface/40 p-5 rounded-lg border border-white/8 flex flex-col justify-between hover:scale-[1.01] hover:shadow-md transition-all duration-300 relative overflow-hidden"
+                    className="glassmorphism bg-surface/40 p-5 rounded-lg border border-line flex flex-col justify-between hover:scale-[1.01] hover:shadow-md transition-all duration-300 relative overflow-hidden"
                   >
                     {/* Header */}
                     <div className="flex justify-between items-start gap-4">
                       <div className="flex items-center gap-3 min-w-0">
-                        <span className="text-2xl leading-none w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center select-none">
+                        <span className="text-2xl leading-none w-10 h-10 bg-surface-sunken rounded-lg flex items-center justify-center select-none">
                           {ASSET_EMOJIS[inv.assetType]}
                         </span>
                         <div className="min-w-0 flex flex-col">
@@ -510,19 +510,19 @@ export const InvestmentsPage: React.FC = () => {
 
                       <div className="flex items-center gap-1.5 shrink-0">
                         {inv.platform && (
-                          <span className="px-2 py-0.5 rounded-md text-[8px] font-bold bg-white/5 border border-white/10 text-white/60">
+                          <span className="px-2 py-0.5 rounded-md text-[8px] font-bold bg-surface-sunken border border-line text-white/60">
                             {inv.platform}
                           </span>
                         )}
                         <button
                           onClick={() => setEditingInvestment(inv)}
-                          className="p-1 rounded-lg text-white/30 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
+                          className="p-1 rounded-lg text-white/30 hover:text-white hover:bg-surface-sunken transition-all cursor-pointer"
                         >
                           <Edit2 size={12} />
                         </button>
                         <button
                           onClick={() => setDeletingId(inv.id)}
-                          className="p-1 rounded-lg text-white/30 hover:text-red-negative hover:bg-red-negative/5 transition-all cursor-pointer"
+                          className="p-1 rounded-lg text-white/30 hover:text-loss hover:bg-loss/5 transition-all cursor-pointer"
                         >
                           <Trash2 size={12} />
                         </button>
@@ -530,7 +530,7 @@ export const InvestmentsPage: React.FC = () => {
                     </div>
 
                     {/* Performance details */}
-                    <div className="my-5 grid grid-cols-2 gap-4 border-b border-white/5 pb-4">
+                    <div className="my-5 grid grid-cols-2 gap-4 border-b border-line pb-4">
                       <div>
                         <span className="text-[9px] text-white/40 uppercase font-bold tracking-wider leading-none">
                           Invested
@@ -562,7 +562,7 @@ export const InvestmentsPage: React.FC = () => {
                           Total Returns
                         </span>
                         <span
-                          className={`text-sm font-bold font-mono mt-0.5 ${gain >= 0 ? "text-green-positive" : "text-red-negative"}`}
+                          className={`text-sm font-bold font-mono mt-0.5 ${gain >= 0 ? "text-gain" : "text-loss"}`}
                         >
                           {gain >= 0 ? "+" : ""}
                           {formatINR(gain)} ({gainPercent.toFixed(1)}%)
@@ -626,7 +626,7 @@ export const InvestmentsPage: React.FC = () => {
                           className={`flex flex-col items-center justify-center p-2 rounded-md border text-[10px] gap-0.5 cursor-pointer transition-all ${
                             isSelected
                               ? "bg-primary/10 border-primary text-white shadow-md"
-                              : "bg-white/2 border-white/5 text-white/60 hover:border-white/15"
+                              : "bg-surface-sunken border-line text-white/60 hover:border-white/15"
                           }`}
                         >
                           <span className="text-lg">{ASSET_EMOJIS[type]}</span>
@@ -647,10 +647,10 @@ export const InvestmentsPage: React.FC = () => {
                     type="text"
                     placeholder="e.g. Reliance Industries, HDFC Nifty Index"
                     {...register("name")}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
+                    className="w-full bg-surface-sunken hover:bg-surface-sunken border border-line focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
                   />
                   {errors.name && (
-                    <span className="text-[11px] text-red-negative font-medium">
+                    <span className="text-[11px] text-loss font-medium">
                       {errors.name.message}
                     </span>
                   )}
@@ -664,7 +664,7 @@ export const InvestmentsPage: React.FC = () => {
                     type="text"
                     placeholder="e.g. RELIANCE, INFYNSE"
                     {...register("symbol")}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
+                    className="w-full bg-surface-sunken hover:bg-surface-sunken border border-line focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
                   />
                 </div>
 
@@ -676,7 +676,7 @@ export const InvestmentsPage: React.FC = () => {
                     type="text"
                     placeholder="e.g. Zerodha, Groww, SBI"
                     {...register("platform")}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
+                    className="w-full bg-surface-sunken hover:bg-surface-sunken border border-line focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
                   />
                 </div>
               </div>
@@ -693,10 +693,10 @@ export const InvestmentsPage: React.FC = () => {
                       step="any"
                       placeholder="0"
                       {...register("units", { valueAsNumber: true })}
-                      className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20 font-mono"
+                      className="w-full bg-surface-sunken hover:bg-surface-sunken border border-line focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20 font-mono"
                     />
                     {errors.units && (
-                      <span className="text-[11px] text-red-negative font-medium">
+                      <span className="text-[11px] text-loss font-medium">
                         {errors.units.message}
                       </span>
                     )}
@@ -709,10 +709,10 @@ export const InvestmentsPage: React.FC = () => {
                     <input
                       type="date"
                       {...register("purchaseDate")}
-                      className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all"
+                      className="w-full bg-surface-sunken hover:bg-surface-sunken border border-line focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all"
                     />
                     {errors.purchaseDate && (
-                      <span className="text-[11px] text-red-negative font-medium">
+                      <span className="text-[11px] text-loss font-medium">
                         {errors.purchaseDate.message}
                       </span>
                     )}
@@ -729,10 +729,10 @@ export const InvestmentsPage: React.FC = () => {
                       step="any"
                       placeholder="0.00"
                       {...register("purchasePrice", { valueAsNumber: true })}
-                      className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20 font-mono"
+                      className="w-full bg-surface-sunken hover:bg-surface-sunken border border-line focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20 font-mono"
                     />
                     {errors.purchasePrice && (
-                      <span className="text-[11px] text-red-negative font-medium">
+                      <span className="text-[11px] text-loss font-medium">
                         {errors.purchasePrice.message}
                       </span>
                     )}
@@ -747,10 +747,10 @@ export const InvestmentsPage: React.FC = () => {
                       step="any"
                       placeholder="0.00"
                       {...register("currentPrice", { valueAsNumber: true })}
-                      className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20 font-mono"
+                      className="w-full bg-surface-sunken hover:bg-surface-sunken border border-line focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20 font-mono"
                     />
                     {errors.currentPrice && (
-                      <span className="text-[11px] text-red-negative font-medium">
+                      <span className="text-[11px] text-loss font-medium">
                         {errors.currentPrice.message}
                       </span>
                     )}
@@ -765,12 +765,12 @@ export const InvestmentsPage: React.FC = () => {
                     rows={2}
                     placeholder="Notes (optional)..."
                     {...register("notes")}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all resize-none placeholder:text-white/20"
+                    className="w-full bg-surface-sunken hover:bg-surface-sunken border border-line focus:border-primary rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all resize-none placeholder:text-white/20"
                   />
                 </div>
 
                 {/* Live Preview Block */}
-                <div className="bg-white/3 border border-white/5 rounded-md p-4 space-y-1.5 text-xs">
+                <div className="bg-surface-sunken border border-line rounded-md p-4 space-y-1.5 text-xs">
                   <span className="text-[9px] text-white/40 uppercase font-bold tracking-wider block">
                     Live Calculation Preview
                   </span>
@@ -786,10 +786,10 @@ export const InvestmentsPage: React.FC = () => {
                       {formatINR(liveValue)}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center pt-1.5 border-t border-white/5">
+                  <div className="flex justify-between items-center pt-1.5 border-t border-line">
                     <span className="font-bold">Gain / Loss:</span>
                     <span
-                      className={`font-mono font-bold ${liveGain >= 0 ? "text-green-positive" : "text-red-negative"}`}
+                      className={`font-mono font-bold ${liveGain >= 0 ? "text-gain" : "text-loss"}`}
                     >
                       {liveGain >= 0 ? "+" : ""}
                       {formatINR(liveGain)} ({liveGainPercent.toFixed(1)}%)
@@ -799,7 +799,7 @@ export const InvestmentsPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex justify-end gap-3 border-t border-white/5 pt-4">
+            <div className="flex justify-end gap-3 border-t border-line pt-4">
               <Button
                 variant="ghost"
                 onClick={() => {

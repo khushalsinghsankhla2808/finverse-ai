@@ -204,7 +204,7 @@ export const BudgetsPage: React.FC = () => {
           <>
             {/* Summary Row */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-white/8 shadow-md">
+              <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-line shadow-md">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Total Budgeted</span>
                   <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
@@ -214,24 +214,24 @@ export const BudgetsPage: React.FC = () => {
                 <h2 className="text-2xl font-bold text-white font-mono mt-3">{formatINR(summary.limit)}</h2>
               </div>
 
-              <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-white/8 shadow-md">
+              <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-line shadow-md">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Total Spent</span>
-                  <div className="w-8 h-8 rounded-lg bg-red-negative/10 border border-red-negative/20 flex items-center justify-center text-red-negative">
+                  <div className="w-8 h-8 rounded-lg bg-loss/10 border border-loss/20 flex items-center justify-center text-loss">
                     <TrendingDown size={16} />
                   </div>
                 </div>
                 <h2 className="text-2xl font-bold text-white font-mono mt-3">{formatINR(summary.spent)}</h2>
               </div>
 
-              <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-white/8 shadow-md">
+              <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-line shadow-md">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Remaining Budget</span>
-                  <div className="w-8 h-8 rounded-lg bg-green-positive/10 border border-green-positive/20 flex items-center justify-center text-green-positive">
+                  <div className="w-8 h-8 rounded-lg bg-gain/10 border border-gain/20 flex items-center justify-center text-gain">
                     <Wallet size={16} />
                   </div>
                 </div>
-                <h2 className={`text-2xl font-bold font-mono mt-3 ${summary.remaining >= 0 ? 'text-green-positive' : 'text-red-negative'}`}>
+                <h2 className={`text-2xl font-bold font-mono mt-3 ${summary.remaining >= 0 ? 'text-gain' : 'text-loss'}`}>
                   {formatINR(summary.remaining)}
                 </h2>
               </div>
@@ -247,10 +247,10 @@ export const BudgetsPage: React.FC = () => {
 
                 // Border style maps based on alert threshold state
                 const cardGlow = isOverBudget
-                  ? 'border-red-negative shadow-md'
+                  ? 'border-loss shadow-md'
                   : isApproaching
-                  ? 'border-gold-savings/35 border-l-gold-savings border-l-[3px]'
-                  : 'border-white/8 hover:shadow-md';
+                  ? 'border-warning/35 border-l-warning border-l-[3px]'
+                  : 'border-line hover:shadow-md';
 
                 return (
                   <motion.div
@@ -264,7 +264,7 @@ export const BudgetsPage: React.FC = () => {
                     {/* Header */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <span className="text-xl leading-none bg-white/5 w-8 h-8 rounded-lg flex items-center justify-center select-none">
+                        <span className="text-xl leading-none bg-surface-sunken w-8 h-8 rounded-lg flex items-center justify-center select-none">
                           {b.icon}
                         </span>
                         <div>
@@ -277,25 +277,25 @@ export const BudgetsPage: React.FC = () => {
 
                       <div className="flex items-center gap-2">
                         {isOverBudget && (
-                          <div className="w-5 h-5 rounded-full bg-red-negative/10 flex items-center justify-center text-red-negative" title="Over budget!">
+                          <div className="w-5 h-5 rounded-full bg-loss/10 flex items-center justify-center text-loss" title="Over budget!">
                             <AlertTriangle size={12} />
                           </div>
                         )}
                         {isApproaching && (
-                          <div className="w-5 h-5 rounded-full bg-gold-savings/10 flex items-center justify-center text-gold-savings" title="Approaching budget limit!">
+                          <div className="w-5 h-5 rounded-full bg-warning/10 flex items-center justify-center text-warning" title="Approaching budget limit!">
                             <AlertTriangle size={12} />
                           </div>
                         )}
                         
                         <button
                           onClick={() => triggerEdit(b)}
-                          className="p-1 rounded-lg text-white/30 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
+                          className="p-1 rounded-lg text-white/30 hover:text-white hover:bg-surface-sunken transition-all cursor-pointer"
                         >
                           <Edit2 size={13} />
                         </button>
                         <button
                           onClick={() => setDeletingBudgetId(b.id)}
-                          className="p-1 rounded-lg text-white/30 hover:text-red-negative hover:bg-red-negative/5 transition-all cursor-pointer"
+                          className="p-1 rounded-lg text-white/30 hover:text-loss hover:bg-loss/5 transition-all cursor-pointer"
                         >
                           <Trash2 size={13} />
                         </button>
@@ -314,11 +314,11 @@ export const BudgetsPage: React.FC = () => {
                       {/* Remaining / Over Indicator */}
                       <div className="text-[11px] font-bold mt-2">
                         {isOverBudget ? (
-                          <span className="text-red-negative font-display">
+                          <span className="text-loss font-display">
                             🔴 Over budget by {formatINR(Math.abs(remaining))}
                           </span>
                         ) : (
-                          <span className="text-green-positive font-display">
+                          <span className="text-gain font-display">
                             {formatINR(remaining)} remaining
                           </span>
                         )}
@@ -332,7 +332,7 @@ export const BudgetsPage: React.FC = () => {
                         <span>{percentage.toFixed(0)}%</span>
                       </div>
                       
-                      <div className="w-full h-2 bg-white/4 rounded-full overflow-hidden relative">
+                      <div className="w-full h-2 bg-surface-sunken rounded-full overflow-hidden relative">
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${Math.min(100, percentage)}%` }}
@@ -346,7 +346,7 @@ export const BudgetsPage: React.FC = () => {
                       </div>
 
                       {isApproaching && (
-                        <span className="text-[10px] text-gold-savings font-semibold block pt-1 animate-pulse">
+                        <span className="text-[10px] text-warning font-semibold block pt-1 animate-pulse">
                           ⚠️ Approaching Limit ({b.alertThreshold}%)
                         </span>
                       )}
@@ -382,7 +382,7 @@ export const BudgetsPage: React.FC = () => {
             {/* Step 1: Category Emoji Grid */}
             {currentStep === 1 && (
               <div className="space-y-4">
-                <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                <div className="flex items-center justify-between border-b border-line pb-2">
                   <span className="text-xs font-bold text-white/50 uppercase tracking-wider">
                     Step 1 of 3: Choose Category
                   </span>
@@ -401,7 +401,7 @@ export const BudgetsPage: React.FC = () => {
                         className={`flex flex-col items-center justify-center p-3 rounded-md border text-xs gap-1 transition-all relative ${
                           isSelected
                             ? 'bg-primary/10 border-primary text-white shadow-md'
-                            : 'bg-white/2 border-white/5 text-white/60 hover:border-white/15 hover:text-white disabled:opacity-30 disabled:pointer-events-none'
+                            : 'bg-surface-sunken border-line text-white/60 hover:border-white/15 hover:text-white disabled:opacity-30 disabled:pointer-events-none'
                         }`}
                       >
 
@@ -418,12 +418,12 @@ export const BudgetsPage: React.FC = () => {
                   })}
                 </div>
                 {errors.category && (
-                  <span className="text-[11px] text-red-negative font-medium block">
+                  <span className="text-[11px] text-loss font-medium block">
                     {errors.category.message}
                   </span>
                 )}
                 
-                <div className="flex justify-end pt-4 border-t border-white/5">
+                <div className="flex justify-end pt-4 border-t border-line">
                   <Button
                     variant="primary"
                     disabled={!formCategory}
@@ -439,14 +439,14 @@ export const BudgetsPage: React.FC = () => {
             {/* Step 2: Limit amount and period selection */}
             {currentStep === 2 && (
               <div className="space-y-6">
-                <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                <div className="flex items-center justify-between border-b border-line pb-2">
                   <span className="text-xs font-bold text-white/50 uppercase tracking-wider">
                     Step 2 of 3: Limit Details
                   </span>
                 </div>
 
                 {/* Giant Amount Input */}
-                <div className="flex flex-col items-center py-4 border-b border-white/10 focus-within:border-primary transition-colors">
+                <div className="flex flex-col items-center py-4 border-b border-line focus-within:border-primary transition-colors">
                   <span className="text-xs text-white/40 uppercase font-bold tracking-wider mb-2">Limit Amount</span>
                   <div className="flex items-center justify-center w-full">
                     <span className="text-4xl font-display font-bold mr-2 text-primary">{activeCurrency.symbol}</span>
@@ -459,7 +459,7 @@ export const BudgetsPage: React.FC = () => {
                     />
                   </div>
                   {errors.limit && (
-                    <span className="text-[11px] text-red-negative mt-2 font-medium">
+                    <span className="text-[11px] text-loss mt-2 font-medium">
                       {errors.limit.message}
                     </span>
                   )}
@@ -470,7 +470,7 @@ export const BudgetsPage: React.FC = () => {
                   <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
                     Frequency
                   </label>
-                  <div className="flex bg-white/4 p-1 rounded-md border border-white/5">
+                  <div className="flex bg-surface-sunken p-1 rounded-md border border-line">
                     {['monthly', 'weekly'].map((p) => (
                       <button
                         key={p}
@@ -486,7 +486,7 @@ export const BudgetsPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex justify-between pt-4 border-t border-white/5">
+                <div className="flex justify-between pt-4 border-t border-line">
                   <Button
                     variant="ghost"
                     leftIcon={<ChevronLeft size={14} />}
@@ -509,7 +509,7 @@ export const BudgetsPage: React.FC = () => {
             {/* Step 3: Alert sliders */}
             {currentStep === 3 && (
               <div className="space-y-6">
-                <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                <div className="flex items-center justify-between border-b border-line pb-2">
                   <span className="text-xs font-bold text-white/50 uppercase tracking-wider">
                     Step 3 of 3: Threshold Alert
                   </span>
@@ -532,12 +532,12 @@ export const BudgetsPage: React.FC = () => {
                 </div>
 
                 {/* Progress bar preview */}
-                <div className="bg-white/3 border border-white/5 rounded-md p-4 space-y-2">
+                <div className="bg-surface-sunken border border-line rounded-md p-4 space-y-2">
                   <span className="text-[10px] text-white/40 uppercase font-bold tracking-wider block">
                     Alert Bar Preview
                   </span>
                   
-                  <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden relative">
+                  <div className="w-full h-2 bg-surface-sunken rounded-full overflow-hidden relative">
                     <div
                       className="h-full rounded-full"
                       style={{
@@ -552,7 +552,7 @@ export const BudgetsPage: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="flex justify-between pt-4 border-t border-white/5">
+                <div className="flex justify-between pt-4 border-t border-line">
                   <Button
                     variant="ghost"
                     leftIcon={<ChevronLeft size={14} />}
@@ -582,7 +582,7 @@ export const BudgetsPage: React.FC = () => {
         >
           <form onSubmit={handleSubmit(onEditSubmit)} className="space-y-6">
             {/* Giant Amount Input */}
-            <div className="flex flex-col items-center py-4 border-b border-white/10 focus-within:border-primary transition-colors">
+            <div className="flex flex-col items-center py-4 border-b border-line focus-within:border-primary transition-colors">
               <span className="text-xs text-white/40 uppercase font-bold tracking-wider mb-2">Limit Amount</span>
               <div className="flex items-center justify-center w-full">
                 <span className="text-4xl font-display font-bold mr-2 text-primary">{activeCurrency.symbol}</span>
@@ -594,7 +594,7 @@ export const BudgetsPage: React.FC = () => {
                 />
               </div>
               {errors.limit && (
-                <span className="text-[11px] text-red-negative mt-2 font-medium">
+                <span className="text-[11px] text-loss mt-2 font-medium">
                   {errors.limit.message}
                 </span>
               )}
@@ -605,7 +605,7 @@ export const BudgetsPage: React.FC = () => {
               <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
                 Frequency
               </label>
-              <div className="flex bg-white/4 p-1 rounded-md border border-white/5">
+              <div className="flex bg-surface-sunken p-1 rounded-md border border-line">
                 {['monthly', 'weekly'].map((p) => (
                   <button
                     key={p}
@@ -637,7 +637,7 @@ export const BudgetsPage: React.FC = () => {
               />
             </div>
 
-            <div className="flex justify-end gap-3 border-t border-white/5 pt-4">
+            <div className="flex justify-end gap-3 border-t border-line pt-4">
               <Button variant="ghost" onClick={() => setEditingBudget(null)} disabled={isSubmitting}>
                 Cancel
               </Button>

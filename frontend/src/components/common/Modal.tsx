@@ -74,16 +74,16 @@ export const Modal: React.FC<ModalProps> = ({
                 duration: 0.25,
               }}
               className={cn(
-                'relative z-10 glassmorphism bg-surface/60 border border-white/10 rounded-[20px] shadow-2xl overflow-hidden flex flex-col',
+                'relative z-10 glassmorphism bg-surface/60 border border-line rounded-[20px] shadow-2xl overflow-hidden flex flex-col',
                 sizes[size]
               )}
             >
               {/* Header */}
-              <div className="flex items-center justify-between px-6 py-4 border-b border-white/5">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-line">
                 <h3 className="font-display font-bold text-lg text-white">{title}</h3>
                 <button
                   onClick={onClose}
-                  className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/5 transition-all duration-200 cursor-pointer"
+                  className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-surface-sunken transition-all duration-200 cursor-pointer"
                 >
                   <X size={18} />
                 </button>
@@ -96,7 +96,7 @@ export const Modal: React.FC<ModalProps> = ({
 
               {/* Footer */}
               {footer && (
-                <div className="px-6 py-4 border-t border-white/5 bg-white/1 flex justify-end items-center gap-3">
+                <div className="px-6 py-4 border-t border-line bg-white/1 flex justify-end items-center gap-3">
                   {footer}
                 </div>
               )}

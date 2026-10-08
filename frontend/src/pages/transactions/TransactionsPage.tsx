@@ -350,44 +350,44 @@ export const TransactionsPage: React.FC = () => {
 
         {/* Summary Row */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-white/8 shadow-md">
+          <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-line shadow-md">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Income This Month</span>
-              <div className="w-8 h-8 rounded-lg bg-green-positive/10 border border-green-positive/20 flex items-center justify-center text-green-positive">
+              <div className="w-8 h-8 rounded-lg bg-gain/10 border border-gain/20 flex items-center justify-center text-gain">
                 <TrendingUp size={16} />
               </div>
             </div>
             <h2 className="text-2xl font-bold text-white font-mono mt-3">{formatINR(summary.income)}</h2>
           </div>
 
-          <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-white/8 shadow-md">
+          <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-line shadow-md">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Expenses This Month</span>
-              <div className="w-8 h-8 rounded-lg bg-red-negative/10 border border-red-negative/20 flex items-center justify-center text-red-negative">
+              <div className="w-8 h-8 rounded-lg bg-loss/10 border border-loss/20 flex items-center justify-center text-loss">
                 <TrendingDown size={16} />
               </div>
             </div>
             <h2 className="text-2xl font-bold text-white font-mono mt-3">{formatINR(summary.expense)}</h2>
           </div>
 
-          <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-white/8 shadow-md">
+          <div className="glassmorphism bg-surface/40 p-5 rounded-lg border border-line shadow-md">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-white/50 uppercase tracking-wider">Net Cash Flow</span>
               <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
                 <ArrowRightLeft size={16} />
               </div>
             </div>
-            <h2 className={`text-2xl font-bold font-mono mt-3 ${summary.net >= 0 ? 'text-green-positive' : 'text-red-negative'}`}>
+            <h2 className={`text-2xl font-bold font-mono mt-3 ${summary.net >= 0 ? 'text-gain' : 'text-loss'}`}>
               {summary.net >= 0 ? '+' : ''}{formatINR(summary.net)}
             </h2>
           </div>
         </div>
 
         {/* Filter Workspace */}
-        <div className="glassmorphism bg-surface/30 p-5 border border-white/8 rounded-lg space-y-4">
+        <div className="glassmorphism bg-surface/30 p-5 border border-line rounded-lg space-y-4">
           {/* Row 1: Sliding Pill Tabs */}
-          <div className="flex border-b border-white/5 pb-3">
-            <div className="flex bg-white/4 p-1 rounded-md border border-white/5 relative">
+          <div className="flex border-b border-line pb-3">
+            <div className="flex bg-surface-sunken p-1 rounded-md border border-line relative">
               {['all', 'income', 'expense', 'transfer'].map((tab) => (
                 <button
                   key={tab}
@@ -419,7 +419,7 @@ export const TransactionsPage: React.FC = () => {
                 placeholder="Search description, category..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md pl-10 pr-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
+                className="w-full bg-surface-sunken hover:bg-surface-sunken border border-line focus:border-primary rounded-md pl-10 pr-4 py-2 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
               />
             </div>
 
@@ -428,7 +428,7 @@ export const TransactionsPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsCategoryDropdownOpen(!isCategoryDropdownOpen)}
-                className="w-full flex items-center justify-between bg-white/3 hover:bg-white/5 border border-white/8 rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all text-left cursor-pointer"
+                className="w-full flex items-center justify-between bg-surface-sunken hover:bg-surface-sunken border border-line rounded-md px-4 py-2 text-sm text-white focus:outline-hidden transition-all text-left cursor-pointer"
               >
                 <span className="truncate">
                   {selectedCategories.length === 0
@@ -444,14 +444,14 @@ export const TransactionsPage: React.FC = () => {
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 5 }}
-                    className="absolute z-20 left-0 right-0 mt-1 glassmorphism bg-surface/90 border border-white/10 rounded-md shadow-xl max-h-56 overflow-y-auto p-2 space-y-1"
+                    className="absolute z-20 left-0 right-0 mt-1 glassmorphism bg-surface/90 border border-line rounded-md shadow-xl max-h-56 overflow-y-auto p-2 space-y-1"
                   >
                     {uniqueCategories.map((cat) => {
                       const isChecked = selectedCategories.includes(cat);
                       return (
                         <label
                           key={cat}
-                          className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-white hover:bg-white/5 transition-colors cursor-pointer font-medium"
+                          className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-white hover:bg-surface-sunken transition-colors cursor-pointer font-medium"
                         >
                           <input
                             type="checkbox"
@@ -482,7 +482,7 @@ export const TransactionsPage: React.FC = () => {
                   type="date"
                   value={dateFrom}
                   onChange={(e) => setDateFrom(e.target.value)}
-                  className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-3 py-2 text-xs text-white/80 focus:outline-hidden transition-all"
+                  className="w-full bg-surface-sunken hover:bg-surface-sunken border border-line focus:border-primary rounded-md px-3 py-2 text-xs text-white/80 focus:outline-hidden transition-all"
                 />
               </div>
               <span className="text-xs text-white/30">to</span>
@@ -491,14 +491,14 @@ export const TransactionsPage: React.FC = () => {
                   type="date"
                   value={dateTo}
                   onChange={(e) => setDateTo(e.target.value)}
-                  className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-3 py-2 text-xs text-white/80 focus:outline-hidden transition-all"
+                  className="w-full bg-surface-sunken hover:bg-surface-sunken border border-line focus:border-primary rounded-md px-3 py-2 text-xs text-white/80 focus:outline-hidden transition-all"
                 />
               </div>
 
               {(search || activeType !== 'all' || selectedCategories.length > 0 || dateFrom || dateTo) && (
                 <button
                   onClick={clearFilters}
-                  className="p-2 rounded-md text-white/50 hover:text-white hover:bg-white/5 transition-all cursor-pointer shrink-0"
+                  className="p-2 rounded-md text-white/50 hover:text-white hover:bg-surface-sunken transition-all cursor-pointer shrink-0"
                   title="Clear Filters"
                 >
                   <X size={16} />
@@ -509,7 +509,7 @@ export const TransactionsPage: React.FC = () => {
         </div>
 
         {/* Transactions Table Workspace */}
-        <div className="glassmorphism bg-surface/20 border border-white/8 rounded-lg overflow-hidden shadow-xl">
+        <div className="glassmorphism bg-surface/20 border border-line rounded-lg overflow-hidden shadow-xl">
           {transactions.length === 0 ? (
             <EmptyState
               icon={Plus}
@@ -532,7 +532,7 @@ export const TransactionsPage: React.FC = () => {
               <div className="hidden md:block overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="border-b border-white/5 text-[10px] uppercase font-bold tracking-wider text-white/40">
+                    <tr className="border-b border-line text-[10px] uppercase font-bold tracking-wider text-white/40">
                       <th className="py-4 px-6 w-12">
                         <input
                           type="checkbox"
@@ -563,8 +563,8 @@ export const TransactionsPage: React.FC = () => {
                         <motion.tr
                           layout
                           key={txn.id}
-                          className={`border-b border-white/3 hover:bg-white/2 transition-colors duration-150 group ${
-                            isSelected ? 'bg-white/4' : ''
+                          className={`border-b border-line hover:bg-surface-sunken transition-colors duration-150 group ${
+                            isSelected ? 'bg-surface-sunken' : ''
                           }`}
                         >
                           <td className="py-4 px-6">
@@ -579,7 +579,7 @@ export const TransactionsPage: React.FC = () => {
                             <div className="flex items-center gap-3">
                               <div
                                 style={{ backgroundColor: `${categoryColor}15`, color: categoryColor }}
-                                className="w-8 h-8 rounded-md flex items-center justify-center font-bold text-xs border border-white/5 select-none shrink-0"
+                                className="w-8 h-8 rounded-md flex items-center justify-center font-bold text-xs border border-line select-none shrink-0"
                               >
                                 {initialLetter}
                               </div>
@@ -602,7 +602,7 @@ export const TransactionsPage: React.FC = () => {
                             {formatDate(txn.date)}
                           </td>
                           <td className={`py-4 px-4 text-right font-semibold font-mono text-sm ${
-                            isExpense ? 'text-red-negative' : isTransfer ? 'text-blue-primary' : 'text-green-positive'
+                            isExpense ? 'text-loss' : isTransfer ? 'text-blue-primary' : 'text-gain'
                           }`}>
                             {isExpense ? '-' : isTransfer ? '' : '+'}{formatINR(Math.abs(txn.amount))}
                           </td>
@@ -610,14 +610,14 @@ export const TransactionsPage: React.FC = () => {
                             <div className="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                               <button
                                 onClick={() => setEditingTransaction(txn)}
-                                className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
+                                className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-surface-sunken transition-all cursor-pointer"
                                 title="Edit"
                               >
                                 <Edit2 size={13} />
                               </button>
                               <button
                                 onClick={() => setDeletingTransactionId(txn.id)}
-                                className="p-1.5 rounded-lg text-white/40 hover:text-red-negative hover:bg-red-negative/10 transition-all cursor-pointer"
+                                className="p-1.5 rounded-lg text-white/40 hover:text-loss hover:bg-loss/10 transition-all cursor-pointer"
                                 title="Delete"
                               >
                                 <Trash2 size={13} />
@@ -643,7 +643,7 @@ export const TransactionsPage: React.FC = () => {
                     <div
                       key={txn.id}
                       className={`p-4 flex items-center justify-between gap-3 ${
-                        isSelected ? 'bg-white/4' : ''
+                        isSelected ? 'bg-surface-sunken' : ''
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
@@ -671,7 +671,7 @@ export const TransactionsPage: React.FC = () => {
                       
                       <div className="flex flex-col items-end gap-1 shrink-0">
                         <span className={`font-semibold font-mono text-sm ${
-                          isExpense ? 'text-red-negative' : isTransfer ? 'text-blue-primary' : 'text-green-positive'
+                          isExpense ? 'text-loss' : isTransfer ? 'text-blue-primary' : 'text-gain'
                         }`}>
                           {isExpense ? '-' : isTransfer ? '' : '+'}{formatINR(Math.abs(txn.amount))}
                         </span>
@@ -684,7 +684,7 @@ export const TransactionsPage: React.FC = () => {
                           </button>
                           <button
                             onClick={() => setDeletingTransactionId(txn.id)}
-                            className="p-1 rounded-lg text-white/40 hover:text-red-negative"
+                            className="p-1 rounded-lg text-white/40 hover:text-loss"
                           >
                             <Trash2 size={12} />
                           </button>
@@ -696,7 +696,7 @@ export const TransactionsPage: React.FC = () => {
               </div>
 
               {/* Pagination controls */}
-              <div className="flex items-center justify-between px-6 py-4 border-t border-white/5 bg-white/1 text-xs text-white/55">
+              <div className="flex items-center justify-between px-6 py-4 border-t border-line bg-white/1 text-xs text-white/55">
                 <span>
                   Showing {Math.min(filteredTransactions.length, (currentPage - 1) * itemsPerPage + 1)} to{' '}
                   {Math.min(filteredTransactions.length, currentPage * itemsPerPage)} of{' '}
@@ -707,7 +707,7 @@ export const TransactionsPage: React.FC = () => {
                   <button
                     disabled={currentPage === 1}
                     onClick={() => setCurrentPage((c) => c - 1)}
-                    className="p-1.5 rounded-lg border border-white/5 bg-white/2 text-white disabled:opacity-30 disabled:pointer-events-none hover:bg-white/5 cursor-pointer"
+                    className="p-1.5 rounded-lg border border-line bg-surface-sunken text-white disabled:opacity-30 disabled:pointer-events-none hover:bg-surface-sunken cursor-pointer"
                   >
                     <ChevronLeft size={14} />
                   </button>
@@ -717,7 +717,7 @@ export const TransactionsPage: React.FC = () => {
                   <button
                     disabled={currentPage === totalPages}
                     onClick={() => setCurrentPage((c) => c + 1)}
-                    className="p-1.5 rounded-lg border border-white/5 bg-white/2 text-white disabled:opacity-30 disabled:pointer-events-none hover:bg-white/5 cursor-pointer"
+                    className="p-1.5 rounded-lg border border-line bg-surface-sunken text-white disabled:opacity-30 disabled:pointer-events-none hover:bg-surface-sunken cursor-pointer"
                   >
                     <ChevronRight size={14} />
                   </button>
@@ -797,13 +797,13 @@ export const TransactionsPage: React.FC = () => {
               {/* Left Column */}
               <div className="space-y-6">
                 {/* Type Selection */}
-                <div className="flex bg-white/4 p-1 rounded-md border border-white/5">
+                <div className="flex bg-surface-sunken p-1 rounded-md border border-line">
                   {(['income', 'expense', 'transfer'] as const).map((type) => {
                     const typeColor =
                       type === 'income'
-                        ? 'bg-green-positive shadow-md-green/10'
+                        ? 'bg-gain shadow-md-green/10'
                         : type === 'expense'
-                        ? 'bg-red-negative shadow-md-red/10'
+                        ? 'bg-loss shadow-md-red/10'
                         : 'bg-blue-600 shadow-md-blue/10';
 
                     return (
@@ -824,15 +824,15 @@ export const TransactionsPage: React.FC = () => {
                 </div>
 
                 {/* Giant Amount Input */}
-                <div className="flex flex-col items-center py-4 border-b border-white/10 group focus-within:border-primary transition-colors">
+                <div className="flex flex-col items-center py-4 border-b border-line group focus-within:border-primary transition-colors">
                   <div className="flex items-center justify-center w-full">
                     <span
                       className={`text-4xl font-display font-bold mr-2 ${
                         formType === 'income'
-                          ? 'text-green-positive'
+                          ? 'text-gain'
                           : formType === 'transfer'
                           ? 'text-blue-primary'
-                          : 'text-red-negative'
+                          : 'text-loss'
                       }`}
                     >
                       {activeCurrency.symbol}
@@ -847,7 +847,7 @@ export const TransactionsPage: React.FC = () => {
                     />
                   </div>
                   {errors.amount && (
-                    <span className="text-[11px] text-red-negative mt-2 font-medium">
+                    <span className="text-[11px] text-loss mt-2 font-medium">
                       {errors.amount.message}
                     </span>
                   )}
@@ -869,7 +869,7 @@ export const TransactionsPage: React.FC = () => {
                           className={`flex flex-col items-center justify-center p-2.5 rounded-md border text-xs gap-1 transition-all cursor-pointer ${
                             isSelected
                               ? 'bg-primary/10 border-primary text-white shadow-md'
-                              : 'bg-white/2 border-white/5 text-white/60 hover:border-white/15 hover:text-white'
+                              : 'bg-surface-sunken border-line text-white/60 hover:border-white/15 hover:text-white'
                           }`}
                         >
                           <span className="font-semibold text-xs truncate max-w-full">
@@ -880,7 +880,7 @@ export const TransactionsPage: React.FC = () => {
                     })}
                   </div>
                   {errors.category && (
-                    <span className="text-[11px] text-red-negative font-medium block">
+                    <span className="text-[11px] text-loss font-medium block">
                       {errors.category.message}
                     </span>
                   )}
@@ -892,16 +892,16 @@ export const TransactionsPage: React.FC = () => {
                 {/* Merchant input */}
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
-                    Merchant / Description <span className="text-red-negative">*</span>
+                    Merchant / Description <span className="text-loss">*</span>
                   </label>
                   <input
                     type="text"
                     placeholder="e.g. Swiggy, Amazon India, Salary"
                     {...register('merchant')}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
+                    className="w-full bg-surface-sunken hover:bg-surface-sunken border border-line focus:border-primary rounded-md px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
                   />
                   {errors.merchant && (
-                    <span className="text-[11px] text-red-negative font-medium">
+                    <span className="text-[11px] text-loss font-medium">
                       {errors.merchant.message}
                     </span>
                   )}
@@ -910,18 +910,18 @@ export const TransactionsPage: React.FC = () => {
                 {/* Date Picker */}
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
-                    Date <span className="text-red-negative">*</span>
+                    Date <span className="text-loss">*</span>
                   </label>
                   <div className="relative">
                     <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" size={16} />
                     <input
                       type="date"
                       {...register('date')}
-                      className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md pl-10 pr-4 py-2.5 text-sm text-white focus:outline-hidden transition-all"
+                      className="w-full bg-surface-sunken hover:bg-surface-sunken border border-line focus:border-primary rounded-md pl-10 pr-4 py-2.5 text-sm text-white focus:outline-hidden transition-all"
                     />
                   </div>
                   {errors.date && (
-                    <span className="text-[11px] text-red-negative font-medium">
+                    <span className="text-[11px] text-loss font-medium">
                       {errors.date.message}
                     </span>
                   )}
@@ -937,10 +937,10 @@ export const TransactionsPage: React.FC = () => {
                     maxLength={200}
                     placeholder="Add description notes (max 200 characters)..."
                     {...register('note')}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all resize-none placeholder:text-white/20"
+                    className="w-full bg-surface-sunken hover:bg-surface-sunken border border-line focus:border-primary rounded-md px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all resize-none placeholder:text-white/20"
                   />
                   {errors.note && (
-                    <span className="text-[11px] text-red-negative font-medium">
+                    <span className="text-[11px] text-loss font-medium">
                       {errors.note.message}
                     </span>
                   )}
@@ -951,7 +951,7 @@ export const TransactionsPage: React.FC = () => {
                   <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
                     Receipt Upload
                   </label>
-                  <label className="border border-dashed border-white/10 bg-white/2 hover:border-primary/45 rounded-md p-4 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-300 relative group">
+                  <label className="border border-dashed border-line bg-surface-sunken hover:border-primary/45 rounded-md p-4 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-300 relative group">
                     <input
                       type="file"
                       accept=".jpg,.jpeg,.png,.pdf"
@@ -968,7 +968,7 @@ export const TransactionsPage: React.FC = () => {
                             e.preventDefault();
                             setReceiptFile(null);
                           }}
-                          className="hover:text-red-negative transition-colors"
+                          className="hover:text-loss transition-colors"
                         >
                           <X size={12} />
                         </button>
@@ -986,7 +986,7 @@ export const TransactionsPage: React.FC = () => {
             </div>
 
             {/* Modal Footer Controls */}
-            <div className="flex justify-end gap-3 border-t border-white/5 pt-4">
+            <div className="flex justify-end gap-3 border-t border-line pt-4">
               <Button
                 variant="ghost"
                 onClick={() => {
@@ -1016,13 +1016,13 @@ export const TransactionsPage: React.FC = () => {
               {/* Left Column */}
               <div className="space-y-6">
                 {/* Type Selection */}
-                <div className="flex bg-white/4 p-1 rounded-md border border-white/5">
+                <div className="flex bg-surface-sunken p-1 rounded-md border border-line">
                   {(['income', 'expense', 'transfer'] as const).map((type) => {
                     const typeColor =
                       type === 'income'
-                        ? 'bg-green-positive shadow-md-green/10'
+                        ? 'bg-gain shadow-md-green/10'
                         : type === 'expense'
-                        ? 'bg-red-negative shadow-md-red/10'
+                        ? 'bg-loss shadow-md-red/10'
                         : 'bg-blue-600 shadow-md-blue/10';
 
                     return (
@@ -1043,15 +1043,15 @@ export const TransactionsPage: React.FC = () => {
                 </div>
 
                 {/* Giant Amount Input */}
-                <div className="flex flex-col items-center py-4 border-b border-white/10 group focus-within:border-primary transition-colors">
+                <div className="flex flex-col items-center py-4 border-b border-line group focus-within:border-primary transition-colors">
                   <div className="flex items-center justify-center w-full">
                     <span
                       className={`text-4xl font-display font-bold mr-2 ${
                         formType === 'income'
-                          ? 'text-green-positive'
+                          ? 'text-gain'
                           : formType === 'transfer'
                           ? 'text-blue-primary'
-                          : 'text-red-negative'
+                          : 'text-loss'
                       }`}
                     >
                       {activeCurrency.symbol}
@@ -1065,7 +1065,7 @@ export const TransactionsPage: React.FC = () => {
                     />
                   </div>
                   {errors.amount && (
-                    <span className="text-[11px] text-red-negative mt-2 font-medium">
+                    <span className="text-[11px] text-loss mt-2 font-medium">
                       {errors.amount.message}
                     </span>
                   )}
@@ -1087,7 +1087,7 @@ export const TransactionsPage: React.FC = () => {
                           className={`flex flex-col items-center justify-center p-2.5 rounded-md border text-xs gap-1 transition-all cursor-pointer ${
                             isSelected
                               ? 'bg-primary/10 border-primary text-white shadow-md'
-                              : 'bg-white/2 border-white/5 text-white/60 hover:border-white/15 hover:text-white'
+                              : 'bg-surface-sunken border-line text-white/60 hover:border-white/15 hover:text-white'
                           }`}
                         >
                           <span className="font-semibold text-xs truncate max-w-full">
@@ -1098,7 +1098,7 @@ export const TransactionsPage: React.FC = () => {
                     })}
                   </div>
                   {errors.category && (
-                    <span className="text-[11px] text-red-negative font-medium block">
+                    <span className="text-[11px] text-loss font-medium block">
                       {errors.category.message}
                     </span>
                   )}
@@ -1110,16 +1110,16 @@ export const TransactionsPage: React.FC = () => {
                 {/* Merchant input */}
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
-                    Merchant / Description <span className="text-red-negative">*</span>
+                    Merchant / Description <span className="text-loss">*</span>
                   </label>
                   <input
                     type="text"
                     placeholder="e.g. Swiggy, Amazon India, Salary"
                     {...register('merchant')}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
+                    className="w-full bg-surface-sunken hover:bg-surface-sunken border border-line focus:border-primary rounded-md px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all placeholder:text-white/20"
                   />
                   {errors.merchant && (
-                    <span className="text-[11px] text-red-negative font-medium">
+                    <span className="text-[11px] text-loss font-medium">
                       {errors.merchant.message}
                     </span>
                   )}
@@ -1128,18 +1128,18 @@ export const TransactionsPage: React.FC = () => {
                 {/* Date Picker */}
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
-                    Date <span className="text-red-negative">*</span>
+                    Date <span className="text-loss">*</span>
                   </label>
                   <div className="relative">
                     <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" size={16} />
                     <input
                       type="date"
                       {...register('date')}
-                      className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md pl-10 pr-4 py-2.5 text-sm text-white focus:outline-hidden transition-all"
+                      className="w-full bg-surface-sunken hover:bg-surface-sunken border border-line focus:border-primary rounded-md pl-10 pr-4 py-2.5 text-sm text-white focus:outline-hidden transition-all"
                     />
                   </div>
                   {errors.date && (
-                    <span className="text-[11px] text-red-negative font-medium">
+                    <span className="text-[11px] text-loss font-medium">
                       {errors.date.message}
                     </span>
                   )}
@@ -1155,10 +1155,10 @@ export const TransactionsPage: React.FC = () => {
                     maxLength={200}
                     placeholder="Add description notes (max 200 characters)..."
                     {...register('note')}
-                    className="w-full bg-white/3 hover:bg-white/5 border border-white/8 focus:border-primary rounded-md px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all resize-none placeholder:text-white/20"
+                    className="w-full bg-surface-sunken hover:bg-surface-sunken border border-line focus:border-primary rounded-md px-4 py-2.5 text-sm text-white focus:outline-hidden transition-all resize-none placeholder:text-white/20"
                   />
                   {errors.note && (
-                    <span className="text-[11px] text-red-negative font-medium">
+                    <span className="text-[11px] text-loss font-medium">
                       {errors.note.message}
                     </span>
                   )}
@@ -1169,7 +1169,7 @@ export const TransactionsPage: React.FC = () => {
                   <label className="text-xs font-bold text-white/50 uppercase tracking-wider">
                     Receipt Upload
                   </label>
-                  <label className="border border-dashed border-white/10 bg-white/2 hover:border-primary/45 rounded-md p-4 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-300 relative group">
+                  <label className="border border-dashed border-line bg-surface-sunken hover:border-primary/45 rounded-md p-4 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-300 relative group">
                     <input
                       type="file"
                       accept=".jpg,.jpeg,.png,.pdf"
@@ -1186,7 +1186,7 @@ export const TransactionsPage: React.FC = () => {
                             e.preventDefault();
                             setReceiptFile(null);
                           }}
-                          className="hover:text-red-negative transition-colors"
+                          className="hover:text-loss transition-colors"
                         >
                           <X size={12} />
                         </button>
@@ -1204,7 +1204,7 @@ export const TransactionsPage: React.FC = () => {
             </div>
 
             {/* Modal Footer Controls */}
-            <div className="flex justify-end gap-3 border-t border-white/5 pt-4">
+            <div className="flex justify-end gap-3 border-t border-line pt-4">
               <Button variant="ghost" onClick={() => setEditingTransaction(null)} disabled={isSubmitting}>
                 Cancel
               </Button>
