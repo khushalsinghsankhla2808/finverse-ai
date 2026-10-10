@@ -51,12 +51,12 @@ const addMoneySchema = z.object({
 type GoalFormValues = z.infer<typeof goalCreateSchema>;
 
 const PRESET_COLORS = [
-  "#0466c8",
-  "#0353a4",
-  "#023e7d",
-  "#002855",
-  "#33415c",
-  "#5c677d",
+  "var(--cat-1)",
+  "var(--cat-2)",
+  "var(--cat-3)",
+  "var(--cat-4)",
+  "var(--cat-5)",
+  "var(--cat-6)",
 ];
 
 const PRESET_TAGS = [

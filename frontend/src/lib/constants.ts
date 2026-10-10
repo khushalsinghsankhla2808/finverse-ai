@@ -28,11 +28,11 @@ export const MOCK_DASHBOARD_DATA = {
     { id: 5, name: "Netflix", category: "Entertainment", amount: -649.00, date: "Jul 19", type: "expense" as const },
   ],
   expenseBreakdown: [
-    { category: "Housing", percentage: 30, color: "#0466c8" },
-    { category: "Food", percentage: 22, color: "#0353a4" },
-    { category: "Transport", percentage: 12, color: "#023e7d" },
-    { category: "Shopping", percentage: 15, color: "#002855" },
-    { category: "Entertainment", percentage: 8, color: "#33415c" },
-    { category: "Other", percentage: 13, color: "#5c677d" },
+    { category: "Housing", percentage: 30, color: "var(--cat-1)" },
+    { category: "Food", percentage: 22, color: "var(--cat-2)" },
+    { category: "Transport", percentage: 12, color: "var(--cat-3)" },
+    { category: "Shopping", percentage: 15, color: "var(--cat-4)" },
+    { category: "Entertainment", percentage: 8, color: "var(--cat-5)" },
+    { category: "Other", percentage: 13, color: "var(--cat-6)" },
   ]
 };

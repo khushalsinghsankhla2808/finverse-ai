@@ -31,7 +31,7 @@ export const budgetSchema = z.object({
     .max(20, 'Color must not exceed 20 characters')
     .regex(/^#[0-9a-fA-F]{3,8}$/, 'Color must be a valid hex color code')
     .optional()
-    .default('#7C3AED'),
+    .default('#0466c8'),
   icon: z
     .string()
     .max(10, 'Icon must not exceed 10 characters')

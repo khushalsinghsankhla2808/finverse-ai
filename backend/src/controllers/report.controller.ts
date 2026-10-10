@@ -62,10 +62,10 @@ export const generateReport = async (
       doc.pipe(stream);
 
       // --- COVER PAGE ---
-      doc.rect(0, 0, doc.page.width, doc.page.height).fill('#0F0A1C'); // Deep dark bg
-      doc.fillColor('#7C3AED').fontSize(36).font('Helvetica-Bold').text('FinVerse AI', 50, 200);
+      doc.rect(0, 0, doc.page.width, doc.page.height).fill('#001233'); // Deep dark bg
+      doc.fillColor('#0466c8').fontSize(36).font('Helvetica-Bold').text('FinVerse AI', 50, 200);
       doc.fillColor('#FFFFFF').fontSize(22).font('Helvetica').text('Financial Statement Report', 50, 250);
-      doc.rect(50, 290, 150, 3).fill('#7C3AED');
+      doc.rect(50, 290, 150, 3).fill('#0466c8');
 
       doc.fillColor('#94A3B8').fontSize(12).font('Helvetica-Bold').text('PREPARED FOR:', 50, 420);
       doc.fillColor('#FFFFFF').fontSize(14).font('Helvetica').text(userName, 50, 440);
@@ -78,21 +78,21 @@ export const generateReport = async (
       doc.addPage({ size: 'A4', margin: 50 });
 
       // --- SUMMARY PAGE ---
-      doc.fillColor('#7C3AED').fontSize(18).font('Helvetica-Bold').text('Financial Summary', 50, 50);
+      doc.fillColor('#0466c8').fontSize(18).font('Helvetica-Bold').text('Financial Summary', 50, 50);
       doc.rect(50, 75, 495, 1).fill('#E2E8F0');
 
       // Metric Blocks
       doc.fillColor('#334155').rect(50, 100, 140, 70).fill();
       doc.fillColor('#FFFFFF').fontSize(10).text('TOTAL INCOME', 65, 115);
-      doc.fontSize(14).font('Helvetica-Bold').fillColor('#10B981').text(formatINR(income), 65, 135);
+      doc.fontSize(14).font('Helvetica-Bold').fillColor('#1e7b4f').text(formatINR(income), 65, 135);
 
       doc.fillColor('#334155').rect(205, 100, 140, 70).fill();
       doc.fillColor('#FFFFFF').fontSize(10).font('Helvetica').text('TOTAL EXPENSES', 220, 115);
-      doc.fontSize(14).font('Helvetica-Bold').fillColor('#F43F5E').text(formatINR(expenses), 220, 135);
+      doc.fontSize(14).font('Helvetica-Bold').fillColor('#b3261e').text(formatINR(expenses), 220, 135);
 
       doc.fillColor('#334155').rect(360, 100, 185, 70).fill();
       doc.fillColor('#FFFFFF').fontSize(10).font('Helvetica').text('NET CASH FLOW', 375, 115);
-      doc.fontSize(14).font('Helvetica-Bold').fillColor(net >= 0 ? '#10B981' : '#F43F5E').text(formatINR(net), 375, 135);
+      doc.fontSize(14).font('Helvetica-Bold').fillColor(net >= 0 ? '#1e7b4f' : '#b3261e').text(formatINR(net), 375, 135);
 
       // Category breakdown table
       doc.fillColor('#1E293B').fontSize(14).font('Helvetica-Bold').text('Expense Allocations', 50, 220);
@@ -111,7 +111,7 @@ export const generateReport = async (
 
       // --- TRANSACTIONS RECORD ---
       doc.addPage();
-      doc.fillColor('#7C3AED').fontSize(18).font('Helvetica-Bold').text('Transactions Ledger', 50, 50);
+      doc.fillColor('#0466c8').fontSize(18).font('Helvetica-Bold').text('Transactions Ledger', 50, 50);
       doc.rect(50, 75, 495, 1).fill('#E2E8F0');
 
       let tableY = 100;
@@ -131,7 +131,7 @@ export const generateReport = async (
         doc.text(t.date.toISOString().split('T')[0], 55, tableY);
         doc.text(t.merchant || t.name, 140, tableY, { width: 150, height: 15, ellipsis: true });
         doc.text(t.category, 300, tableY);
-        doc.font('Helvetica-Bold').fillColor(t.type === 'income' ? '#10B981' : '#F43F5E').text(formatINR(Math.abs(t.amount)), 450, tableY);
+        doc.font('Helvetica-Bold').fillColor(t.type === 'income' ? '#1e7b4f' : '#b3261e').text(formatINR(Math.abs(t.amount)), 450, tableY);
       });
 
       doc.end();
@@ -155,7 +155,7 @@ export const generateReport = async (
       summarySheet.addRow({ metric: 'Savings Rate (%)', value: rate });
       
       summarySheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFF' } };
-      summarySheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '7C3AED' } };
+      summarySheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '0466C8' } };
 
       // Sheet 2: Ledger
       const txnSheet = workbook.addWorksheet('Transactions');
@@ -180,7 +180,7 @@ export const generateReport = async (
       });
 
       txnSheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFF' } };
-      txnSheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '7C3AED' } };
+      txnSheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '0466C8' } };
 
       await workbook.xlsx.writeFile(filePath);
 

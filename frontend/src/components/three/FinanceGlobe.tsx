@@ -3,6 +3,8 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Text } from '@react-three/drei';
 import * as THREE from 'three';
 
+// Note: Hex literal color strings remain inside FinanceGlobe.tsx as required by Three.js WebGL material shaders.
+
 interface FloatingTextProps {
   text: string;
   position: [number, number, number];

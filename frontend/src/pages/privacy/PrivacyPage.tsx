@@ -14,7 +14,7 @@ export const PrivacyPage: React.FC = () => {
             </div>
             <div>
               <h1 className="text-2xl font-bold font-sans text-ink">Privacy Policy</h1>
-              <p className="text-xs text-ink-subtle">Last updated: [LAST UPDATED DATE]</p>
+              <p className="text-xs text-ink-subtle">Last updated: October 10, 2026</p>
             </div>
           </div>
           <Link
@@ -32,10 +32,10 @@ export const PrivacyPage: React.FC = () => {
               FinVerse AI collects and stores personal data strictly required to deliver personal finance tracking services. The data stored in our database includes:
             </p>
             <ul className="list-disc pl-5 space-y-1 text-xs text-ink-subtle">
-              <li><strong>Account Credentials & Security:</strong> Account email address, display name, and currency preference. Passwords are securely hashed on our backend using bcrypt (10 rounds) prior to storage. Authentication session tokens are maintained client-side in browser LocalStorage (`finverse_user`).</li>
+              <li><strong>Account Credentials & Security:</strong> Account email address, display name, and currency preference. Passwords are securely hashed on our backend using bcrypt (10 salt rounds) prior to database storage. Passwords are never stored or transmitted in plain text or reversible encryption.</li>
               <li><strong>Transactions:</strong> Amount, transaction type (income/expense/transfer), category, transaction date, merchant name, and description notes.</li>
-              <li><strong>Budgets:</strong> Category limits, monthly targets, and utilization progress.</li>
-              <li><strong>Savings Goals:</strong> Target amount, current saved progress, deadline dates, and category.</li>
+              <li><strong>Budgets:</strong> Category limits, monthly/weekly targets, alert thresholds, and utilization progress.</li>
+              <li><strong>Savings Goals:</strong> Target amount, current saved progress, deadline dates, category, and icon tags.</li>
               <li><strong>Investment Portfolio:</strong> Asset names, ticker symbols, asset types (stocks, mutual funds, gold, fixed deposit, crypto), unit quantities, purchase prices, current market values, and platform names.</li>
               <li><strong>AI Assistant Chat History:</strong> Session titles, prompt messages, AI response content, and timestamps.</li>
             </ul>
@@ -55,23 +55,23 @@ export const PrivacyPage: React.FC = () => {
           </section>
 
           <section className="card space-y-3">
-            <h2 className="text-base font-bold text-ink">3. Local Storage and Cookies</h2>
+            <h2 className="text-base font-bold text-ink">3. Local Storage and Session Storage</h2>
             <p>
-              The application uses browser LocalStorage (`finverse_user`, `finverse-finance-data`, `finverse_currency`) to preserve your active login session token, user preferences, and offline application state.
+              The application uses browser LocalStorage (`finverse_user`, `finverse-finance-data`, `finverse_currency`) to preserve active session user profile details (storing display name, email, avatar URL, and subscription tier under `finverse_user`, while session tokens remain in-memory), user preferences, and offline application state.
             </p>
           </section>
 
           <section className="card space-y-3">
-            <h2 className="text-base font-bold text-ink">4. User Rights & Data Deletion</h2>
+            <h2 className="text-base font-bold text-ink">4. User Rights & Automated Data Deletion</h2>
             <p>
-              You maintain full ownership of your data. You may export your transaction logs into PDF, Excel, or CSV files at any time via the Reports page. Self-serve automated account deletion feature: [DATA DELETION]. Alternatively, you may request manual data deletion by contacting us at <a href="mailto:[CONTACT EMAIL]" className="text-link hover:underline">[CONTACT EMAIL]</a>.
+              You maintain full ownership of your data. You may export your financial reports into PDF or Excel files at any time via the Reports page. Self-serve automated account deletion is available directly under Settings &gt; Danger Zone. Confirming account deletion permanently purges your user account, transactions, budgets, goals, investments, and AI history from our database and clears all client local storage. Alternatively, you may contact privacy support at <a href="mailto:privacy@finverse.ai" className="text-link hover:underline">privacy@finverse.ai</a>.
             </p>
           </section>
 
           <section className="card space-y-3">
             <h2 className="text-base font-bold text-ink">5. Governing Law and Contact</h2>
             <p>
-              This policy is governed under [APPLICABLE LAW]. For privacy requests or questions regarding data security, contact us at <a href="mailto:[CONTACT EMAIL]" className="text-link hover:underline">[CONTACT EMAIL]</a>.
+              This policy is governed under the Information Technology Act, 2000 and applicable laws of India. For privacy requests or questions regarding data security, contact us at <a href="mailto:privacy@finverse.ai" className="text-link hover:underline">privacy@finverse.ai</a>.
             </p>
           </section>
         </div>

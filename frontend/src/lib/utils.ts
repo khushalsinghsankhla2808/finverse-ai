@@ -39,22 +39,22 @@ export const formatDate = (dateStr: string): string => {
   return format(new Date(dateStr), 'MMM dd, yyyy');
 };
 
-// Get category color
+// Get category color using theme tokens
 export const getCategoryColor = (category: string): string => {
   const colors: Record<string, string> = {
-    Housing: '#0466c8',
-    Food: '#0353a4',
-    Transport: '#023e7d',
-    Shopping: '#002855',
-    Entertainment: '#33415c',
-    Groceries: '#0353a4',
-    Utilities: '#5c677d',
-    Income: '#22C55E',
-    Transfer: '#0353a4',
-    Healthcare: '#33415c',
-    Education: '#0466c8',
-    Investment: '#002855',
-    Other: '#7d8597',
+    Housing: 'var(--cat-1)',
+    Food: 'var(--cat-2)',
+    Transport: 'var(--cat-3)',
+    Shopping: 'var(--cat-4)',
+    Entertainment: 'var(--cat-5)',
+    Groceries: 'var(--cat-2)',
+    Utilities: 'var(--cat-6)',
+    Income: 'var(--gain)',
+    Transfer: 'var(--cat-2)',
+    Healthcare: 'var(--cat-5)',
+    Education: 'var(--cat-1)',
+    Investment: 'var(--cat-4)',
+    Other: 'var(--cat-7)',
   };
-  return colors[category] ?? '#7d8597';
+  return colors[category] ?? 'var(--cat-7)';
 };

@@ -58,8 +58,8 @@ export class ErrorBoundary extends Component<Props, State> {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: '#001233',
-            fontFamily: 'Inter, system-ui, sans-serif',
+            background: 'var(--ground)',
+            fontFamily: 'var(--font-sans)',
             padding: '2rem',
           }}
         >
@@ -68,15 +68,15 @@ export class ErrorBoundary extends Component<Props, State> {
               textAlign: 'center',
               maxWidth: '480px',
               padding: '3rem 2rem',
-              borderRadius: '1rem',
-              background: 'rgba(255,255,255,0.03)',
-              border: '1px solid rgba(255,255,255,0.06)',
+              borderRadius: 'var(--radius-card)',
+              background: 'var(--surface)',
+              border: '1px solid var(--border)',
             }}
           >
             <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>⚠️</div>
             <h1
               style={{
-                color: '#FFFFFF',
+                color: 'var(--ink)',
                 fontSize: '1.5rem',
                 fontWeight: 600,
                 marginBottom: '0.75rem',
@@ -86,7 +86,7 @@ export class ErrorBoundary extends Component<Props, State> {
             </h1>
             <p
               style={{
-                color: 'rgba(255,255,255,0.6)',
+                color: 'var(--ink-muted)',
                 fontSize: '0.95rem',
                 lineHeight: 1.6,
                 marginBottom: '1.5rem',
@@ -99,12 +99,12 @@ export class ErrorBoundary extends Component<Props, State> {
             {this.state.errorId && (
               <p
                 style={{
-                  color: 'rgba(255,255,255,0.4)',
+                  color: 'var(--ink-subtle)',
                   fontSize: '0.8rem',
                   fontFamily: 'JetBrains Mono, monospace',
-                  background: 'rgba(255,255,255,0.05)',
+                  background: 'var(--surface-sunken)',
                   padding: '0.5rem 1rem',
-                  borderRadius: '0.5rem',
+                  borderRadius: 'var(--radius-control)',
                   marginBottom: '1.5rem',
                   wordBreak: 'break-all',
                 }}
@@ -118,10 +118,10 @@ export class ErrorBoundary extends Component<Props, State> {
                 onClick={this.handleReload}
                 style={{
                   padding: '0.625rem 1.5rem',
-                  borderRadius: '0.5rem',
+                  borderRadius: 'var(--radius-control)',
                   border: 'none',
-                  background: '#0466c8',
-                  color: '#FFFFFF',
+                  background: 'var(--primary)',
+                  color: 'var(--on-primary)',
                   fontSize: '0.9rem',
                   fontWeight: 500,
                   cursor: 'pointer',
@@ -136,10 +136,10 @@ export class ErrorBoundary extends Component<Props, State> {
                 onClick={this.handleGoHome}
                 style={{
                   padding: '0.625rem 1.5rem',
-                  borderRadius: '0.5rem',
-                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: 'var(--radius-control)',
+                  border: '1px solid var(--border)',
                   background: 'transparent',
-                  color: 'rgba(255,255,255,0.7)',
+                  color: 'var(--ink)',
                   fontSize: '0.9rem',
                   fontWeight: 500,
                   cursor: 'pointer',

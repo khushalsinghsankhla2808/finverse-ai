@@ -18,12 +18,12 @@ import EmptyState from "@/components/common/EmptyState";
 
 // Asset colors
 const ASSET_COLORS: Record<string, string> = {
-  stocks: "#0466c8", // Peach
-  mutual_funds: "#0353a4", // Teal
-  gold: "#023e7d", // Peach light
-  crypto: "#FF6B9D", // Pink
-  fixed_deposit: "#5c677d", // Teal light
-  other: "#FACC15", // Warning yellow
+  stocks: "var(--cat-1)",
+  mutual_funds: "var(--cat-2)",
+  gold: "var(--cat-3)",
+  crypto: "var(--cat-4)",
+  fixed_deposit: "var(--cat-5)",
+  other: "var(--cat-6)",
 };
 
 const ASSET_LABELS: Record<string, string> = {

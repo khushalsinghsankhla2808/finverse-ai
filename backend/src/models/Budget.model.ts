@@ -21,7 +21,7 @@ const BudgetSchema = new Schema<IBudgetDocument>(
     limit: { type: Number, required: true, min: 1 },
     spent: { type: Number, default: 0 },
     period: { type: String, enum: ['monthly', 'weekly'], default: 'monthly' },
-    color: { type: String, default: '#7C3AED' },
+    color: { type: String, default: '#0466c8' },
     icon: { type: String, default: '💰' },
     alertThreshold: { type: Number, default: 80, min: 0, max: 100 },
     isActive: { type: Boolean, default: true },

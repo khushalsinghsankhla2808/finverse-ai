@@ -23,7 +23,7 @@ const GoalSchema = new Schema<IGoalDocument>(
     currentAmount: { type: Number, default: 0, min: 0 },
     deadline: { type: Date, required: true },
     category: { type: String, required: true, trim: true },
-    color: { type: String, default: '#7C3AED' },
+    color: { type: String, default: '#0466c8' },
     icon: { type: String, default: '🎯' },
     isCompleted: { type: Boolean, default: false },
     completedAt: { type: Date, default: null },

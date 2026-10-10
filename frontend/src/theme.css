@@ -22,6 +22,16 @@
   --slate-grey: #7d8597;
   --lavender-grey: #979dac; /* muted text and disabled states only, never a gradient stop */
 
+  /* Category Tokens */
+  --cat-1: var(--smart-blue);
+  --cat-2: var(--sapphire);
+  --cat-3: var(--regal-navy);
+  --cat-4: var(--prussian-blue);
+  --cat-5: var(--twilight-indigo);
+  --cat-6: var(--blue-slate);
+  --cat-7: var(--slate-grey);
+  --cat-8: var(--lavender-grey);
+
   /* Added to complete the palette (the ten colors have no light neutral or orange) */
   --accent-orange: #e8730c;
   --paper: #f4f6fa;

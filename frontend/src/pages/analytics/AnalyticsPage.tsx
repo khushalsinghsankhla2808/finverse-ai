@@ -111,9 +111,9 @@ export const AnalyticsPage: React.FC = () => {
 
   // Recharts styling constants
   const chartStyles = {
-    cartesianGrid: { strokeDasharray: '3 3', stroke: 'rgba(255,255,255,0.06)' },
-    xAxis: { tick: { fill: '#6B7280', fontSize: 10 }, axisLine: { stroke: 'rgba(255,255,255,0.1)' }, tickLine: false },
-    yAxis: { tick: { fill: '#6B7280', fontSize: 10 }, axisLine: false, tickLine: false, tickFormatter: formatINRCompact },
+    cartesianGrid: { strokeDasharray: '3 3', stroke: 'var(--border)' },
+    xAxis: { tick: { fill: 'var(--ink-subtle)', fontSize: 10 }, axisLine: { stroke: 'var(--border)' }, tickLine: false },
+    yAxis: { tick: { fill: 'var(--ink-subtle)', fontSize: 10 }, axisLine: false, tickLine: false, tickFormatter: formatINRCompact },
   };
 
   // Custom Chart Tooltips
@@ -232,8 +232,8 @@ export const AnalyticsPage: React.FC = () => {
                 <XAxis dataKey="label" {...chartStyles.xAxis} />
                 <YAxis {...chartStyles.yAxis} />
                 <Tooltip content={<CustomSpendingTooltip />} cursor={{ fill: 'rgba(255,255,255,0.04)' }} />
-                <Bar dataKey="income" fill="#10B981" radius={[4, 4, 0, 0]} opacity={0.65} />
-                <Bar dataKey="expense" fill="#F43F5E" radius={[4, 4, 0, 0]} opacity={0.65} />
+                <Bar dataKey="income" fill="var(--gain)" radius={[4, 4, 0, 0]} opacity={0.75} />
+                <Bar dataKey="expense" fill="var(--loss)" radius={[4, 4, 0, 0]} opacity={0.75} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -335,12 +335,12 @@ export const AnalyticsPage: React.FC = () => {
                 <AreaChart data={cashFlowData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="area-income" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#10B981" stopOpacity={0.2} />
-                      <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
+                      <stop offset="5%" stopColor="var(--gain)" stopOpacity={0.2} />
+                      <stop offset="95%" stopColor="var(--gain)" stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="area-expense" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#F43F5E" stopOpacity={0.2} />
-                      <stop offset="95%" stopColor="#F43F5E" stopOpacity={0} />
+                      <stop offset="5%" stopColor="var(--loss)" stopOpacity={0.2} />
+                      <stop offset="95%" stopColor="var(--loss)" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid {...chartStyles.cartesianGrid} />
@@ -350,7 +350,7 @@ export const AnalyticsPage: React.FC = () => {
                   <Area
                     type="monotone"
                     dataKey="income"
-                    stroke="#10B981"
+                    stroke="var(--gain)"
                     strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#area-income)"
@@ -358,7 +358,7 @@ export const AnalyticsPage: React.FC = () => {
                   <Area
                     type="monotone"
                     dataKey="expenses"
-                    stroke="#F43F5E"
+                    stroke="var(--loss)"
                     strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#area-expense)"

@@ -39,17 +39,17 @@ const budgetCreateSchema = z.object({
 type BudgetFormValues = z.infer<typeof budgetCreateSchema>;
 
 const CATEGORIES_MAPPINGS = [
-  { category: 'Housing', color: '#0466c8' },
-  { category: 'Food', color: '#0353a4' },
-  { category: 'Transport', color: '#10B981' },
-  { category: 'Shopping', color: '#002855' },
-  { category: 'Entertainment', color: '#33415c' },
-  { category: 'Groceries', color: '#0353a4' },
-  { category: 'Utilities', color: '#5c677d' },
-  { category: 'Healthcare', color: '#33415c' },
-  { category: 'Education', color: '#0466c8' },
-  { category: 'Investment', color: '#002855' },
-  { category: 'Other', color: '#7d8597' },
+  { category: 'Housing', color: 'var(--cat-1)' },
+  { category: 'Food', color: 'var(--cat-2)' },
+  { category: 'Transport', color: 'var(--cat-3)' },
+  { category: 'Shopping', color: 'var(--cat-4)' },
+  { category: 'Entertainment', color: 'var(--cat-5)' },
+  { category: 'Groceries', color: 'var(--cat-2)' },
+  { category: 'Utilities', color: 'var(--cat-6)' },
+  { category: 'Healthcare', color: 'var(--cat-5)' },
+  { category: 'Education', color: 'var(--cat-1)' },
+  { category: 'Investment', color: 'var(--cat-4)' },
+  { category: 'Other', color: 'var(--cat-7)' },
 ];
 
 export const BudgetsPage: React.FC = () => {
@@ -162,10 +162,10 @@ export const BudgetsPage: React.FC = () => {
 
   // Progress Bar color logic selector
   const getProgressColor = (percentage: number) => {
-    if (percentage < 60) return '#10B981'; // Green
-    if (percentage < 80) return '#F59E0B'; // Amber
-    if (percentage < 100) return '#F97316'; // Orange
-    return '#F43F5E'; // Red
+    if (percentage < 60) return 'var(--gain)';
+    if (percentage < 80) return 'var(--warning)';
+    if (percentage < 100) return 'var(--loss)';
+    return 'var(--loss)';
   };
 
   return (

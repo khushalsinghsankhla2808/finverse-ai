@@ -6,21 +6,21 @@ import { AuthenticatedRequest } from '../middleware/auth.middleware';
 import redis from '../config/redis';
 
 const SERVER_CATEGORY_COLORS: Record<string, string> = {
-  Housing: '#7C3AED',
-  Food: '#06B6D4',
-  Transport: '#10B981',
-  Shopping: '#F59E0B',
-  Entertainment: '#F43F5E',
-  Groceries: '#8B5CF6',
-  Utilities: '#EC4899',
-  Healthcare: '#14B8A6',
-  Education: '#8B5CF6',
-  Investment: '#F59E0B',
-  Other: '#6B7280',
+  Housing: '#0466c8',
+  Food: '#0353a4',
+  Transport: '#023e7d',
+  Shopping: '#002855',
+  Entertainment: '#33415c',
+  Groceries: '#0353a4',
+  Utilities: '#5c677d',
+  Healthcare: '#33415c',
+  Education: '#0466c8',
+  Investment: '#002855',
+  Other: '#7d8597',
 };
 
 const getCategoryColor = (category: string): string => {
-  return SERVER_CATEGORY_COLORS[category] || '#6B7280';
+  return SERVER_CATEGORY_COLORS[category] || '#7d8597';
 };
 
 export const getDashboardMetrics = async (
