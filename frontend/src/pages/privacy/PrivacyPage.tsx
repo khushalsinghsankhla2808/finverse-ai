@@ -42,9 +42,9 @@ export const PrivacyPage: React.FC = () => {
           </section>
 
           <section className="card space-y-3">
-            <h2 className="text-base font-bold text-ink">2. Data Transmitted to Google Gemini AI API</h2>
+            <h2 className="text-base font-bold text-ink">2. Data Transmitted to Mistral AI API</h2>
             <p>
-              When using the AI Assistant, your prompt query text and an aggregated context string (`contextText`) containing specific financial details are transmitted to the Google Gemini API to generate personalized financial insights. The exact fields transmitted in `contextText` include:
+              When using the AI Assistant, your prompt query text and an aggregated context string (`contextText`) containing specific financial details are transmitted to the Mistral AI API to generate personalized financial insights. The exact fields transmitted in `contextText` include:
             </p>
             <ul className="list-disc pl-5 space-y-1 text-xs text-ink-subtle">
               <li><strong>30-Day Totals:</strong> Total monthly income, total monthly expenses, savings rate percentage, and top spending category with spent amount.</li>

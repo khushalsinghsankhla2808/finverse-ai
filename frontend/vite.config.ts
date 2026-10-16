@@ -20,18 +20,33 @@ export default defineConfig({
     include: ['react-is'],
   },
   build: {
+    chunkSizeWarningLimit: 600,
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (id.includes('node_modules')) {
-            if (id.includes('react/') || id.includes('react-dom/')) {
-              return 'react';
-            }
-            if (id.includes('framer-motion')) {
-              return 'framer-motion';
-            }
-            if (id.includes('three') || id.includes('@react-three')) {
+          const normalized = id.replace(/\\/g, '/');
+          if (normalized.includes('/node_modules/')) {
+            if (normalized.includes('node_modules/three') || normalized.includes('node_modules/@react-three')) {
               return 'three';
+            }
+            if (normalized.includes('node_modules/recharts') || normalized.includes('node_modules/d3-')) {
+              return 'charts';
+            }
+            if (normalized.includes('node_modules/firebase') || normalized.includes('node_modules/@firebase')) {
+              return 'firebase';
+            }
+            if (normalized.includes('node_modules/framer-motion')) {
+              return 'motion';
+            }
+            if (
+              normalized.includes('node_modules/react/') ||
+              normalized.includes('node_modules/react-dom/') ||
+              normalized.includes('node_modules/react-router/') ||
+              normalized.includes('node_modules/react-router-dom/') ||
+              normalized.includes('node_modules/react-is/') ||
+              normalized.includes('node_modules/scheduler/')
+            ) {
+              return 'react-vendor';
             }
             return 'vendor';
           }

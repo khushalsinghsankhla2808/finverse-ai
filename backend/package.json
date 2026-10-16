@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "nodemon --exec ts-node server.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@mistralai/mistralai": "^1.1.0",
@@ -37,9 +39,12 @@
     "@types/node": "^20.14.2",
     "@types/nodemailer": "^6.4.15",
     "@types/pdfkit": "^0.13.4",
+    "@types/supertest": "^7.2.1",
     "nodemon": "^3.1.2",
+    "supertest": "^7.3.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vitest": "^4.1.12"
   },
   "overrides": {
     "exceljs": {

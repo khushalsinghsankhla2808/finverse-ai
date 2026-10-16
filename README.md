@@ -28,7 +28,7 @@
   <img src="https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js" />
   <img src="https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
   <img src="https://img.shields.io/badge/Firebase-Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=white" alt="Firebase Auth" />
-  <img src="https://img.shields.io/badge/Gemini_AI-Powered-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Gemini AI" />
+  <img src="https://img.shields.io/badge/Mistral_AI-Powered-FF7000?style=for-the-badge&logo=mistralai&logoColor=white" alt="Mistral AI" />
   <img src="https://img.shields.io/badge/Redis-Cache-DC382D?style=for-the-badge&logo=redis&logoColor=white" alt="Redis" />
 </p>
 
@@ -36,7 +36,7 @@
 
 ## 📖 About
 
-**FinVerse AI** is a full-stack personal finance management platform built for the modern Indian investor. It combines intelligent transaction tracking, budget management, investment portfolio monitoring, and savings goal planning  -  all enhanced by a conversational AI advisor powered by Google Gemini.
+**FinVerse AI** is a full-stack personal finance management platform built for the modern Indian investor. It combines intelligent transaction tracking, budget management, investment portfolio monitoring, and savings goal planning  -  all enhanced by a conversational AI advisor powered by Mistral AI.
 
 The platform features a premium glassmorphic dark-mode UI with 3D visualizations, real-time analytics dashboards, and automated financial report generation in PDF and Excel formats.
 
@@ -66,7 +66,7 @@ A quick tour of FinVerse AI, from sign-in to AI-powered insights.
     </td>
     <td align="center" width="50%">
       <img src="https://github.com/user-attachments/assets/586e319d-3379-46ff-bcdb-5c1e1011020b" alt="FinVerse AI Assistant chat" width="100%" />
-      <br /><sub><b>AI Assistant</b>  -  Gemini-powered chat with saved conversations and auto-generated spending insights</sub>
+      <br /><sub><b>AI Assistant</b>  -  Mistral AI-powered chat with saved conversations and auto-generated spending insights</sub>
     </td>
   </tr>
   <tr>
@@ -118,12 +118,12 @@ A quick tour of FinVerse AI, from sign-in to AI-powered insights.
 - Platform and symbol tagging
 
 ### 🤖 AI Financial Advisor
-- **Conversational Chat**  -  Natural language financial Q&A powered by Google Gemini 1.5 Flash
+- **Conversational Chat**  -  Natural language financial Q&A powered by Mistral AI
 - **Context-Aware**  -  Automatically injects your real financial data (last 30 days of transactions, active budgets, active goals) into every query
 - **Automated Insights**  -  AI-generated spending warnings, savings milestones, and goal deadline alerts
 - **Chat History**  -  Persistent, per-user conversation logs stored in MongoDB
 - **Smart Suggestions**  -  Pre-built prompt questions like _"Where am I spending the most?"_ and _"Am I on track with my goals?"_
-- **Graceful Fallback**  -  Rule-based mock advisor automatically kicks in when `GEMINI_API_KEY` is not configured, so the app is fully demoable without a live key
+- **Graceful Fallback**  -  Rule-based mock advisor automatically kicks in when `MISTRAL_API_KEY` is not configured (MISTRAL_API_KEY is optional), so the app is fully demoable without a live key
 
 ### 📄 Report Generation
 - **PDF Reports**  -  Branded, multi-page financial statements with cover page, summary metrics, expense allocation tables, and transaction ledgers (via PDFKit)
@@ -176,7 +176,7 @@ A quick tour of FinVerse AI, from sign-in to AI-powered insights.
 | **MongoDB + Mongoose** | NoSQL database with schema modeling & virtuals |
 | **Firebase Admin SDK** | Server-side verification of Firebase ID tokens |
 | **Redis (ioredis)** | Caching layer for analytics/AI data, invalidated per-user on writes |
-| **Google Generative AI** | Gemini 1.5 Flash for AI chat and insights |
+| **Mistral AI** | Mistral AI SDK (@mistralai/mistralai) for AI chat and insights |
 | **PDFKit** | PDF report generation |
 | **ExcelJS** | Excel workbook generation |
 | **Cloudinary** | Cloud storage for generated reports |
@@ -227,7 +227,7 @@ A quick tour of FinVerse AI, from sign-in to AI-powered insights.
              │
              ▼
 ┌────────────────────┐    ┌──────────────────────────┐
-│   Cloudinary        │    │   Google Gemini AI        │
+│   Cloudinary        │    │   Mistral AI              │
 │   (Report Storage)  │    │   (Chat & Insights)       │
 └────────────────────┘    └──────────────────────────┘
              │
@@ -276,7 +276,7 @@ cd frontend && npm install && cd ..
 
 ### 3. Configure Environment Variables
 
-See the [Environment Variables](#-environment-variables) section below for the full list. At minimum you need a MongoDB URI and a Firebase project (client + admin credentials) to run the app; Redis, Gemini, Cloudinary, and email are optional and degrade gracefully.
+See the [Environment Variables](#-environment-variables) section below for the full list. At minimum you need a MongoDB URI and a Firebase project (client + admin credentials) to run the app; Redis, Mistral AI (MISTRAL_API_KEY), Cloudinary, and email are optional and degrade gracefully.
 
 ### 4. Start Development Servers
 
@@ -319,8 +319,8 @@ MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/FinVerse
 # ── Redis ──────────────────────────────────────────
 REDIS_URL=redis://localhost:6379
 
-# ── Google Gemini AI (optional  -  falls back to rule-based advisor) ──
-GEMINI_API_KEY=
+# ── Mistral AI (optional  -  falls back to rule-based advisor) ──
+MISTRAL_API_KEY=
 
 # ── Cloudinary (optional  -  falls back to local file storage) ──
 CLOUDINARY_CLOUD_NAME=
@@ -484,7 +484,7 @@ finverse-ai/
 │       │   ├── goal.controller.ts
 │       │   ├── investment.controller.ts
 │       │   ├── analytics.controller.ts
-│       │   ├── ai.controller.ts      # Gemini AI chat + insights
+│       │   ├── ai.controller.ts      # Mistral AI chat + insights
 │       │   └── report.controller.ts  # PDF/Excel/CSV generation
 │       ├── middleware/
 │       │   ├── auth.middleware.ts    # Firebase ID token verification guard

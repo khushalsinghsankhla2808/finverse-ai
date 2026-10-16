@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, useMemo } from 'react';
+import React, { useState, useEffect, Suspense, useMemo, lazy } from 'react';
 import { motion } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import { useForm } from 'react-hook-form';
@@ -36,8 +36,9 @@ import { renderCategoryIcon } from '@/lib/categoryIcons';
 import KPICard from '@/components/dashboard/KPICard';
 import KPICardSkeleton from '@/components/dashboard/KPICardSkeleton';
 import QuickActions from '@/components/dashboard/QuickActions';
-import FinanceGlobe from '@/components/three/FinanceGlobe';
 import GlobeErrorBoundary from '@/components/three/GlobeErrorBoundary';
+
+const FinanceGlobe = lazy(() => import('@/components/three/FinanceGlobe'));
 import PageTransition from '@/components/common/PageTransition';
 import AnimatedNumber from '@/components/common/AnimatedNumber';
 import Modal from '@/components/common/Modal';
