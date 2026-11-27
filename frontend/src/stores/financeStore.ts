@@ -9,6 +9,22 @@ import budgetService from '@/services/budgetService';
 import goalService from '@/services/goalService';
 import investmentService from '@/services/investmentService';
 
+// Helper to normalize transaction amount sign: expenses are negative, income is positive
+const normalizeTxnAmount = (type: string, amount: number) =>
+  type === 'expense' ? -Math.abs(amount) : Math.abs(amount);
+
+const mapTransactionItem = (txn: any): Transaction => ({
+  id: txn._id || txn.id,
+  name: txn.name,
+  category: txn.category,
+  amount: normalizeTxnAmount(txn.type, txn.amount),
+  date: txn.date ? (typeof txn.date === 'string' ? txn.date.split('T')[0] : new Date(txn.date).toISOString().split('T')[0]) : new Date().toISOString().split('T')[0],
+  type: txn.type,
+  merchant: txn.merchant,
+  note: txn.note,
+  receiptUrl: txn.receiptUrl,
+});
+
 // Helper to recalculate budget spent from transactions within current period (IST)
 const recalculateSpent = (transactions: Transaction[], budgets: Budget[]): Budget[] => {
   const now = new Date();
@@ -108,16 +124,7 @@ export const useFinanceStore = create<FinanceState>()(
           const hasToken = useAuthStore.getState().isAuthenticated;
           if (hasToken) {
             const res = await transactionService.getAll();
-            const txns = res.data.transactions.map((txn: any) => ({
-              id: txn._id,
-              name: txn.name,
-              category: txn.category,
-              amount: txn.amount,
-              date: txn.date.split('T')[0],
-              type: txn.type,
-              merchant: txn.merchant,
-              note: txn.note,
-            }));
+            const txns = res.data.transactions.map(mapTransactionItem);
             const updatedBudgets = recalculateSpent(txns, get().budgets);
             set({ transactions: txns, budgets: updatedBudgets });
           }
@@ -128,19 +135,13 @@ export const useFinanceStore = create<FinanceState>()(
         try {
           const hasToken = useAuthStore.getState().isAuthenticated;
           if (hasToken) {
-            await transactionService.create(t);
+            await transactionService.create({
+              ...t,
+              amount: Math.abs(t.amount),
+            });
             // Reload list from api after additions
             const res = await transactionService.getAll();
-            const txns = res.data.transactions.map((txn: any) => ({
-              id: txn._id,
-              name: txn.name,
-              category: txn.category,
-              amount: txn.amount,
-              date: txn.date.split('T')[0],
-              type: txn.type,
-              merchant: txn.merchant,
-              note: txn.note,
-            }));
+            const txns = res.data.transactions.map(mapTransactionItem);
             const updatedBudgets = recalculateSpent(txns, get().budgets);
             set({ transactions: txns, budgets: updatedBudgets });
             return;
@@ -151,7 +152,11 @@ export const useFinanceStore = create<FinanceState>()(
 
         // Local fallback
         set((state) => {
-          const newTxn: Transaction = { ...t, id: uuidv4() };
+          const newTxn: Transaction = {
+            ...t,
+            amount: normalizeTxnAmount(t.type, t.amount),
+            id: uuidv4(),
+          };
           const updatedTransactions = [newTxn, ...state.transactions];
           const updatedBudgets = recalculateSpent(updatedTransactions, state.budgets);
           return {
@@ -165,18 +170,12 @@ export const useFinanceStore = create<FinanceState>()(
         try {
           const hasToken = useAuthStore.getState().isAuthenticated;
           if (hasToken) {
-            await transactionService.update(id, updatedFields);
+            await transactionService.update(id, {
+              ...updatedFields,
+              ...(updatedFields.amount !== undefined ? { amount: Math.abs(updatedFields.amount) } : {}),
+            });
             const res = await transactionService.getAll();
-            const txns = res.data.transactions.map((txn: any) => ({
-              id: txn._id,
-              name: txn.name,
-              category: txn.category,
-              amount: txn.amount,
-              date: txn.date.split('T')[0],
-              type: txn.type,
-              merchant: txn.merchant,
-              note: txn.note,
-            }));
+            const txns = res.data.transactions.map(mapTransactionItem);
             const updatedBudgets = recalculateSpent(txns, get().budgets);
             set({ transactions: txns, budgets: updatedBudgets });
             return;
@@ -188,7 +187,15 @@ export const useFinanceStore = create<FinanceState>()(
         // Local fallback
         set((state) => {
           const updatedTransactions = state.transactions.map((t) =>
-            t.id === id ? { ...t, ...updatedFields } : t
+            t.id === id
+              ? {
+                  ...t,
+                  ...updatedFields,
+                  ...(updatedFields.amount !== undefined
+                    ? { amount: normalizeTxnAmount(updatedFields.type || t.type, updatedFields.amount) }
+                    : {}),
+                }
+              : t
           );
           const updatedBudgets = recalculateSpent(updatedTransactions, state.budgets);
           return {
@@ -204,16 +211,7 @@ export const useFinanceStore = create<FinanceState>()(
           if (hasToken) {
             await transactionService.delete(id);
             const res = await transactionService.getAll();
-            const txns = res.data.transactions.map((txn: any) => ({
-              id: txn._id,
-              name: txn.name,
-              category: txn.category,
-              amount: txn.amount,
-              date: txn.date.split('T')[0],
-              type: txn.type,
-              merchant: txn.merchant,
-              note: txn.note,
-            }));
+            const txns = res.data.transactions.map(mapTransactionItem);
             const updatedBudgets = recalculateSpent(txns, get().budgets);
             set({ transactions: txns, budgets: updatedBudgets });
             return;
@@ -438,16 +436,7 @@ export const useFinanceStore = create<FinanceState>()(
               icon: gl.icon,
             }));
 
-            const txns = txnsRes.data.transactions.map((txn: any) => ({
-              id: txn._id,
-              name: txn.name,
-              category: txn.category,
-              amount: txn.amount,
-              date: txn.date.split('T')[0],
-              type: txn.type,
-              merchant: txn.merchant,
-              note: txn.note,
-            }));
+            const txns = txnsRes.data.transactions.map(mapTransactionItem);
 
             const budgets = budgetsRes.data.map((bdg: any) => ({
               id: bdg._id,

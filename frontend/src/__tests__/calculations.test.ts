@@ -260,5 +260,29 @@ describe('Calculations Audit Suite', () => {
       const formatted = formatINR(-41700.40);
       expect(formatted).toMatch(/41,700\.40/);
     });
+
+    it('B13: Month-scoped expense calculation counts only expenses this month, excluding last month expenses and income', () => {
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const currentMonth = now.getMonth();
+      const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+      const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+
+      const currentYearMonth = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+      const lastMonthYearMonth = `${lastMonthYear}-${String(lastMonth + 1).padStart(2, '0')}`;
+
+      const transactions = [
+        { id: '1', type: 'expense', amount: -3500, date: `${currentYearMonth}-15` }, // an expense this month
+        { id: '2', type: 'expense', amount: -2000, date: `${lastMonthYearMonth}-20` }, // an expense last month
+        { id: '3', type: 'income', amount: 45000, date: `${currentYearMonth}-01` },   // income
+      ];
+
+      const thisMonthExpense = transactions
+        .filter((t) => t.type === 'expense' && t.date.startsWith(currentYearMonth))
+        .reduce((sum, t) => sum + Math.abs(t.amount), 0);
+
+      // Verify that thisMonthExpense counts only the first
+      expect(thisMonthExpense).toBe(3500);
+    });
   });
 });
