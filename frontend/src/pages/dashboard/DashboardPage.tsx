@@ -122,14 +122,11 @@ export const DashboardPage: React.FC = () => {
     const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
     const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
 
-    const isThisMonth = (dateStr: string) => {
-      const d = new Date(dateStr);
-      return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
-    };
-    const isLastMonth = (dateStr: string) => {
-      const d = new Date(dateStr);
-      return d.getMonth() === lastMonth && d.getFullYear() === lastMonthYear;
-    };
+    const currentYearMonth = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`;
+    const lastMonthYearMonth = `${lastMonthYear}-${String(lastMonth + 1).padStart(2, '0')}`;
+
+    const isThisMonth = (dateStr: string) => dateStr.startsWith(currentYearMonth);
+    const isLastMonth = (dateStr: string) => dateStr.startsWith(lastMonthYearMonth);
 
     const balance = transactions.reduce((sum, t) => sum + t.amount, 0);
 
@@ -164,6 +161,8 @@ export const DashboardPage: React.FC = () => {
       expenses: expense,
       savings: investment,
       netWorth: balance,
+      thisMonthIncome,
+      thisMonthExpense,
       balanceChange: calcMom(thisMonthBalance, lastMonthBalance),
       incomeChange: calcMom(thisMonthIncome, lastMonthIncome),
       expenseChange: calcMom(thisMonthExpense, lastMonthExpense),
@@ -384,79 +383,79 @@ export const DashboardPage: React.FC = () => {
               )}
             </motion.div>
 
-            {/* Row 2: Net Worth, Finance Globe, Quick Actions */}
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-              {/* Net Worth */}
-              <div className="card flex flex-col justify-between lg:col-span-4 h-auto lg:h-[380px]">
-                <div>
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-ink-subtle leading-none">
-                    Equity Valuations
-                  </span>
-                  <h3 className="text-sm font-bold font-sans text-ink mt-0.5">Net Worth Projection</h3>
-                </div>
+{/* Row 2: Net Worth, Finance Globe, Quick Actions */}
+<div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12">
+  {/* Net Worth */}
+  <div className="card flex flex-col justify-between lg:col-span-4 h-auto lg:min-h-[380px]">
+    <div>
+      <span className="text-[11px] font-bold uppercase tracking-wider text-ink-subtle leading-none">
+        Equity Valuations
+      </span>
+      <h3 className="text-sm font-bold font-sans text-ink mt-0.5">Net Worth Projection</h3>
+    </div>
 
-                <div className="my-auto py-3">
-                  <span className="text-[10px] text-ink-subtle font-bold uppercase tracking-wider">Estimated Valuation</span>
-                  <div className="flex items-baseline mt-1 gap-1">
-                    <span className="text-3xl font-sans font-extrabold text-ink tracking-tight">
-                      <AnimatedNumber value={stats.netWorth} prefix={activeCurrency.symbol} decimals={0} />
-                    </span>
-                    {stats.balanceChange !== undefined && (
-                      <span className={stats.balanceChange >= 0 ? 'amount-gain text-sm font-semibold' : 'amount-loss text-sm font-semibold'}>
-                        {stats.balanceChange >= 0 ? '+' : ''}{stats.balanceChange.toFixed(1)}%
-                      </span>
-                    )}
-                  </div>
-                </div>
+    <div className="my-auto py-3">
+      <span className="text-[10px] text-ink-subtle font-bold uppercase tracking-wider">Estimated Valuation</span>
+      <div className="flex items-baseline mt-1 gap-1">
+        <span className="text-3xl font-sans font-extrabold text-ink tracking-tight">
+          <AnimatedNumber value={stats.netWorth} prefix={activeCurrency.symbol} decimals={0} />
+        </span>
+        {stats.balanceChange !== undefined && (
+          <span className={stats.balanceChange >= 0 ? 'amount-gain text-sm font-semibold' : 'amount-loss text-sm font-semibold'}>
+            {stats.balanceChange >= 0 ? '+' : ''}{stats.balanceChange.toFixed(1)}%
+          </span>
+        )}
+      </div>
+    </div>
 
-                {/* Dynamic Income vs Expenses Stats */}
-                <div className="border border-line bg-surface-sunken p-3 rounded-[var(--radius-control)] flex justify-between items-center text-xs">
-                  <div>
-                    <span className="text-ink-subtle block text-[9px] uppercase font-bold">This Month Income</span>
-                    <span className="amount-gain font-mono font-semibold">{formatINR(stats.income)}</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-ink-subtle block text-[9px] uppercase font-bold">This Month Expenses</span>
-                    <span className="amount-loss font-mono font-semibold">{formatINR(stats.expenses)}</span>
-                  </div>
-                </div>
+    <div className="border border-line bg-surface-sunken p-3 rounded-[var(--radius-control)] flex justify-between items-center text-xs">
+      <div>
+        <span className="text-ink-subtle block text-[9px] uppercase font-bold">This Month Income</span>
+        <span className="amount-gain font-mono font-semibold">{formatINR(stats.thisMonthIncome)}</span>
+      </div>
+      <div className="text-right">
+        <span className="text-ink-subtle block text-[9px] uppercase font-bold">This Month Expenses</span>
+        <span className="amount-loss font-mono font-semibold">{formatINR(stats.thisMonthExpense)}</span>
+      </div>
+    </div>
 
-                <div className="flex justify-between items-center text-xs text-ink-subtle font-medium mt-2">
-                  <span>{dateRange.start}</span>
-                  <span>{dateRange.end}</span>
-                </div>
-              </div>
+    <div className="flex justify-between items-center text-xs text-ink-subtle font-medium mt-2">
+      <span>{dateRange.start}</span>
+      <span>{dateRange.end}</span>
+    </div>
+  </div>
 
-              {/* Finance Globe */}
-              <div className="card flex flex-col justify-between lg:col-span-4 h-auto lg:h-[380px]">
-                <div className="flex justify-between items-center border-b border-line pb-2">
-                  <div>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-ink-subtle leading-none">
-                      Asset Coordinates
-                    </span>
-                    <h3 className="text-sm font-bold font-sans text-ink mt-0.5">Financial Globe</h3>
-                  </div>
-                  <span className="text-[10px] text-primary font-semibold flex items-center gap-1 bg-surface-sunken border border-line px-2 py-0.5 rounded-[var(--radius-control)]">
-                    Interactive
-                  </span>
-                </div>
+  {/* Finance Globe */}
+  <div className="card flex flex-col justify-between lg:col-span-4 h-auto lg:min-h-[380px]">
+    <div className="flex justify-between items-center border-b border-line pb-2">
+      <div>
+        <span className="text-[11px] font-bold uppercase tracking-wider text-ink-subtle leading-none">
+          Asset Coordinates
+        </span>
+        <h3 className="text-sm font-bold font-sans text-ink mt-0.5">Financial Globe</h3>
+      </div>
+      <span className="text-[10px] text-primary font-semibold flex items-center gap-1 bg-surface-sunken border border-line px-2 py-0.5 rounded-[var(--radius-control)]">
+        Interactive
+      </span>
+    </div>
 
-                <div className="flex-1 min-h-0 relative h-[300px]">
-                  <GlobeErrorBoundary>
-                    <Suspense fallback={<GlobeFallback />}>
-                      <FinanceGlobe />
-                    </Suspense>
-                  </GlobeErrorBoundary>
-                </div>
-              </div>
+    <div className="flex-1 min-h-[300px] relative">
+      <GlobeErrorBoundary>
+        <Suspense fallback={<GlobeFallback />}>
+          <FinanceGlobe />
+        </Suspense>
+      </GlobeErrorBoundary>
+    </div>
+  </div>
 
-              {/* Quick Actions */}
-              <QuickActions
-                onAddTransaction={() => setIsAddModalOpen(true)}
-                className="lg:col-span-4 h-auto lg:h-[380px]"
-              />
-            </div>
-
+  {/* Quick Actions */}
+  <div className="lg:col-span-4 flex [&>*]:h-full [&>*]:w-full">
+    <QuickActions
+      onAddTransaction={() => setIsAddModalOpen(true)}
+      className="h-auto lg:min-h-[380px]"
+    />
+  </div>
+</div>
             {/* AI Insights Card on Dashboard (Rule 14) */}
             <div className="card bg-surface border border-line flex flex-col gap-2">
               <div className="flex items-center gap-2 text-primary font-semibold text-sm">
